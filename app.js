@@ -1,9 +1,9 @@
-var PORT = 3000;
+const PORT = 3000
 
-var swig = require('swig');
-var url=require('url');
-var express = require('express');
-var app = express();
+const swig = require('swig');
+const url=require('url');
+const express = require('express');
+const app = express();
 const http = require('http').Server(app);
 
 // set the view engine to ejs
