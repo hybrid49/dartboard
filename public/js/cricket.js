@@ -61,41 +61,22 @@ function undoLastThrow(){
 }
 
 function saveDart(dart){
-	let selector = $('#throw' + nbThrow);
-	let score
-	if (dart.indexOf('S') >= 0) {
-		dart = dart.replace('S', '')
-		if (dart !== 'Bulle') {
-			score = parseInt(dart)
-			saveScore(score, dart, 'S')
-			selector.html('Single ' + dart)
-			selector.addClass('SingleShot')
-		} else {
-			score = 25
-			saveScore(score, dart, 'S')
-			selector.html('Single ' + dart)
-			selector.addClass('SingleShot')
-		}
-	} else if (dart.indexOf('D') >= 0) {
-		dart = dart.replace('D', '')
-		if (dart !== 'Bulle') {
-			score = parseInt(dart)
-			saveScore(score, dart, 'D')
-			selector.html('Double ' + dart)
-			selector.addClass('DoubleShot')
-		} else {
-			score = 50
-			saveScore(score, dart, 'D')
-			selector.html('Double ' + dart)
-			selector.addClass('DoubleShot')
-		}
-	} else if (dart.indexOf('T') >= 0) {
-		dart = dart.replace('T', '')
-		score = parseInt(dart)
-		saveScore(score, dart, 'T')
-		selector.html('Triple ' + dart)
-		selector.addClass('TripleShot')
+	let zone = dart.substring(0,1);
+	let zoneText;
+
+	if(zone === "S"){
+		zoneText = "Single";
+	}else if(zone === "D"){
+		zoneText = "Double";
+	}else if(zone === "T") {
+		zoneText = "Triple";
 	}
+
+	dart = dart.replace(zone,'');
+	score = parseInt(dart);
+	saveScore(score, dart,zone);
+	$('#throw'+nbThrow).html(zoneText+' '+dart);
+	$('#throw'+nbThrow).addClass(zoneText+'Shot');
 }
 
 function saveScore(score, dart, position){
@@ -291,55 +272,11 @@ function initRound(){
 	}
 }
 
+
 function getDart(msg){
-	if(msg === '3,7'){
-		return 'S20'
-	}else if(msg === '2,7'){
-		return 'D20'
-	}else if(msg === '7,7'){
-		return 'T20'
-	}
-	else if(msg === '0,1'){
-		return 'S19'
-	}else if(msg === '0,0'){
-		return 'D19'
-	}else if(msg === '0,2'){
-		return 'T19'
-	}
-	else if(msg === '4,6'){
-		return 'S18'
-	}else if(msg === '1,6'){
-		return 'D18'
-	}else if(msg === '6,6'){
-		return 'T18'
-	}
-	else if(msg === '1,4'){
-		return 'S17'
-	}else if(msg === '1,5'){
-		return 'D17'
-	}else if(msg === '1,3'){
-		return 'T17'
-	}
-	else if(msg === '2,1'){
-		return 'S16'
-	}else if(msg === '2,0'){
-		return 'D16'
-	}else if(msg === '2,2'){
-		return 'T16'
-	}
-	else if(msg === '3,4'){
-		return 'S15'
-	}else if(msg === '3,5'){
-		return 'D15'
-	}else if(msg === '3,3'){
-		return 'T15'
-	}
-	else if(msg === '5,6'){
-		return 'SBulle'
-	}else if(msg === '5,7'){
-		return 'DBulle'
-	}
-	else{
-		return 'miss';
-	}
+	arrayTouch.forEach((item, index) => {
+		if (index===msg) {
+			return item;
+		}
+	} );
 }
