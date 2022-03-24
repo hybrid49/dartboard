@@ -2,29 +2,29 @@ var PORT = 3000;
 
 var swig = require('swig');
 var url=require('url');
-// load the things we need
 var express = require('express');
 var app = express();
 const http = require('http').Server(app);
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 app.use(express.static(__dirname + '/public'));
-// index page
+
+// game cricket page
 app.get('/game/cricket', function(req, res) {
 	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer});
 });
+// game 501 page
 app.get('/game/501', function(req, res) {
 	res.render('pages/501', {nbPlayer: req.query.nbPlayer});
 });
-
-// about page
+// index page
 app.get('/', function(req, res) {
 	res.render('pages/index');
 });
-
-// about page
+// select number player page
 app.get('/lobby', function(req, res) {
 	res.render('pages/lobby', {game : req.query.game});
 });
@@ -35,18 +35,27 @@ const io = new Server(http);
 
 const fs = require('fs');
 
-// fs.watch('C:\\Users\\User\\PhpstormProjects\\dart3\\dart.txt', (event, filename) => {
-// 	console.log('watch');
-// 	fs.readFile('C:\\Users\\User\\PhpstormProjects\\dart3\\dart.txt', 'utf8' , (err, data) => {
-// 		if (err) {
-// 			console.error(err)
-// 			return
-// 		}
-// 		io.emit('dart', data);
-// 	})
-// });
+let fsTimeout;
+
+// listen on update on file to check if arduino send informations
+fs.watch('/srv/dart3/dart.txt', (event, filename) => {
+	//define var to stop multiple trigger if a dart is stuck in the board
+	if (!fsTimeout) {
+		fs.readFile('/srv/dart3/dart.txt', 'utf8', (err, data) => {
+			if (err) {
+				console.error(err)
+				return
+			}
+			console.log('watch : ' + data);
+			io.emit('dart', data);
+			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
+		});
+	}
+});
+
 io.on('connection', (socket) => {
 	console.log('a user connected');
 });
+
 // console.log(parser);
 http.listen(PORT);

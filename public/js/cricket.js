@@ -2,7 +2,7 @@
 let selectedPlayer = 1;
 let round =1;
 let r = document.querySelector(':root');
-var socket = io();
+const socket = io()
 let nbThrow = 0;
 let lastMsg = '';
 let arrayTouch = [];
@@ -61,38 +61,40 @@ function undoLastThrow(){
 }
 
 function saveDart(dart){
-	if(dart.indexOf("S") >= 0){
-		dart = dart.replace('S','');
-		if(dart !== 'Bulle'){
-			score = parseInt(dart);
-			saveScore(score, dart,'S');
-			$('#throw'+nbThrow).html('Single '+dart);
-			$('#throw'+nbThrow).addClass('SingleShot');
-		}else{
-			score = 25;
-			saveScore(score, dart,'S');
-			$('#throw'+nbThrow).html('Single '+dart);
-			$('#throw'+nbThrow).addClass('SingleShot');
+	let selector = $('#throw' + nbThrow);
+	let score
+	if (dart.indexOf('S') >= 0) {
+		dart = dart.replace('S', '')
+		if (dart !== 'Bulle') {
+			score = parseInt(dart)
+			saveScore(score, dart, 'S')
+			selector.html('Single ' + dart)
+			selector.addClass('SingleShot')
+		} else {
+			score = 25
+			saveScore(score, dart, 'S')
+			selector.html('Single ' + dart)
+			selector.addClass('SingleShot')
 		}
-	}else if(dart.indexOf("D") >= 0){
-		dart = dart.replace('D','');
-		if(dart !== 'Bulle'){
-			score = parseInt(dart);
-			saveScore(score, dart, 'D');
-			$('#throw'+nbThrow).html('Double '+dart);
-			$('#throw'+nbThrow).addClass('DoubleShot');
-		}else{
-			score = 50;
-			saveScore(score, dart, 'D');
-			$('#throw'+nbThrow).html('Double '+dart);
-			$('#throw'+nbThrow).addClass('DoubleShot');
+	} else if (dart.indexOf('D') >= 0) {
+		dart = dart.replace('D', '')
+		if (dart !== 'Bulle') {
+			score = parseInt(dart)
+			saveScore(score, dart, 'D')
+			selector.html('Double ' + dart)
+			selector.addClass('DoubleShot')
+		} else {
+			score = 50
+			saveScore(score, dart, 'D')
+			selector.html('Double ' + dart)
+			selector.addClass('DoubleShot')
 		}
-	}else if(dart.indexOf("T") >= 0){
-		dart = dart.replace('T','');
-		score = parseInt(dart);
-		saveScore(score, dart, 'T');
-		$('#throw'+nbThrow).html('Triple '+dart);
-		$('#throw'+nbThrow).addClass('TripleShot');
+	} else if (dart.indexOf('T') >= 0) {
+		dart = dart.replace('T', '')
+		score = parseInt(dart)
+		saveScore(score, dart, 'T')
+		selector.html('Triple ' + dart)
+		selector.addClass('TripleShot')
 	}
 }
 
@@ -109,16 +111,17 @@ function saveScore(score, dart, position){
 			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 1;
 		}
 	}
-	if(arrayTouch[selectedPlayer][dart] > 3){
-		nb = arrayTouch[selectedPlayer][dart] - 3;
-		for(let i = 1; i <= nombrePlayer; i++){
-			if(i !== selectedPlayer){
-				if(arrayTouch[i][dart] < 3){
-					arrayTouch[i]['point'] = arrayTouch[i]['point'] + score*nb;
+	let nb;
+	if (arrayTouch[selectedPlayer][dart] > 3) {
+		nb = arrayTouch[selectedPlayer][dart] - 3
+		for (let i = 1; i <= nombrePlayer; i++) {
+			if (i !== selectedPlayer) {
+				if (arrayTouch[i][dart] < 3) {
+					arrayTouch[i]['point'] = arrayTouch[i]['point'] + score * nb
 				}
 			}
 		}
-		arrayTouch[selectedPlayer][dart] = 3;
+		arrayTouch[selectedPlayer][dart] = 3
 	}
 
 	displayScore()
@@ -163,7 +166,7 @@ function setHtmlHistoryRound(idRound,numberRound, listeScore){
 	selectorHR1.find('.T2').html('');
 	selectorHR1.find('.T3').html('');
 	selectorHR1.find('.title').html('R'+numberRound+' :');
-	for(i=1;i<=3;i++){
+	for(let i=1;i<=3;i++){
 		selectorHR1.find('.T'+i).html(getHtmlThrowLastRound(listeScore[i]));
 	}
 }
@@ -195,16 +198,19 @@ function getHtmlThrowLastRound(dart){
 function changePlayer(){
 	nbThrow = 0;
 	$('#changePlayer').hide();
-	$('#throw1').removeClass('TripleShot');
-	$('#throw1').removeClass('DoubleShot');
-	$('#throw1').html('-');
-	$('#throw2').removeClass('TripleShot');
-	$('#throw2').removeClass('DoubleShot');
-	$('#throw2').html('-');
-	$('#throw3').removeClass('TripleShot');
-	$('#throw3').removeClass('DoubleShot');
-	$('#throw3').html('-');
-	if(selectedPlayer == nombrePlayer){
+	let selector1 = $('#throw1');
+	let selector2 = $('#throw2');
+	let selector3 = $('#throw3');
+	selector1.removeClass('TripleShot');
+	selector1.removeClass('DoubleShot');
+	selector1.html('-');
+	selector2.removeClass('TripleShot');
+	selector2.removeClass('DoubleShot');
+	selector2.html('-');
+	selector3.removeClass('TripleShot');
+	selector3.removeClass('DoubleShot');
+	selector3.html('-');
+	if(selectedPlayer === nombrePlayer){
 		newRound()
 	}else{
 		selectedPlayer = selectedPlayer+1;
@@ -276,7 +282,7 @@ function initGame(nbPLayer){
 	});
 }
 function initRound(){
-	arrayRound[round] = []
+	arrayRound[round] = [];
 	for(let i = 1; i <= nombrePlayer; i++){
 		arrayRound[round][i] = [];
 		arrayRound[round][i][1] = '';
