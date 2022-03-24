@@ -63,6 +63,7 @@ function undoLastThrow(){
 function saveDart(dart){
 	let zone = dart.substring(0,1);
 	let zoneText;
+	let dartString;
 
 	if(zone === "S"){
 		zoneText = "Single";
@@ -73,7 +74,10 @@ function saveDart(dart){
 	}
 
 	dart = dart.replace(zone,'');
-	score = parseInt(dart);
+
+	(dart==="25") ? dartString = "Bull" : dartString = dart;
+
+	let score = parseInt(dart);
 	saveScore(score, dart,zone);
 	$('#throw'+nbThrow).html(zoneText+' '+dart);
 	$('#throw'+nbThrow).addClass(zoneText+'Shot');
@@ -106,24 +110,18 @@ function saveScore(score, dart, position){
 	}
 
 	displayScore()
+
 }
 
 function displayScore(){
 
-	arrayTouch.forEach((item, index) => {
-		item.forEach((i, v) => {
-			if(i === 1){
-				$('#tr'+v).find('.tdPlayer'+index).html(getHtmlThrow(i));
-			}
-			if(i === 2){
-				$('#tr'+v).find('.tdPlayer'+index).html(getHtmlThrow(i));
-			}
-			if(i === 3){
-				$('#tr'+v).find('.tdPlayer'+index).html(getHtmlThrow(i));
-			}
-			$('#scoreTotal'+index).html(item['point']);
+	arrayTouch.forEach((hits, numPlayer) => {
+		hits.forEach((nbHit, target) => {
+			$('#tr'+target).find('.tdPlayer'+numPlayer).html(getHtmlThrow(nbHit));
+			$('#scoreTotal'+numPlayer).html(hits['point']);
 		})
 	});
+
 	if(round >= 3){
 		setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
 		setHtmlHistoryRound(2,round-1, arrayRound[round-1][selectedPlayer]);
@@ -134,7 +132,6 @@ function displayScore(){
 		setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
 		setHtmlHistoryRound(2,round-1, arrayRound[round-1][selectedPlayer]);
 	}
-	checkVictory();
 }
 
 function checkVictory(){
@@ -258,7 +255,7 @@ function initGame(nbPLayer){
 		arrayTouch[index]['17'] = 0;
 		arrayTouch[index]['16'] = 0;
 		arrayTouch[index]['15'] = 0;
-		arrayTouch[index]['Bulle'] = 0;
+		arrayTouch[index]['25'] = 0;
 		arrayTouch[index]['point'] = 0;
 	});
 }
