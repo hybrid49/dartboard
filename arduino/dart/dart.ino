@@ -60,7 +60,7 @@ void loop() {
       if (buttonState2 == HIGH) {
       } else {
         // if the current state is LOW then the button went from on to off:
-        Serial.println("nextBtn");
+        Serial.println("btnCancel");
       }
       // Delay a little bit to avoid bouncing
       delay(50);
