@@ -5,28 +5,31 @@ let r = document.querySelector(':root');
 const socket = io()
 let nbThrow = 0;
 let lastMsg = '';
+let isGameOver = false;
 let arrayTouch = [];
 let arrayRound = [];
+
 initRound();
 initGame(nombrePlayer);
-socket.on('dart', function(msg) {
-	throwDart(msg);
+
+socket.on('arduino', function(msg) {
+	arduinoEvent(msg);
 });
 
-function throwDart(msg){
-	if(lastMsg === ''){
+function arduinoEvent(msg){
+	if(isGameOver === false && lastMsg === ''){
 		lastMsg = msg;
-		if(msg === 'changePlayer'){
-			changePlayer();
-		}else{
-			nbThrow++;
-			if(nbThrow <= 3){
-				playThrow(msg)
-			}else{
-				displayChangePlayer()
-			}
 
+		if(msg === 'btnValidate'){
+			changePlayer();
+		}else if(msg === 'btnCancel'){
+			//ToDO : Mettre une pop-up de confirmation + Retour
+		}else if (nbThrow < 3){
+			//We don't trigger the function when players hit the board when they remove darts
+			nbThrow++;
+			playThrow(msg);
 		}
+
 		setInterval(function(){
 			lastMsg = '';
 		}, 1500);
@@ -36,14 +39,19 @@ function throwDart(msg){
 function playThrow(msg){
 	let dart = getDart(msg);
 	arrayRound[round][selectedPlayer][nbThrow] = dart;
+
 	if(dart !== 'miss'){
 		saveDart(dart);
 		displayScore();
+
+		if (checkVictory()){
+			displayVictoryScreen();
+			}
 	}else{
 		$('#throw'+nbThrow).html('miss');
 		displayScore();
 	}
-	if(nbThrow === 3){
+	if(nbThrow === 3 && !checkVictory()){
 		displayChangePlayer();
 	}
 }
@@ -79,7 +87,7 @@ function saveDart(dart){
 
 	let score = parseInt(dart);
 	saveScore(score, dart,zone);
-	$('#throw'+nbThrow).html(zoneText+' '+dart);
+	$('#throw'+nbThrow).html(zoneText+' '+dartString);
 	$('#throw'+nbThrow).addClass(zoneText+'Shot');
 }
 
@@ -135,7 +143,21 @@ function displayScore(){
 }
 
 function checkVictory(){
+	let isVictory = true;
 
+	arrayTargets.forEach((v,i) => {
+		if (arrayTouch[selectedPlayer][v] < 3)
+			isVictory = false;
+	});
+
+	for(let i = 1; i <= nombrePlayer; i++){
+		if (arrayTouch[selectedPlayer]["point"] > arrayTouch[i]["point"])
+			isVictory = false;
+	}
+
+	isGameOver = isVictory;
+
+	return isVictory;
 }
 
 function setHtmlHistoryRound(idRound,numberRound, listeScore){
@@ -146,6 +168,7 @@ function setHtmlHistoryRound(idRound,numberRound, listeScore){
 	selectorHR1.find('.title').html('R'+numberRound+' :');
 	for(let i=1;i<=3;i++){
 		selectorHR1.find('.T'+i).html(getHtmlThrowLastRound(listeScore[i]));
+		console.log();
 	}
 }
 
@@ -161,6 +184,14 @@ function getHtmlThrow(i){
 	}
 }
 function getHtmlThrowLastRound(dart){
+	let dartInt = dart.substring(1);
+
+	if (!(dartInt in arrayTouch[selectedPlayer])){
+		return '-';
+	}
+
+	(dart==="25") ? dartString = "Bull" : dartString = dart;
+
 	if(dart.indexOf("S") >= 0){
 		return '/';
 	}else if(dart.indexOf("D") >= 0){
@@ -170,7 +201,6 @@ function getHtmlThrowLastRound(dart){
 	}else{
 		return '-';
 	}
-
 }
 
 function changePlayer(){
@@ -179,15 +209,10 @@ function changePlayer(){
 	let selector1 = $('#throw1');
 	let selector2 = $('#throw2');
 	let selector3 = $('#throw3');
-	selector1.removeClass('TripleShot');
-	selector1.removeClass('DoubleShot');
-	selector1.html('-');
-	selector2.removeClass('TripleShot');
-	selector2.removeClass('DoubleShot');
-	selector2.html('-');
-	selector3.removeClass('TripleShot');
-	selector3.removeClass('DoubleShot');
-	selector3.html('-');
+	selector1.removeClass('TripleShot').removeClass('DoubleShot').html('-');
+	selector2.removeClass('TripleShot').removeClass('DoubleShot').html('-');
+	selector3.removeClass('TripleShot').removeClass('DoubleShot').html('-');
+
 	if(selectedPlayer === nombrePlayer){
 		newRound()
 	}else{
@@ -210,6 +235,8 @@ function changePlayer(){
 		$('.tdPlayer'+selectedPlayer).addClass('selected');
 		$('#zoneScorePlayer'+selectedPlayer).addClass('selected');
 	}
+
+	displayScore();
 }
 
 function newRound(){
@@ -249,16 +276,13 @@ function initGame(nbPLayer){
 		arrayTouch[i] = [];
 	}
 	arrayTouch.forEach((item, index) => {
-		arrayTouch[index]['20'] = 0;
-		arrayTouch[index]['19'] = 0;
-		arrayTouch[index]['18'] = 0;
-		arrayTouch[index]['17'] = 0;
-		arrayTouch[index]['16'] = 0;
-		arrayTouch[index]['15'] = 0;
-		arrayTouch[index]['25'] = 0;
+		arrayTargets.forEach((v,i) => {
+			arrayTouch[index][v] = 0;
+		});
 		arrayTouch[index]['point'] = 0;
 	});
 }
+
 function initRound(){
 	arrayRound[round] = [];
 	for(let i = 1; i <= nombrePlayer; i++){
@@ -269,11 +293,6 @@ function initRound(){
 	}
 }
 
-
 function getDart(msg){
-	arrayTouch.forEach((item, index) => {
-		if (index===msg) {
-			return item;
-		}
-	} );
+	return targetMatrix[msg];
 }
