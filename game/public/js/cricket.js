@@ -8,6 +8,7 @@ let lastMsg = '';
 let isGameOver = false;
 let arrayTouch = [];
 let arrayRound = [];
+let previousTimestamp = 0;
 
 initRound();
 initGame(nombrePlayer);
@@ -17,8 +18,12 @@ socket.on('arduino', function(msg) {
 });
 
 function arduinoEvent(msg){
-	if(isGameOver === false && lastMsg === ''){
-		lastMsg = msg;
+	let timestamp = Math.floor(Date.now());
+	let deltaTimestamp = timestamp - previousTimestamp;
+
+	if(msg !== '' && deltaTimestamp >= '600' && isGameOver === false ){
+
+		previousTimestamp = timestamp;
 
 		if(msg === 'btnValidate'){
 			changePlayer();
@@ -29,10 +34,6 @@ function arduinoEvent(msg){
 			nbThrow++;
 			playThrow(msg);
 		}
-
-		setInterval(function(){
-			lastMsg = '';
-		}, 1500);
 	}
 }
 
@@ -43,14 +44,15 @@ function playThrow(msg){
 	if(dart !== 'miss'){
 		saveDart(dart);
 		displayScore();
-
-		if (checkVictory()){
-			displayVictoryScreen();
-			}
 	}else{
 		$('#throw'+nbThrow).html('miss');
 		displayScore();
 	}
+
+	if (checkVictory()){
+		displayVictoryScreen();
+	}
+
 	if(nbThrow === 3 && !checkVictory()){
 		displayChangePlayer();
 	}
