@@ -50,7 +50,7 @@ void loop() {
       if (buttonState == HIGH) {
       } else {
         // if the current state is LOW then the button went from on to off:
-        Serial.println("changePlayer");
+        Serial.println("btnValidate");
       }
       // Delay a little bit to avoid bouncing
       delay(50);
