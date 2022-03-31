@@ -52,55 +52,26 @@
         <div class="icon-block sectionCenter">
           <table class="tableCricket">
             <tbody>
-            <tr id="tr20">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">20</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
-            <tr id="tr19">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">19</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
-            <tr id="tr18">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">18</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
-            <tr id="tr17">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">17</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
-            <tr id="tr16">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">16</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
-            <tr id="tr15">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">15</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
-            <tr id="tr25">
-              <td class="tdGame tdPlayer1 selected"></td>
-              <td class="tdGame tdPlayer2"></td>
-              <td class="tdGame tableChiffreCenter">O</td>
-              <td class="tdGame tdPlayer3"></td>
-              <td class="tdGame tdPlayer4"></td>
-            </tr>
+              <% for(var i=0; i < arrayTargets.length; i++) { %>
+              <% if(arrayTargets[i] != 25){ %>
+                <tr id="tr<%- arrayTargets[i] %>">
+                  <td class="tdGame tdPlayer1 selected"></td>
+                  <td class="tdGame tdPlayer2"></td>
+                  <td class="tdGame tableChiffreCenter"><%- arrayTargets[i] %></td>
+                  <td class="tdGame tdPlayer3"></td>
+                  <td class="tdGame tdPlayer4"></td>
+                </tr>
+                <% }else{ %>
+                  <tr id="tr25">
+                    <td class="tdGame tdPlayer1 selected"></td>
+                    <td class="tdGame tdPlayer2"></td>
+                    <td class="tdGame tableChiffreCenter">BULL</td>
+                    <td class="tdGame tdPlayer3"></td>
+                    <td class="tdGame tdPlayer4"></td>
+                  </tr>
+                <% } %>
+              <% } %>
+
             </tbody>
           </table>
         </div>

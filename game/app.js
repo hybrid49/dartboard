@@ -16,18 +16,46 @@ app.use(express.static(__dirname + '/public'));
 app.get('/game/cricket', function(req, res) {
 	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, arrayTargets:["20","19","18","17","16","15","25"]});
 });
+
+// game cricket page
+app.get('/game/RandomCricket', function(req, res) {
+	let array = [25];
+	do {
+		let nb = between(0, 20);
+
+		if(array.includes(nb)){
+			nb = between(0, 20);
+		}else{
+			array.push(nb);
+		}
+	}while(array.length < 7)
+	array.sort(function(a, b) {
+		return a - b;
+	});
+	console.log(array);
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, arrayTargets:array});
+});
+
 // game 501 page
 app.get('/game/501', function(req, res) {
 	res.render('pages/501', {nbPlayer: req.query.nbPlayer});
 });
+
 // index page
 app.get('/', function(req, res) {
 	res.render('pages/index');
 });
+
 // select number player page
 app.get('/lobby', function(req, res) {
 	res.render('pages/lobby', {game : req.query.game});
 });
+
+function between(min, max) {
+	return Math.floor(
+		Math.random() * (max - min + 1) + min
+	)
+}
 
 const { Server }  = require('socket.io', {wsEngine: 'ws' });
 
