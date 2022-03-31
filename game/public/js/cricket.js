@@ -4,10 +4,12 @@ let round =1;
 let r = document.querySelector(':root');
 const socket = io()
 let nbThrow = 0;
+let nbTotalThrow = 0;
 let lastMsg = '';
 let isGameOver = false;
 let arrayTouch = [];
 let arrayRound = [];
+let arrayHistoryThrow = [];
 let previousTimestamp = 0;
 
 initRound();
@@ -21,7 +23,7 @@ function arduinoEvent(msg){
 	let timestamp = Math.floor(Date.now());
 	let deltaTimestamp = timestamp - previousTimestamp;
 
-	if(msg !== '' && deltaTimestamp >= '600' && isGameOver === false ){
+	if(msg !== '' && deltaTimestamp >= '900' && isGameOver === false ){
 
 		previousTimestamp = timestamp;
 
@@ -32,7 +34,9 @@ function arduinoEvent(msg){
 		}else if (nbThrow < 3){
 			//We don't trigger the function when players hit the board when they remove darts
 			nbThrow++;
+			nbTotalThrow++;
 			playThrow(msg);
+			saveHistory();
 		}
 	}
 }
@@ -54,43 +58,104 @@ function playThrow(msg){
 	}
 
 	if(nbThrow === 3 && !checkVictory()){
-		displayChangePlayer();
+		displayModalChangePlayer();
 	}
+	saveHistoryThrow();
 }
 
-function displayChangePlayer(){
+function displayModalChangePlayer(){
 	$('#changePlayer').show()
 	displayScore()
 }
 
-function undoLastThrow(){
-	if(nbThrow >= 1){
-		let lastThrow = arrayRound[round][selectedPlayer][nbThrow];
+function saveHistory(){
+	if(nbTotalThrow >= 1){
+		arrayHistoryThrow[nbTotalThrow] = $.extend(true, [], arrayTouch);
+	}
+}
 
+function clone(obj){
+	try{
+		console.log(JSON.stringify(obj))
+		var copy = JSON.parse(JSON.stringify(obj));
+	} catch(ex){
+		alert("Vous utilisez un vieux navigateur bien pourri, qui n'est pas pris en charge par ce site");
+	}
+	return copy;
+}
+
+function undoLastThrow(){
+	$('#changePlayer').hide()
+
+	if(nbThrow > 1){
+		arrayRound[round][selectedPlayer][nbThrow] = '';
+		nbThrow--;
+	}else{
+		arrayRound[round][selectedPlayer][nbThrow] = '';
+		if(selectedPlayer != 1){
+			nbThrow = 2;
+			selectedPlayer--;
+		}else{
+			nbThrow = 2;
+			round--;
+			selectedPlayer = nombrePlayer;
+		}
+	}
+	arrayHistoryThrow[nbTotalThrow] = [];
+
+	nbTotalThrow--;
+	arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalThrow]);
+
+	displayScore();
+	displayChangedPlayer();
+	displayHistoryRound();
+}
+
+function displayHistoryRound(){
+	for(let i = 1; i <= 3; i++){
+		if(i <= nbThrow){
+			let zoneText;
+			let dartString;
+			let dart;
+			if(arrayRound[round][selectedPlayer][i] === 'miss'){
+				zoneText = "miss";
+				dartString = '';
+			}else{
+				let zone = arrayRound[round][selectedPlayer][i].substring(0,1);
+				zoneText = getTextDart(zone);
+				dart = arrayRound[round][selectedPlayer][i].replace(zone,'');
+				(dart==="25") ? dartString = "Bull" : dartString = dart;
+			}
+
+			$('#throw'+i).html(zoneText+' '+dartString);
+			$('#throw'+i).addClass(zoneText+'Shot');
+		}else{
+			$('#throw'+i).removeClass('TripleShot').removeClass('DoubleShot').html('-');
+		}
+
+	}
+}
+
+function getTextDart(zone){
+	if(zone === "S"){
+		return "Single";
+	}else if(zone === "D"){
+		return "Double";
+	}else if(zone === "T") {
+		return "Triple";
+	}else{
+		return "miss";
 	}
 }
 
 function saveDart(dart){
 	let zone = dart.substring(0,1);
-	let zoneText;
-	let dartString;
-
-	if(zone === "S"){
-		zoneText = "Single";
-	}else if(zone === "D"){
-		zoneText = "Double";
-	}else if(zone === "T") {
-		zoneText = "Triple";
-	}
 
 	dart = dart.replace(zone,'');
-
-	(dart==="25") ? dartString = "Bull" : dartString = dart;
-
+	displayHistoryRound();
 	let score = parseInt(dart);
 	saveScore(score, dart,zone);
-	$('#throw'+nbThrow).html(zoneText+' '+dartString);
-	$('#throw'+nbThrow).addClass(zoneText+'Shot');
+
 }
 
 function saveScore(score, dart, position){
@@ -219,26 +284,35 @@ function changePlayer(){
 		newRound()
 	}else{
 		selectedPlayer = selectedPlayer+1;
-		if(selectedPlayer === 2){
-			r.style.setProperty('--main-bg-color', '#ffeb3b');
-			r.style.setProperty('--main-bg-color-darker', '#ab9d26');
-		}
-		if(selectedPlayer === 3){
-			r.style.setProperty('--main-bg-color', '#2fc536');
-			r.style.setProperty('--main-bg-color-darker', '#1d8122');
-		}
-		if(selectedPlayer === 4){
-			r.style.setProperty('--main-bg-color', '#03a9f4');
-			r.style.setProperty('--main-bg-color-darker', '#016795');
-		}
-
-		$('.tdGame').removeClass('selected');
-		$('.scorePlayer').removeClass('selected');
-		$('.tdPlayer'+selectedPlayer).addClass('selected');
-		$('#zoneScorePlayer'+selectedPlayer).addClass('selected');
+		displayChangedPlayer();
 	}
 
 	displayScore();
+}
+
+function displayChangedPlayer(){
+	if(selectedPlayer === 1){
+		r.style.setProperty('--main-bg-color', '#f44336');
+		r.style.setProperty('--main-bg-color-darker', '#c62828');
+	}
+	if(selectedPlayer === 2){
+		r.style.setProperty('--main-bg-color', '#ffeb3b');
+		r.style.setProperty('--main-bg-color-darker', '#ab9d26');
+	}
+	if(selectedPlayer === 3){
+		r.style.setProperty('--main-bg-color', '#2fc536');
+		r.style.setProperty('--main-bg-color-darker', '#1d8122');
+	}
+	if(selectedPlayer === 4){
+		r.style.setProperty('--main-bg-color', '#03a9f4');
+		r.style.setProperty('--main-bg-color-darker', '#016795');
+	}
+
+	$('#nbRound').html(round);
+	$('.tdGame').removeClass('selected');
+	$('.scorePlayer').removeClass('selected');
+	$('.tdPlayer'+selectedPlayer).addClass('selected');
+	$('#zoneScorePlayer'+selectedPlayer).addClass('selected');
 }
 
 function newRound(){
@@ -248,14 +322,7 @@ function newRound(){
 		round = round + 1;
 		initRound();
 		selectedPlayer = 1
-		r.style.setProperty('--main-bg-color', '#f44336');
-		r.style.setProperty('--main-bg-color-darker', '#c62828');
-
-		$('#nbRound').html(round);
-		$('.tdGame').removeClass('selected');
-		$('.scorePlayer').removeClass('selected');
-		$('.tdPlayer'+selectedPlayer).addClass('selected');
-		$('#zoneScorePlayer'+selectedPlayer).addClass('selected');
+		displayChangedPlayer();
 	}
 
 }
@@ -278,10 +345,11 @@ function initGame(nbPLayer){
 		arrayTouch[i] = [];
 	}
 	arrayTouch.forEach((item, index) => {
+		arrayTouch[index]['point'] = 0;
 		arrayTargets.forEach((v,i) => {
 			arrayTouch[index][v] = 0;
 		});
-		arrayTouch[index]['point'] = 0;
+
 	});
 }
 
@@ -296,5 +364,14 @@ function initRound(){
 }
 
 function getDart(msg){
-	return targetMatrix[msg];
+	let result = targetMatrix[msg];
+	if(result != undefined){
+		return result;
+	}else{
+		return 'miss';
+	}
+}
+
+function saveHistoryThrow(){
+
 }
