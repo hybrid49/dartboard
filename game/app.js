@@ -14,11 +14,11 @@ app.use(express.static(__dirname + '/public'));
 
 // game cricket page
 app.get('/game/cricket', function(req, res) {
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, arrayTargets:["20","19","18","17","16","15","25"]});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:["20","19","18","17","16","15","25"]});
 });
 // game 501 page
 app.get('/game/501', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer});
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:2});
 });
 // index page
 app.get('/', function(req, res) {
