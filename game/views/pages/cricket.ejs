@@ -20,7 +20,7 @@
       <div class="col s12 m2">
         <div class="icon-block sectionLeft">
           <div class="center titleLeft">CRICKET CUT THROAT</div>
-          <div class="center titleLeft">ROUND <span id="nbRound">1</span> / 20</div>
+          <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
           <div class="center tableLeft">
             <table>
               <tbody>
@@ -134,6 +134,12 @@
 <div id="changePlayer">
   CHANGEMENT DE JOUEUR
 </div>
+<div id="newGame">
+  Voulez vous jouer de nouveau
+</div>
+<div id="returnMenu">
+  Voulez vous jouer de nouveau
+</div>
 <div id="zonevictory">
   VICTOIRE : <span id="zonevictoryPlayer"></span>
 </div>
@@ -143,8 +149,8 @@
 <script src="../../js/socket.io.js"></script>
 <script src="../../js/dart_target_matrix.js"></script>
 <script>
-  <% var nombrePlayer = nbPlayer%>
-  let nombrePlayer = <%- nombrePlayer %>;
+  let nombrePlayer = <%- nbPlayer %>;
+  let maxRound = <%- maxRound %>;
   let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
 </script>
 <script src="../../js/cricket.js"></script>
