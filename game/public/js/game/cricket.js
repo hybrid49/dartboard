@@ -1,31 +1,26 @@
 initGame(nombrePlayer);
 
-function getTextDart(zone){
-	if(zone === "S"){
-		return "Single";
-	}else if(zone === "D"){
-		return "Double";
-	}else if(zone === "T") {
-		return "Triple";
-	}else{
-		return "miss";
+function initGame(nbPLayer){
+	for(let i = 1; i <= nbPLayer; i++){
+		arrayTouch[i] = [];
 	}
+	arrayTouch.forEach((item, index) => {
+		arrayTouch[index]['point'] = 0;
+		arrayTouch[index]['nbThrowRound'] = 0;
+		arrayTargets.forEach((v,i) => {
+			arrayTouch[index][v] = 0;
+		});
+	});
 }
 
 function saveScore(score, dart, position){
+	saveTouch(dart, position);
+	calculateNewScore(score, dart);
+}
 
-	if(arrayTouch[selectedPlayer][dart] <= 3){
-		if(position === 'T'){
-			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 3;
-		}
-		if(position === 'D'){
-			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 2;
-		}
-		if(position === 'S'){
-			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 1;
-		}
-	}
+function calculateNewScore(score, dart){
 	let nb;
+
 	if (arrayTouch[selectedPlayer][dart] > 3) {
 		nb = arrayTouch[selectedPlayer][dart] - 3
 		for (let i = 1; i <= nombrePlayer; i++) {
@@ -37,12 +32,30 @@ function saveScore(score, dart, position){
 		}
 		arrayTouch[selectedPlayer][dart] = 3
 	}
+}
 
-	displayScore()
+function checkVictory(){
+	let isVictory = true;
+
+	if(!(round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3)){
+		arrayTargets.forEach((v,i) => {
+			if (arrayTouch[selectedPlayer][v] < 3)
+				isVictory = false;
+		});
+
+
+		for(let i = 1; i <= nombrePlayer; i++){
+			if (arrayTouch[selectedPlayer]["point"] > arrayTouch[i]["point"])
+				isVictory = false;
+		}
+	}
+
+	isGameOver = isVictory;
+
+	return isVictory;
 }
 
 function displayScore(){
-
 	arrayTouch.forEach((hits, numPlayer) => {
 		hits.forEach((nbHit, target) => {
 			$('#tr'+target).find('.tdPlayer'+numPlayer).html(getHtmlThrow(nbHit));
@@ -62,28 +75,6 @@ function displayScore(){
 	}
 }
 
-function checkVictory(){
-	if(round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3){
-		isGameOver = true;
-		return true;
-	}
-	let isVictory = true;
-	arrayTargets.forEach((v,i) => {
-		if (arrayTouch[selectedPlayer][v] < 3)
-			isVictory = false;
-	});
-
-
-	for(let i = 1; i <= nombrePlayer; i++){
-		if (arrayTouch[selectedPlayer]["point"] > arrayTouch[i]["point"])
-			isVictory = false;
-	}
-
-	isGameOver = isVictory;
-
-	return isVictory;
-}
-
 function displayVictoryScreen(){
 	let lastPointPLayer = 1000;
 	let winner = 1;
@@ -101,17 +92,4 @@ function displayVictoryScreen(){
 		$('#newGame').show();
 	}, 1500);
 
-}
-
-function initGame(nbPLayer){
-	for(let i = 1; i <= nbPLayer; i++){
-		arrayTouch[i] = [];
-	}
-	arrayTouch.forEach((item, index) => {
-		arrayTouch[index]['point'] = 0;
-		arrayTargets.forEach((v,i) => {
-			arrayTouch[index][v] = 0;
-		});
-
-	});
 }

@@ -3,8 +3,7 @@ let round =1;
 let r = document.querySelector(':root');
 const socket = io()
 let nbThrow = 0;
-let nbTotalThrow = 0;
-let lastMsg = '';
+let nbTotalAction = 0;
 let isGameOver = false;
 let isNewGame = false;
 let isReturnMenu = false;
@@ -19,42 +18,6 @@ socket.on('arduino', function(msg) {
     arduinoEvent(msg);
 });
 
-function arduinoEvent(msg){
-    let timestamp = Math.floor(Date.now());
-    let deltaTimestamp = timestamp - previousTimestamp;
-
-    if(msg !== '' && deltaTimestamp >= '900' && isGameOver === false ){
-
-        previousTimestamp = timestamp;
-
-        if(msg === 'btnValidate'){
-            changePlayer();
-            saveHistory('btn');
-        }else if(msg === 'btnCancel'){
-            undoLastThrow();
-        }else if (nbThrow < 3){
-            //We don't trigger the function when players hit the board when they remove darts
-            nbThrow++;
-            playThrow(msg);
-            saveHistory('touch');
-        }
-    }
-    else{
-        if(msg === 'btnValidate'){
-            if(isNewGame && !isReturnMenu)
-                location.window.reload();
-        }else if(msg === 'btnCancel'){
-            if(isNewGame){
-                displayModalReturnMenu();
-            }else if(isReturnMenu){
-                isReturnMenu = false;
-                $('#returnMenu').hide();
-                undoLastThrow();
-            }
-        }
-    }
-}
-
 function initRound(){
     arrayRound[round] = [];
     for(let i = 1; i <= nombrePlayer; i++){
@@ -65,141 +28,60 @@ function initRound(){
     }
 }
 
-function newRound(){
-    if(round === maxRound){
-        displayVictoryScreen();
-    }else{
-        round = round + 1;
-        initRound();
-        selectedPlayer = 1
-        displayChangedPlayer();
+function arduinoEvent(msg){
+    let timestamp   = Math.floor(Date.now());
+    let deltaTimestamp = timestamp - previousTimestamp;
+
+    if(msg !== '' && deltaTimestamp >= '800' ){
+        previousTimestamp = timestamp;
+
+        if(isGameOver === false )
+            arduinoEventGameInProgress(msg);
+        else
+            arduinoEventGameOver(msg);
+
+        console.log(arrayHistoryThrow);
     }
 }
 
-function getDart(msg){
-    let result = targetMatrix[msg];
-    if(result != undefined){
-        return result;
-    }else{
-        return 'miss';
+function arduinoEventGameInProgress(msg) {
+    if(msg === 'btnValidate'){
+        changePlayer();
+        saveHistory('btn');
+    }else if(msg === 'btnCancel'){
+        undoLastAction();
+    }else if (nbThrow < 3){
+        //We don't trigger the function when players hit the board when they remove darts
+        nbThrow++;
+        playThrow(msg);
+        saveHistory('dart');
     }
 }
 
-function playThrow(msg){
-    let dart = getDart(msg);
-    arrayRound[round][selectedPlayer][nbThrow] = dart;
+function arduinoEventGameOver(msg) {
+    switch(msg) {
+        case 'btnValidate':
+            if(isNewGame)
+                window.location.reload();
+            if(isReturnMenu)
+                window.location.replace('/');
+            break;
 
-    if(dart !== 'miss'){
-        saveDart(dart);
-        displayScore();
-    }else{
-        $('#throw'+nbThrow).html('miss');
-        displayScore();
-    }
+        case 'btnCancel':
+            if(isNewGame)
+                displayModalReturnMenu();
+            if(isReturnMenu) {
+                isReturnMenu = false;
+                $('#returnMenu').hide();
+                undoLastAction();
+                }
+            break;
 
-    if (checkVictory()){
-        displayVictoryScreen();
-    }
-
-    if(nbThrow === 3 && !checkVictory()){
-        displayModalChangePlayer();
-    }
-    saveHistoryThrow();
-}
-
-function displayModalChangePlayer(){
-    $('#changePlayer').show()
-    displayScore()
-}
-
-function saveHistory(action){
-
-    nbTotalThrow++;
-    if(action ==='touch'){
-        arrayHistoryThrow[nbTotalThrow] = $.extend(true, [], arrayTouch);
-    }else{
-        arrayHistoryThrow[nbTotalThrow] = 'changePlayer';
-    }
-}
-
-function undoLastThrow(){
-    $('#changePlayer').hide();
-    if(nbTotalThrow > 0){
-        if(arrayHistoryThrow[nbTotalThrow] !== 'changePlayer'){
-            arrayRound[round][selectedPlayer][nbThrow] = '';
-            nbThrow--;
-            arrayHistoryThrow[nbTotalThrow] = [];
-
-            nbTotalThrow--;
-            arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalThrow]);
-
-        }else{
-            if(selectedPlayer !== 1){
-                nbThrow = 3;
-                selectedPlayer--;
-            }else{
-                nbThrow = 3;
-                round--;
-                selectedPlayer = nombrePlayer;
-            }
-            arrayHistoryThrow[nbTotalThrow] = [];
-
-            nbTotalThrow--;
-            displayChangedPlayer();
-
-        }
-        displayScore();
-        displayHistoryRound();
-    }
-}
-
-function saveDart(dart){
-    let zone = dart.substring(0,1);
-
-    dart = dart.replace(zone,'');
-    displayHistoryRound();
-    let score = parseInt(dart);
-    saveScore(score, dart,zone);
-}
-
-function setHtmlHistoryRound(idRound,numberRound, listeScore){
-    let selectorHR1 = $('#HistoryRound'+idRound);
-    selectorHR1.find('.T1').html('');
-    selectorHR1.find('.T2').html('');
-    selectorHR1.find('.T3').html('');
-    selectorHR1.find('.title').html('R'+numberRound+' :');
-    for(let i=1;i<=3;i++){
-        selectorHR1.find('.T'+i).html(getHtmlThrowLastRound(listeScore[i]));
-        console.log();
-    }
-}
-
-function getHtmlThrow(i){
-    if(i === 1){
-        return '/';
-    }
-    if(i === 2){
-        return 'X';
-    }
-    if(i === 3){
-        return 'O';
-    }
-}
-function getHtmlThrowLastRound(dart){
-    let dartInt = dart.substring(1);
-
-    if (arrayTouch.length > 0 || !(dartInt in arrayTouch[selectedPlayer])){
-        return '-';
-    }
-
-    if(dart.indexOf("S") >= 0){
-        return '/';
-    }else if(dart.indexOf("D") >= 0){
-        return 'X';
-    }else if(dart.indexOf("T") >= 0){
-        return 'O';
-    }else{
-        return '-';
+        default:
+            // Restart a game by throwing a dart after 5 seconds
+            let dart = getDart(msg);
+            if(deltaTimestamp >= '5000' && nbThrow === 3 && dart !== 'undefined' && dart !== null)
+                window.location.reload();
     }
 }
 
@@ -223,57 +105,137 @@ function changePlayer(){
     displayScore();
 }
 
-function displayModalReturnMenu(){
-    $('#newGame').hide();
-    $('#returnMenu').show();
-    isNewGame = false;
-    isReturnMenu = true;
+function saveHistory(action){
+    nbTotalAction++;
+    if(action ==='dart')
+        arrayHistoryThrow[nbTotalAction] = $.extend(true, [], arrayTouch);
+    else
+        arrayHistoryThrow[nbTotalAction]= 'changePlayer';
 }
-function displayHistoryRound(){
-    for(let i = 1; i <= 3; i++){
-        if(i <= nbThrow){
-            let zoneText;
-            let dartString;
-            let dart;
-            if(arrayRound[round][selectedPlayer][i] === 'miss'){
-                zoneText = "miss";
-                dartString = '';
-            }else{
-                let zone = arrayRound[round][selectedPlayer][i].substring(0,1);
-                zoneText = getTextDart(zone);
-                dart = arrayRound[round][selectedPlayer][i].replace(zone,'');
-                (dart==="25") ? dartString = "Bull" : dartString = dart;
+
+function undoLastAction(){
+    $('#changePlayer').hide();
+
+    if(nbTotalAction > 0){
+
+        console.log(nbTotalAction);
+
+        if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
+
+            arrayRound[round][selectedPlayer][nbThrow] = '';
+            arrayHistoryThrow[nbTotalAction] = [];
+
+            nbThrow--;
+            nbTotalAction--;
+            
+            if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
+                if(nbTotalAction === 0)
+                    initGame();
+                else
+                    arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalAction]);
             }
 
-            $('#throw'+i).html(zoneText+' '+dartString);
-            $('#throw'+i).addClass(zoneText+'Shot');
         }else{
-            $('#throw'+i).removeClass('TripleShot').removeClass('DoubleShot').html('-');
+            selectedPlayer !== 1 ? selectedPlayer-- : (selectedPlayer = nombrePlayer , round--);
+            arrayHistoryThrow[nbTotalAction] = [];
+
+            nbTotalAction--;
+            nbThrow = arrayHistoryThrow[nbTotalAction][selectedPlayer]["nbThrowRound"];
+
+            displayChangedPlayer();
         }
+
+        displayScore();
+        displayHistoryRound();
     }
 }
 
-function displayChangedPlayer(){
-    if(selectedPlayer === 1){
-        r.style.setProperty('--main-bg-color', '#f44336');
-        r.style.setProperty('--main-bg-color-darker', '#c62828');
-    }
-    if(selectedPlayer === 2){
-        r.style.setProperty('--main-bg-color', '#ffeb3b');
-        r.style.setProperty('--main-bg-color-darker', '#ab9d26');
-    }
-    if(selectedPlayer === 3){
-        r.style.setProperty('--main-bg-color', '#2fc536');
-        r.style.setProperty('--main-bg-color-darker', '#1d8122');
-    }
-    if(selectedPlayer === 4){
-        r.style.setProperty('--main-bg-color', '#03a9f4');
-        r.style.setProperty('--main-bg-color-darker', '#016795');
+function playThrow(msg){
+    let dart = getDart(msg);
+    arrayRound[round][selectedPlayer][nbThrow] = dart;
+
+    if(dart !== 'miss'){
+        saveDart(dart);
+    }else{
+        $('#throw'+nbThrow).html('miss');
     }
 
-    $('#nbRound').html(round);
-    $('.tdGame').removeClass('selected');
-    $('.scorePlayer').removeClass('selected');
-    $('.tdPlayer'+selectedPlayer).addClass('selected');
-    $('#zoneScorePlayer'+selectedPlayer).addClass('selected');
+    displayScore();
+    manageEndTurn();
+}
+
+function getDart(msg){
+    let result = targetMatrix[msg];
+    return (result === undefined ? 'miss' : result);
+}
+
+function newRound(){
+    if(round !== maxRound){
+        round ++;
+        selectedPlayer = 1;
+
+        initRound();
+        displayChangedPlayer();
+    }
+}
+
+function manageEndTurn(){
+    if (checkVictory())
+        displayVictoryScreen();
+    else if(nbThrow === 3)
+        displayModalChangePlayer();
+}
+
+function saveDart(dart){
+    let zone = dart.substring(0,1);
+
+    dart = dart.replace(zone,'');
+    let score = parseInt(dart);
+
+    displayHistoryRound();
+    saveScore(score, dart, zone);
+}
+
+function setHtmlHistoryRound(idRound,numberRound, listeScore){
+    let selectorHR1 = $('#HistoryRound'+idRound);
+    selectorHR1.find('.T1').html('');
+    selectorHR1.find('.T2').html('');
+    selectorHR1.find('.T3').html('');
+    selectorHR1.find('.title').html('R'+numberRound+' :');
+
+    for(let i=1;i<=3;i++){
+        selectorHR1.find('.T'+i).html(getHtmlThrowLastRound(listeScore[i]));
+    }
+}
+
+function saveTouch(dart, position){
+    let numberTouch = determineNumberTouchs(position);
+    arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + numberTouch;
+    arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
+}
+
+function getHtmlThrow(i){
+    return i === 1 ? '/'
+         : i === 2 ? 'X'
+         : i === 3 ? '0'
+         :           '';
+}
+
+function getHtmlThrowLastRound(dart){
+    return dart.indexOf("S") >= 0 ? '/'
+         : dart.indexOf("D") >= 0 ? 'X'
+         : dart.indexOf("T") >= 0 ? 'O'
+         :                                '-';
+}
+
+function determineZoneText(zone){
+    return zone === "S" ? "Single"
+         : zone === "D" ? "Double"
+         :                "Triple";
+}
+
+function determineNumberTouchs(zone){
+    return zone === "S" ? 1
+         : zone === "D" ? 2
+         :                3;
 }
