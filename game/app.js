@@ -21,19 +21,17 @@ app.get('/game/cricket', function(req, res) {
 app.get('/game/RandomCricket', function(req, res) {
 	let array = [25];
 	do {
-		let nb = between(0, 20);
+		let nb = between(1, 20);
 
-		if(array.includes(nb)){
-			nb = between(0, 20);
-		}else{
+		if(!array.includes(nb))
 			array.push(nb);
-		}
 	}while(array.length < 7)
+
 	array.sort(function(a, b) {
 		return a - b;
 	});
-	console.log(array);
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, arrayTargets:array});
+
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:array});
 });
 
 // game 501 page

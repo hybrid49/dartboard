@@ -28,7 +28,7 @@ function displayHistoryRound(){
 
             $('#throw'+i).html(zoneText+' '+dartString);
 
-            if (arrayTargets.includes(dart.toString()))
+            if (isTargetTouched(arrayRound[round][selectedPlayer][i]))
                 $('#throw'+i).addClass(zoneText+'Shot');
         }else{
             $('#throw'+i).removeClass('TripleShot').removeClass('DoubleShot').html('-');
