@@ -13,6 +13,32 @@ function displayModalReturnMenu(){
     isReturnMenu = true;
 }
 
+function displayHistoryRound(){
+    for(let i = 1; i <= 3; i++){
+        if(i <= nbThrow){
+            let zoneText;
+            let dartString;
+            let dart;
+            if(arrayRound[round][selectedPlayer][i] === 'miss'){
+                zoneText = "miss";
+                dartString = '';
+            }else{
+                let zone = arrayRound[round][selectedPlayer][i].substring(0,1);
+                zoneText = determineZoneText(zone);
+                dart = arrayRound[round][selectedPlayer][i].replace(zone,'');
+                (dart==="25") ? dartString = "Bull" : dartString = dart;
+            }
+
+            $('#throw'+i).html(zoneText+' '+dartString);
+
+            if (isTargetTouched(arrayRound[round][selectedPlayer][i]))
+                $('#throw'+i).addClass(zoneText+'Shot');
+        }else{
+            $('#throw'+i).removeClass('TripleShot').removeClass('DoubleShot').html('-');
+        }
+    }
+}
+
 function displayChangedPlayer(){
     if(selectedPlayer === 1){
         r.style.setProperty('--main-bg-color', '#f44336');

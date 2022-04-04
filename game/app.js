@@ -23,16 +23,15 @@ app.get('/game/RandomCricket', function(req, res) {
 	do {
 		let nb = between(1, 20);
 
-		if(array.includes(nb)){
-			nb = between(1, 20);
-		}else{
+		if(!array.includes(nb))
 			array.push(nb);
-		}
 	}while(array.length < 7)
+
 	array.sort(function(a, b) {
 		return a - b;
 	});
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer,maxRound:20, arrayTargets:array, mode: "random"});
+
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:array});
 });
 
 // game 501 page

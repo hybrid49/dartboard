@@ -40,8 +40,6 @@ function arduinoEvent(msg){
             arduinoEventGameInProgress(msg);
         else
             arduinoEventGameOver(msg);
-
-        console.log(arrayHistoryThrow);
     }
 }
 
@@ -123,8 +121,6 @@ function undoLastAction(){
 
     if(nbTotalAction > 0){
 
-        console.log(nbTotalAction);
-
         if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
 
             arrayRound[round][selectedPlayer][nbThrow] = '';
@@ -146,6 +142,8 @@ function undoLastAction(){
 
             nbTotalAction--;
             nbThrow = arrayHistoryThrow[nbTotalAction][selectedPlayer]["nbThrowRound"];
+            if (nbThrow === undefined)
+                nbThrow = 0;
 
             displayChangedPlayer();
         }
@@ -201,16 +199,27 @@ function saveDart(dart){
     saveScore(score, dart, zone);
 }
 
-function setHtmlHistoryRound(idRound,numberRound, listeScore){
+function getScore(dart){
+}
+
+function setHtmlHistoryRound(idRound, numberRound, listeScore){
     let selectorHR1 = $('#HistoryRound'+idRound);
     selectorHR1.find('.T1').html('');
     selectorHR1.find('.T2').html('');
     selectorHR1.find('.T3').html('');
     selectorHR1.find('.title').html('R'+numberRound+' :');
 
-    for(let i=1;i<=3;i++){
+    let displayThrow = (numberRound === round) ? nbThrow : 3;
+
+    for(let i=1;i<=displayThrow;i++){
         selectorHR1.find('.T'+i).html(getHtmlThrowLastRound(listeScore[i]));
     }
+}
+
+function isTargetTouched(dart){
+    let zone = dart.substring(1);
+
+    return arrayTargets.includes(zone);
 }
 
 function saveTouch(dart, position){
@@ -227,7 +236,8 @@ function getHtmlThrow(i){
 }
 
 function getHtmlThrowLastRound(dart){
-    return dart.indexOf("S") >= 0 ? '/'
+    return !isTargetTouched(dart) ? '-'
+         : dart.indexOf("S") >= 0 ? '/'
          : dart.indexOf("D") >= 0 ? 'X'
          : dart.indexOf("T") >= 0 ? 'O'
          :                                '-';

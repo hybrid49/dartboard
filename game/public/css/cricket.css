@@ -45,7 +45,8 @@ td{
 	text-align: center;
 }
 .tableChiffreCenter{
-	color: white;
+	background-color: #9F9F9F;
+	color: black !important;
 }
 .tableCricket{
 	border: 4px solid black;
