@@ -14,17 +14,17 @@ app.use(express.static(__dirname + '/public'));
 
 // game cricket page
 app.get('/game/cricket', function(req, res) {
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:["20","19","18","17","16","15","25"]});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:20, arrayTargets:["20","19","18","17","16","15","25"], mode: "cricket"});
 });
 
 // game cricket page
 app.get('/game/RandomCricket', function(req, res) {
 	let array = [25];
 	do {
-		let nb = between(0, 20);
+		let nb = between(1, 20);
 
 		if(array.includes(nb)){
-			nb = between(0, 20);
+			nb = between(1, 20);
 		}else{
 			array.push(nb);
 		}
@@ -32,13 +32,16 @@ app.get('/game/RandomCricket', function(req, res) {
 	array.sort(function(a, b) {
 		return a - b;
 	});
-	console.log(array);
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, arrayTargets:array});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer,maxRound:20, arrayTargets:array, mode: "random"});
 });
 
 // game 501 page
 app.get('/game/501', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:2});
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:15});
+});
+// game 501 page
+app.get('/game/301', function(req, res) {
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:10});
 });
 
 // index page

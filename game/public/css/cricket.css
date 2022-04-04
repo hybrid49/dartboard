@@ -1,6 +1,7 @@
 :root {
 	--main-bg-color: #f44336;
 	--main-bg-color-darker: #c62828;
+	--main-bg-color-darker-transparent: #c6282863;
 }
 @font-face {
 	font-family: myFirstFont;
@@ -147,49 +148,63 @@ td{
 .scoreP{
 	font-size: 130px;
 }
-#changePlayer{
+#changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes{
 	position: absolute;
 	top: 3em;
 	background-color: #9a9c98b3;
 	font-size: 114px;
 	padding: 10px 50px;
-	left: 60px;
+	text-align: center;
 	border: 16px solid white;
 	display: none;
+	color: white;
 }
 #zonevictory{
-	position: absolute;
-	top: 3em;
-	background-color: #9a9c98b3;
-	font-size: 114px;
-	padding: 10px 50px;
+	top:1em;
 	left: 60px;
-	border: 16px solid white;
-	display: none;
+	right: 60px;
+	animation-duration: 3s;
+	animation-name: clignoter;
+	animation-iteration-count: infinite;
+	transition: none;
+	background-color: var(--main-bg-color-darker-transparent);
+	border: 16px solid var(--main-bg-color);
 }
-#newGame{
-	position: absolute;
-	top: 3em;
-	background-color: #9a9c98b3;
-	font-size: 114px;
-	padding: 10px 50px;
+#changePlayer{
 	left: 60px;
-	border: 16px solid white;
-	display: none;
+	right: 60px;
 }
 #returnMenu{
-	position: absolute;
-	top: 3em;
-	background-color: #9a9c98b3;
-	font-size: 114px;
-	padding: 10px 50px;
 	left: 60px;
-	border: 16px solid white;
-	display: none;
+	right: 60px;
+}
+#newGame{
+	left: 60px;
+	right: 60px;
+}
+#zonebtnno{
+	top:5em;
+	left: 200px;
+	right: 1200px;
+}
+#zonebtyes{
+	top:5em;
+	left: 1200px;
+	right: 200px;
 }
 .DoubleShot{
 	color : #9c27b0;
 }
 .TripleShot{
 	color : #e91e63;
+}
+.tableChiffreCenter{
+	min-height: 93px;
+	background-color: #607d8b;
+}
+
+@keyframes clignoter {
+	0%   { opacity:1; }
+	40%   {opacity:0; }
+	100% { opacity:1; }
 }

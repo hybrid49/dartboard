@@ -2,31 +2,23 @@
 initGame(nombrePlayer);
 
 function saveScore(score, dart, position){
-
-	if(arrayTouch[selectedPlayer][dart] <= 3){
-		if(position === 'T'){
-			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 3;
-		}
-		if(position === 'D'){
-			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 2;
-		}
-		if(position === 'S'){
-			arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + 1;
-		}
-	}
 	let nb;
-	if (arrayTouch[selectedPlayer][dart] > 3) {
-		nb = arrayTouch[selectedPlayer][dart] - 3
-		for (let i = 1; i <= nombrePlayer; i++) {
-			if (i !== selectedPlayer) {
-				if (arrayTouch[i][dart] < 3) {
-					arrayTouch[i]['point'] = arrayTouch[i]['point'] + score * nb
-				}
-			}
-		}
-		arrayTouch[selectedPlayer][dart] = 3
+	if(position === 'T'){
+		nb = 3;
 	}
-
+	if(position === 'D'){
+		nb = 2
+	}
+	if(position === 'S'){
+		nb = 1;
+	}
+	total = arrayTouch[selectedPlayer]['point'] - (nb*score);
+	if(total < 0){
+		isAskChangePlayer = true;
+		displayModalChangePlayer()
+	}else{
+		arrayTouch[selectedPlayer]['point'] -= nb*score;
+	}
 	displayScore()
 }
 
@@ -34,10 +26,10 @@ function displayScore(){
 
 	arrayTouch.forEach((hits, numPlayer) => {
 		hits.forEach((nbHit, target) => {
-			$('#tr'+target).find('.tdPlayer'+numPlayer).html(getHtmlThrow(nbHit));
 			$('#scoreTotal'+numPlayer).html(hits['point']);
 		})
 	});
+	$("#scoreCurrentPlayer").html(arrayTouch[selectedPlayer]['point']);
 
 	if(round >= 3){
 		setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
@@ -51,19 +43,38 @@ function displayScore(){
 	}
 }
 
+function displayHistoryRound(){
+	for(let i = 1; i <= 3; i++){
+		if(i <= nbThrow){
+			let zoneText;
+			let dartString;
+			let dart;
+			if(arrayRound[round][selectedPlayer][i] === 'miss'){
+				zoneText = "miss";
+				dartString = '';
+			}else{
+				let zone = arrayRound[round][selectedPlayer][i].substring(0,1);
+				zoneText = determineZoneText(zone);
+				dart = arrayRound[round][selectedPlayer][i].replace(zone,'');
+				(dart==="25") ? dartString = "Bull" : dartString = dart;
+			}
+
+			$('#throw'+i).html(zoneText+' '+dartString);
+		}else{
+			$('#throw'+i).removeClass('TripleShot').removeClass('DoubleShot').html('-');
+		}
+	}
+}
+
 function checkVictory(){
 	let isVictory = true;
 
-	arrayTargets.forEach((v,i) => {
-		if (arrayTouch[selectedPlayer][v] < 3)
-			isVictory = false;
-	});
-
-	for(let i = 1; i <= nombrePlayer; i++){
-		if (arrayTouch[selectedPlayer]["point"] > arrayTouch[i]["point"])
-			isVictory = false;
+	if(arrayTouch[selectedPlayer]['point'] !== 501){
+		isVictory = false;
 	}
+	if(round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3){
 
+	}
 	isGameOver = isVictory;
 
 	return isVictory;
@@ -87,10 +98,6 @@ function initGame(nbPLayer){
 		arrayTouch[i] = [];
 	}
 	arrayTouch.forEach((item, index) => {
-		arrayTouch[index]['point'] = 0;
-		arrayTargets.forEach((v,i) => {
-			arrayTouch[index][v] = 0;
-		});
-
+		arrayTouch[index]['point'] = 501;
 	});
 }

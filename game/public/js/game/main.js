@@ -7,6 +7,7 @@ let nbTotalAction = 0;
 let isGameOver = false;
 let isNewGame = false;
 let isReturnMenu = false;
+let isAskChangePlayer = false;
 let arrayTouch = [];
 let arrayRound = [];
 let arrayHistoryThrow = [];
@@ -35,7 +36,7 @@ function arduinoEvent(msg){
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
-        if(isGameOver === false )
+        if(!isGameOver)
             arduinoEventGameInProgress(msg);
         else
             arduinoEventGameOver(msg);
@@ -51,10 +52,12 @@ function arduinoEventGameInProgress(msg) {
     }else if(msg === 'btnCancel'){
         undoLastAction();
     }else if (nbThrow < 3){
-        //We don't trigger the function when players hit the board when they remove darts
-        nbThrow++;
-        playThrow(msg);
-        saveHistory('dart');
+        if(!isAskChangePlayer){
+            //We don't trigger the function when players hit the board when they remove darts
+            nbThrow++;
+            playThrow(msg);
+            saveHistory('dart');
+        }
     }
 }
 
@@ -73,6 +76,8 @@ function arduinoEventGameOver(msg) {
             if(isReturnMenu) {
                 isReturnMenu = false;
                 $('#returnMenu').hide();
+                $('#zonebtnno').hide();
+                $('#zonebtyes').hide();
                 undoLastAction();
                 }
             break;
@@ -101,7 +106,7 @@ function changePlayer(){
         selectedPlayer = selectedPlayer+1;
         displayChangedPlayer();
     }
-
+    isAskChangePlayer = false;
     displayScore();
 }
 

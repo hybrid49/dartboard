@@ -57,7 +57,7 @@
                 <tr id="tr<%- arrayTargets[i] %>">
                   <td class="tdGame tdPlayer1 selected"></td>
                   <td class="tdGame tdPlayer2"></td>
-                  <td class="tdGame tableChiffreCenter"><%- arrayTargets[i] %></td>
+                  <td class="tdGame tableChiffreCenter"><%if (mode === "random"){ %>?<%}else{%><%- arrayTargets[i] %><%}%></td>
                   <td class="tdGame tdPlayer3"></td>
                   <td class="tdGame tdPlayer4"></td>
                 </tr>
@@ -132,16 +132,22 @@
   </div>
 </div>
 <div id="changePlayer">
-  CHANGEMENT DE JOUEUR
+  CHANGE PLAYER
 </div>
 <div id="newGame">
-  Voulez vous jouer de nouveau
+  Play again ?
 </div>
 <div id="returnMenu">
-  Voulez vous jouer de nouveau
+  Return menu ?
 </div>
 <div id="zonevictory">
-  VICTOIRE : <span id="zonevictoryPlayer"></span>
+  Victory : <span id="zonevictoryPlayer"></span>
+</div>
+<div id="zonebtnno">
+  NO <i class="fa fa-circle" style="color: red;"></i>
+</div>
+<div id="zonebtyes">
+  YES <i class="fa fa-circle" style="color: blue;"></i>
 </div>
 <!--  Scripts-->
 <script src="../../js/jquery-2.1.1.min.js"></script>
