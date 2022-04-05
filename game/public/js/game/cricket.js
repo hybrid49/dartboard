@@ -34,33 +34,6 @@ function calculateNewScore(score, dart){
 	}
 }
 
-function displayHistoryRound(){
-	for(let i = 1; i <= 3; i++){
-		if(i <= nbThrow){
-			let zoneText;
-			let dartString;
-			let dart;
-			if(arrayRound[round][selectedPlayer][i] === 'miss'){
-				zoneText = "miss";
-				dartString = '';
-			}else{
-				let zone = arrayRound[round][selectedPlayer][i].substring(0,1);
-				zoneText = determineZoneText(zone);
-				dart = arrayRound[round][selectedPlayer][i].replace(zone,'');
-				(dart==="25") ? dartString = "Bull" : dartString = dart;
-			}
-
-			$('#throw'+i).html(zoneText+' '+dartString);
-
-			if (arrayTargets.includes(dart.toString()))
-				$('#throw'+i).addClass(zoneText+'Shot');
-				$('#tr'+dart).find('.tableChiffreCenter').html(dart.toString());
-		}else{
-			$('#throw'+i).removeClass('TripleShot').removeClass('DoubleShot').html('-');
-		}
-	}
-}
-
 function checkVictory(){
 	let isVictory = true;
 

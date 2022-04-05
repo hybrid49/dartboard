@@ -11,10 +11,10 @@ app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 app.use(express.static(__dirname + '/public'));
-
+arrayComplete = ["20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","25"]
 // game cricket page
 app.get('/game/cricket', function(req, res) {
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:20, arrayTargets:["20","19","18","17","16","15","25"], mode: "cricket"});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:["20","19","18","17","16","15","25"], mode: "cricket"});
 });
 
 // game cricket page
@@ -31,16 +31,16 @@ app.get('/game/RandomCricket', function(req, res) {
 		return a - b;
 	});
 
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:array});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:array, mode: "cricket"});
 });
 
 // game 501 page
 app.get('/game/501', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:15});
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:15, arrayTarget : arrayComplete});
 });
 // game 501 page
 app.get('/game/301', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:10});
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:10, arrayTarget : arrayComplete});
 });
 
 // index page

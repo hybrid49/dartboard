@@ -163,7 +163,7 @@ td{
 	top:1em;
 	left: 60px;
 	right: 60px;
-	animation-duration: 3s;
+	animation-duration: 2s;
 	animation-name: clignoter;
 	animation-iteration-count: infinite;
 	transition: none;
@@ -185,11 +185,11 @@ td{
 #zonebtnno{
 	top:5em;
 	left: 200px;
-	right: 1200px;
+	right: 1100px;
 }
 #zonebtyes{
 	top:5em;
-	left: 1200px;
+	left: 1100px;
 	right: 200px;
 }
 .DoubleShot{
