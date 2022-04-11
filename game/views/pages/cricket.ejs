@@ -23,7 +23,7 @@
           <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
           <div class="center tableLeft">
             <table>
-              <tbody>
+              <tbody id="bodyHistoryRound">
               <tr id="HistoryRound1">
                 <td class="title">R1 :</td>
                 <td class="T1"></td>
@@ -53,7 +53,7 @@
           <table class="tableCricket">
             <tbody>
               <% for(var i=0; i < arrayTargets.length; i++) { %>
-              <% if(arrayTargets[i] != 25){ %>
+              <% if(arrayTargets[i] !== 25){ %>
                 <tr id="tr<%- arrayTargets[i] %>">
                   <td class="tdGame tdPlayer1 selected"></td>
                   <td class="tdGame tdPlayer2"></td>
@@ -153,8 +153,8 @@
   let maxRound = <%- maxRound %>;
   let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
 </script>
-<script src="../../js/game/main.js"></script>
 <script src="../../js/game/mainDisplay.js"></script>
+<script src="../../js/game/main.js"></script>
 <script src="../../js/game/cricket.js"></script>
 </body>
 </html>

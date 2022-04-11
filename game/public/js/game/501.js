@@ -1,6 +1,3 @@
-
-initGame(nombrePlayer);
-
 function saveScore(score, dart, position){
 
 	if(arrayTouch[selectedPlayer][dart] <= 3){

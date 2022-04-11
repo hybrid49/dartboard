@@ -123,6 +123,18 @@ td{
 .tableCricket tr:nth-last-child(1) .tdPlayer4.selected{
 	border-bottom: 10px solid var(--main-bg-color);
 }
+.tableCricket tr td:nth-child(1){
+	color: #f44336;
+}
+.tableCricket tr td:nth-child(2){
+	color: #ffeb3b;
+}
+.tableCricket tr td:nth-child(4){
+	color: #2fc536;
+}
+.tableCricket tr td:nth-child(5){
+	color: #03a9f4;
+}
 .lastDart{
 	background-color: #424242;
 	font-size: 40px;
