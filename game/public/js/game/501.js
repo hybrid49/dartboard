@@ -1,20 +1,21 @@
-function saveScore(score, dart, position){
-	let nb;
-	if(position === 'T'){
-		nb = 3;
-	}
-	if(position === 'D'){
-		nb = 2
-	}
-	if(position === 'S'){
-		nb = 1;
-	}
-	total = arrayTouch[selectedPlayer]['point'] - (nb*score);
+init501();
+
+function init501(){
+	arrayTouch.forEach((item, index) => {
+		arrayTouch[index]['point'] = 501;
+	});
+}
+
+function manageThrow(dart, number, zone){
+	let nb = determineNumberTouchs(zone);
+
+	total = arrayTouch[selectedPlayer]['point'] - (nb*number);
+
 	if(total < 0){
 		isAskChangePlayer = true;
 		displayModalChangePlayer()
 	}else{
-		arrayTouch[selectedPlayer]['point'] -= nb*score;
+		arrayTouch[selectedPlayer]['point'] -= nb*number;
 	}
 	displayScore()
 }
@@ -88,13 +89,4 @@ function displayVictoryScreen(){
 	});
 	$('#zonevictory').show();
 	$('#zonevictoryPlayer').html('Player '+winner);
-}
-
-function initGame(nbPLayer){
-	for(let i = 1; i <= nbPLayer; i++){
-		arrayTouch[i] = [];
-	}
-	arrayTouch.forEach((item, index) => {
-		arrayTouch[index]['point'] = 501;
-	});
 }

@@ -69,6 +69,7 @@ function arduinoEventGameInProgress(msg) {
     }else if(msg === 'btnCancel'){
         undoLastAction();
     }else if (nbThrow < 3){
+        console.log(isAskChangePlayer);
         if(!isAskChangePlayer){
             //We don't trigger the function when players hit the board when they remove darts
             nbThrow++;
