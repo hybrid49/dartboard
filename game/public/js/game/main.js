@@ -12,12 +12,31 @@ let arrayTouch = [];
 let arrayRound = [];
 let arrayHistoryThrow = [];
 let previousTimestamp = 0;
+let deltaTimestamp = 0;
 
+initGame();
 initRound();
 
 socket.on('arduino', function(msg) {
     arduinoEvent(msg);
 });
+
+function initGame(){
+    for(let i = 1; i <= nombrePlayer; i++)
+        arrayTouch[i] = [];
+
+    arrayTouch.forEach((item, index) => {
+        arrayTouch[index]['point'] = 0;
+        arrayTouch[index]['nbThrowRound'] = 0;
+        // End game stat
+        arrayTouch[index]['nbHit'] = 0;
+        arrayTouch[index]['nbSingle'] = 0;
+        arrayTouch[index]['nbDouble'] = 0;
+        arrayTouch[index]['nbTriple'] = 0;
+        arrayTouch[index]['nbBull'] = 0;
+        arrayTouch[index]['nbDoubleBull'] = 0;
+    });
+}
 
 function initRound(){
     arrayRound[round] = [];
@@ -30,8 +49,8 @@ function initRound(){
 }
 
 function arduinoEvent(msg){
-    let timestamp   = Math.floor(Date.now());
-    let deltaTimestamp = timestamp - previousTimestamp;
+    let timestamp = Math.floor(Date.now());
+    deltaTimestamp = timestamp - previousTimestamp;
 
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
@@ -83,10 +102,38 @@ function arduinoEventGameOver(msg) {
         default:
             // Restart a game by throwing a dart after 5 seconds
             let dart = getDart(msg);
-            if(deltaTimestamp >= '5000' && nbThrow === 3 && dart !== 'undefined' && dart !== null)
-                window.location.reload();
+            if(deltaTimestamp >= '5000' && nbThrow === 3 && dart !== 'undefined' && dart !== null){
+                resetGlobal();
+                arduinoEventGameInProgress(msg);
+            }
     }
 }
+
+function resetGlobal(){
+    selectedPlayer = 1;
+    round =1;
+    nbThrow = 0;
+    nbTotalAction = 0;
+    isGameOver = false;
+    isNewGame = false;
+    isReturnMenu = false;
+    arrayTouch = [];
+    arrayRound = [];
+    arrayHistoryThrow = [];
+
+    initRound();
+    initGame(nombrePlayer);
+    displayHistoryRound();
+    displayChangedPlayer();
+
+    $('#changePlayer').hide();
+    $('#newGame').hide();
+    $('#returnMenu').hide();
+    $('#zonevictory').hide();
+    $('#bodyHistoryRound').find("td").html(" ");
+    $('#bodyHistoryRound').find(".title").first().html("R1 :");
+}
+
 
 function changePlayer(){
     nbThrow = 0;
@@ -98,9 +145,11 @@ function changePlayer(){
     selector2.removeClass('TripleShot').removeClass('DoubleShot').html('-');
     selector3.removeClass('TripleShot').removeClass('DoubleShot').html('-');
 
-    if(selectedPlayer === nombrePlayer){
-        newRound()
-    }else{
+    if(checkVictory(true))
+        displayVictoryScreen();
+    else if (selectedPlayer === nombrePlayer)
+        newRound();
+    else{
         selectedPlayer = selectedPlayer+1;
         displayChangedPlayer();
     }
@@ -156,11 +205,15 @@ function undoLastAction(){
 function playThrow(msg){
     let dart = getDart(msg);
     arrayRound[round][selectedPlayer][nbThrow] = dart;
+    arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
 
-    if(dart !== 'miss'){
-        saveDart(dart);
-    }else{
-        $('#throw'+nbThrow).html('miss');
+    if(dart !== 'miss')
+        saveThrow(dart);
+    else {
+        // Exit for special management of certain games
+        if (typeof exitPlayThrowMiss === "function")
+            exitPlayThrowMiss();
+        $('#throw' + nbThrow).html('miss');
     }
 
     displayScore();
@@ -183,23 +236,61 @@ function newRound(){
 }
 
 function manageEndTurn(){
-    if (checkVictory())
+    if (checkVictory(''))
         displayVictoryScreen();
     else if(nbThrow === 3)
         displayModalChangePlayer();
 }
 
-function saveDart(dart){
+function saveThrow(dart){
     let zone = dart.substring(0,1);
+    let numberChar = dart.replace(zone,'');
+    let number = parseInt(numberChar);
 
-    dart = dart.replace(zone,'');
-    let score = parseInt(dart);
-
-    displayHistoryRound();
-    saveScore(score, dart, zone);
+    manageStat(dart, number, zone);
+    manageThrow(dart, number, zone);
 }
 
-function getScore(dart){
+function manageStat(dart, number, zone){
+    if (arrayTargets.includes(number.toString())){
+        arrayTouch[selectedPlayer]['nbHit'] ++;
+
+        if (dart === 'D25')
+            arrayTouch[selectedPlayer]['nbDoubleBull']++;
+        else if (dart === 'S25')
+            arrayTouch[selectedPlayer]['nbBull']++;
+        else if (zone === 'S')
+            arrayTouch[selectedPlayer]['nbSingle']++;
+        else if(zone === 'D')
+            arrayTouch[selectedPlayer]['nbDouble']++;
+        else if(zone === 'T')
+            arrayTouch[selectedPlayer]['nbTriple']++;
+    }
+}
+
+function isCurrentPlayerHasBetterStatThanCurrentWinner(player, currentWinner){
+    if (player['nbHit'] > currentWinner['nbHit'])
+        return true;
+    else if(player['nbHit'] === currentWinner['nbHit']){
+        if (player['nbDoubleBull'] > currentWinner['nbDoubleBull'])
+            return true;
+        else if(player['nbDoubleBull'] === currentWinner['nbDoubleBull']){
+            if (player['nbBull'] > currentWinner['nbBull'])
+                return true;
+            else if(player['nbBull'] === currentWinner['nbBull']){
+                  if (player['nbTriple'] > currentWinner['nbTriple'])
+                    return true;
+                else if(player['nbTriple'] === currentWinner['nbTriple']){
+                    if (player['nbDouble'] > currentWinner['nbDouble'])
+                        return true;
+                    else if(player['nbDouble'] === currentWinner['nbDouble']){
+                        if (player['nbSingle'] > currentWinner['nbSingle'])
+                            return true;
+                    }
+                }
+            }
+        }
+    }
 }
 
 function setHtmlHistoryRound(idRound, numberRound, listeScore){
@@ -220,12 +311,6 @@ function isTargetTouched(dart){
     let zone = dart.substring(1);
 
     return arrayTargets.includes(zone);
-}
-
-function saveTouch(dart, position){
-    let numberTouch = determineNumberTouchs(position);
-    arrayTouch[selectedPlayer][dart] = arrayTouch[selectedPlayer][dart] + numberTouch;
-    arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
 }
 
 function getHtmlThrow(i){

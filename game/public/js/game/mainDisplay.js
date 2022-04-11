@@ -19,6 +19,7 @@ function displayHistoryRound(){
             let zoneText;
             let dartString;
             let dart;
+
             if(arrayRound[round][selectedPlayer][i] === 'miss'){
                 zoneText = "miss";
                 dartString = '';
@@ -60,6 +61,7 @@ function displayChangedPlayer(){
         r.style.setProperty('--main-bg-color-darker', '#016795');
         r.style.setProperty('--main-bg-color-darker-transparent', '#03a9f463');
     }
+
 
     $('#nbRound').html(round);
     $('.tdGame').removeClass('selected');

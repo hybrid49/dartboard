@@ -1,44 +1,46 @@
-initGame(nombrePlayer);
+initCricket();
 
-function initGame(nbPLayer){
-	for(let i = 1; i <= nbPLayer; i++){
-		arrayTouch[i] = [];
-	}
+function initCricket(){
 	arrayTouch.forEach((item, index) => {
-		arrayTouch[index]['point'] = 0;
-		arrayTouch[index]['nbThrowRound'] = 0;
-		arrayTargets.forEach((v,i) => {
+		arrayTargets.forEach((v) => {
 			arrayTouch[index][v] = 0;
 		});
 	});
 }
 
-function saveScore(score, dart, position){
-	saveTouch(dart, position);
-	calculateNewScore(score, dart);
+function manageThrow(dart, number, zone){
+	saveTouch(number, zone);
+	calculateNewScore(number);
+	displayHistoryRound();
 }
 
-function calculateNewScore(score, dart){
+function saveTouch(dart, position){
+	let numberTouch = determineNumberTouchs(position);
+	arrayTouch[selectedPlayer][dart] += numberTouch;
+}
+
+function calculateNewScore(number){
 	let nb;
 
-	if (arrayTouch[selectedPlayer][dart] > 3) {
-		nb = arrayTouch[selectedPlayer][dart] - 3
+	if (arrayTouch[selectedPlayer][number] > 3) {
+		nb = arrayTouch[selectedPlayer][number] - 3
 		for (let i = 1; i <= nombrePlayer; i++) {
 			if (i !== selectedPlayer) {
-				if (arrayTouch[i][dart] < 3) {
-					arrayTouch[i]['point'] = arrayTouch[i]['point'] + score * nb
+				if (arrayTouch[i][number] < 3) {
+					arrayTouch[i]['point'] += number * nb
 				}
 			}
 		}
-		arrayTouch[selectedPlayer][dart] = 3
+		arrayTouch[selectedPlayer][number] = 3
 	}
 }
 
-function checkVictory(){
+function checkVictory(button){
 	let isVictory = true;
 
-	if(!(round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3)){
-		arrayTargets.forEach((v,i) => {
+	if(!(round === maxRound && selectedPlayer === nombrePlayer &&
+		(nbThrow === 3 || button === true))){
+		arrayTargets.forEach((v) => {
 			if (arrayTouch[selectedPlayer][v] < 3)
 				isVictory = false;
 		});
@@ -76,14 +78,8 @@ function displayScore(){
 }
 
 function displayVictoryScreen(){
-	let lastPointPLayer = 1000;
-	let winner = 1;
-	arrayTouch.forEach((item, index) => {
-		if(item['point'] < lastPointPLayer){
-			lastPointPLayer = item['point'];
-			winner = index;
-		}
-	});
+	let winner = determineWinner();
+
 	if(winner === 1){
 		r.style.setProperty('--main-bg-color', '#f44336');
 		r.style.setProperty('--main-bg-color-darker', '#c62828');
@@ -113,5 +109,21 @@ function displayVictoryScreen(){
 		$('#zonebtnno').show();
 		$('#zonebtyes').show();
 	}, 1500);
+}
 
+function determineWinner(){
+	let minPoint = 10000;
+	let winner = 1;
+
+	// TODO : prendre en compte le nombre de numéro fermé en cas d'égalité
+	arrayTouch.forEach((item, index) => {
+		if(item['point'] < minPoint) {
+			minPoint = item['point'];
+			winner = index;
+		}else if (item['point'] === minPoint
+			  && isCurrentPlayerHasBetterStatThanCurrentWinner(item, arrayTouch[winner]))
+			winner = index;
+	});
+
+	return winner;
 }

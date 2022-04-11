@@ -1,6 +1,3 @@
-
-initGame(nombrePlayer);
-
 function saveScore(score, dart, position){
 	let nb;
 	if(position === 'T'){
