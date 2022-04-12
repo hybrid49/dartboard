@@ -46,7 +46,7 @@ function manageThrow(dart, number, zone){
 }
 
 function manageHittedMultiplier(number, numberTouch){
-    let currentMultiplier = arrayTouch[selectedPlayer]['multiplier'];
+    let currentMultiplier = (number === "25") ? 1 : arrayTouch[selectedPlayer]['multiplier'];
     let combo = determineCombo();
 
     calculateNewMultiplier(numberTouch);
@@ -62,14 +62,9 @@ function determineCombo(){
     return (arrayTouch[selectedPlayer]['nbMultiplierRound'] === 3) ? 3 : 1;
 }
 
-function calculateNewMultiplier(number, numberTouch){
+function calculateNewMultiplier(numberTouch){
     arrayTouch[selectedPlayer]['multiplier'] += numberTouch;
     arrayTouch[selectedPlayer]['nbMultiplierRound']++;
-}
-
-function determineHittedMultiplierZone(number){
-    if (number !== "25")
-        arrayMultiplier.push(number);
 }
 
 function determineNewMultiplierZone(numberTouch){
@@ -84,6 +79,11 @@ function determineNewMultiplierZone(numberTouch){
             arrayMultiplier.push(number);
         }
     }
+}
+
+function determineHittedMultiplierZone(number){
+    if (number !== "25")
+        arrayMultiplier.push(number);
 }
 
 function checkVictory(button){

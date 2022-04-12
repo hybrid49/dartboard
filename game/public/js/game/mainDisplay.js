@@ -62,10 +62,55 @@ function displayChangedPlayer(){
         r.style.setProperty('--main-bg-color-darker-transparent', '#03a9f463');
     }
 
-
     $('#nbRound').html(round);
     $('.tdGame').removeClass('selected');
     $('.scorePlayer').removeClass('selected');
     $('.tdPlayer'+selectedPlayer).addClass('selected');
     $('#zoneScorePlayer'+selectedPlayer).addClass('selected');
+}
+
+function displayEasterEggsArduinoEvent(deltaTimestamp){
+    // TODO : Faire fonctionner cette méthode avec un SetTimeOut plutot qu'au
+    // TODO :  lanceement d'unenouvelle flechette car c'est plus logique
+    if (isEasterEggsDisplay() && !isGameOver){
+        let len = deltaTimestamp.toString().length;
+
+        if (len > 5 && deltaTimestamp > 60000)
+            displayAtWhatTime();
+    }
+}
+
+function displayAtWhatTime(){
+
+}
+
+function displayEasterEggsPlayThrow(){
+    // fews easterEgg doesn't happen all the time
+    if (isEasterEggsDisplay()){
+        displayLoser();
+        displaySlotMachine();
+        displayUniverseAnswer();
+        displayBigBoss();
+    }
+    displayNewBestScoreAllTime();
+}
+
+function displayLoser(){
+    // TODO : Valeur du round = miss / miss / miss
+}
+
+function displaySlotMachine(){
+    // TODO : Valeur du round = S7 / S7 / S7
+}
+
+function displayUniverseAnswer(){
+    // TODO : Valeur du round = 42
+}
+
+function displayNewBestScoreAllTime(){
+    // TODO : Faire apparaitre une vidéo de Macron, disant qu'il ferait mieux de traverser la rue
+}
+
+function displayBigBoss(){
+    // TODO : Valeur du round = bull / bull / bull
 }

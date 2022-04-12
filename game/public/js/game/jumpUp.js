@@ -54,7 +54,7 @@ function determineNewMultiplierZone(numberTouch){
 
             if (number.toString() === "21")
                 number = "25";
-            arrayHitted.push(number);
+            arrayMultiplier.push(number);
         }
     }
 }
@@ -63,6 +63,7 @@ function checkVictory(button){
     //button is useless in this game
     return (round === maxRound);
 }
+
 function displayScore(){
     $('#scoreTotal'+selectedPlayer).html(arrayTouch[selectedPlayer]['point']);
 }

@@ -13,6 +13,7 @@ let arrayRound = [];
 let arrayHistoryThrow = [];
 let previousTimestamp = 0;
 let deltaTimestamp = 0;
+let easterEggsRatio = 0.44;
 
 initGame();
 initRound();
@@ -55,10 +56,13 @@ function arduinoEvent(msg){
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
+        displayEasterEggsArduinoEvent(deltaTimestamp);
+
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
         else
             arduinoEventGameOver(msg);
+
     }
 }
 
@@ -69,7 +73,6 @@ function arduinoEventGameInProgress(msg) {
     }else if(msg === 'btnCancel'){
         undoLastAction();
     }else if (nbThrow < 3){
-        console.log(isAskChangePlayer);
         if(!isAskChangePlayer){
             //We don't trigger the function when players hit the board when they remove darts
             nbThrow++;
@@ -110,31 +113,63 @@ function arduinoEventGameOver(msg) {
     }
 }
 
-function resetGlobal(){
-    selectedPlayer = 1;
-    round =1;
-    nbThrow = 0;
-    nbTotalAction = 0;
-    isGameOver = false;
-    isNewGame = false;
-    isReturnMenu = false;
-    arrayTouch = [];
-    arrayRound = [];
-    arrayHistoryThrow = [];
+function playThrow(msg){
+    let dart = getDart(msg);
+    arrayRound[round][selectedPlayer][nbThrow] = dart;
+    arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
 
-    initRound();
-    initGame(nombrePlayer);
-    displayHistoryRound();
-    displayChangedPlayer();
+    if(dart !== 'miss')
+        saveThrow(dart);
+    else {
+        // Exit for special management of certain games
+        if (typeof exitPlayThrowMiss === "function")
+            exitPlayThrowMiss();
+        $('#throw' + nbThrow).html('miss');
+    }
 
-    $('#changePlayer').hide();
-    $('#newGame').hide();
-    $('#returnMenu').hide();
-    $('#zonevictory').hide();
-    $('#bodyHistoryRound').find("td").html(" ");
-    $('#bodyHistoryRound').find(".title").first().html("R1 :");
+    displayEasterEggsPlayThrow();
+
+    displayScore();
+    manageEndTurn();
 }
 
+function getDart(msg){
+    let result = targetMatrix[msg];
+    return (result === undefined ? 'miss' : result);
+}
+
+function saveThrow(dart){
+    let zone = dart.substring(0,1);
+    let numberChar = dart.replace(zone,'');
+    let number = parseInt(numberChar);
+
+    manageStat(dart, number, zone);
+    manageThrow(dart, number, zone);
+}
+
+function manageStat(dart, number, zone){
+    if (arrayTargets.includes(number.toString())){
+        arrayTouch[selectedPlayer]['nbHit'] ++;
+
+        if (dart === 'D25')
+            arrayTouch[selectedPlayer]['nbDoubleBull']++;
+        else if (dart === 'S25')
+            arrayTouch[selectedPlayer]['nbBull']++;
+        else if (zone === 'S')
+            arrayTouch[selectedPlayer]['nbSingle']++;
+        else if(zone === 'D')
+            arrayTouch[selectedPlayer]['nbDouble']++;
+        else if(zone === 'T')
+            arrayTouch[selectedPlayer]['nbTriple']++;
+    }
+}
+
+function manageEndTurn(){
+    if (checkVictory(''))
+        displayVictoryScreen();
+    else if(nbThrow === 3)
+        displayModalChangePlayer();
+}
 
 function changePlayer(){
     nbThrow = 0;
@@ -170,60 +205,41 @@ function undoLastAction(){
     $('#changePlayer').hide();
 
     if(nbTotalAction > 0){
-
-        if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
-
-            arrayRound[round][selectedPlayer][nbThrow] = '';
-            arrayHistoryThrow[nbTotalAction] = [];
-
-            nbThrow--;
-            nbTotalAction--;
-            
-            if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
-                if(nbTotalAction === 0)
-                    initGame();
-                else
-                    arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalAction]);
-            }
-
-        }else{
-            selectedPlayer !== 1 ? selectedPlayer-- : (selectedPlayer = nombrePlayer , round--);
-            arrayHistoryThrow[nbTotalAction] = [];
-
-            nbTotalAction--;
-            nbThrow = arrayHistoryThrow[nbTotalAction][selectedPlayer]["nbThrowRound"];
-            if (nbThrow === undefined)
-                nbThrow = 0;
-
-            displayChangedPlayer();
-        }
+        if(arrayHistoryThrow[nbTotalAction] === 'changePlayer')
+            undoLastChangePlayer();
+        else
+            undoLastThrow();
 
         displayScore();
         displayHistoryRound();
     }
 }
 
-function playThrow(msg){
-    let dart = getDart(msg);
-    arrayRound[round][selectedPlayer][nbThrow] = dart;
-    arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
+function undoLastChangePlayer(){
+    selectedPlayer !== 1 ? selectedPlayer-- : (selectedPlayer = nombrePlayer , round--);
+    arrayHistoryThrow[nbTotalAction] = [];
 
-    if(dart !== 'miss')
-        saveThrow(dart);
-    else {
-        // Exit for special management of certain games
-        if (typeof exitPlayThrowMiss === "function")
-            exitPlayThrowMiss();
-        $('#throw' + nbThrow).html('miss');
-    }
+    nbTotalAction--;
+    nbThrow = arrayHistoryThrow[nbTotalAction][selectedPlayer]["nbThrowRound"];
+    if (nbThrow === undefined)
+        nbThrow = 0;
 
-    displayScore();
-    manageEndTurn();
+    displayChangedPlayer();
 }
 
-function getDart(msg){
-    let result = targetMatrix[msg];
-    return (result === undefined ? 'miss' : result);
+function undoLastThrow(){
+    arrayRound[round][selectedPlayer][nbThrow] = '';
+    arrayHistoryThrow[nbTotalAction] = [];
+
+    nbThrow--;
+    nbTotalAction--;
+
+    if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
+        if(nbTotalAction === 0)
+            initGame();
+        else
+            arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalAction]);
+    }
 }
 
 function newRound(){
@@ -233,39 +249,6 @@ function newRound(){
 
         initRound();
         displayChangedPlayer();
-    }
-}
-
-function manageEndTurn(){
-    if (checkVictory(''))
-        displayVictoryScreen();
-    else if(nbThrow === 3)
-        displayModalChangePlayer();
-}
-
-function saveThrow(dart){
-    let zone = dart.substring(0,1);
-    let numberChar = dart.replace(zone,'');
-    let number = parseInt(numberChar);
-
-    manageStat(dart, number, zone);
-    manageThrow(dart, number, zone);
-}
-
-function manageStat(dart, number, zone){
-    if (arrayTargets.includes(number.toString())){
-        arrayTouch[selectedPlayer]['nbHit'] ++;
-
-        if (dart === 'D25')
-            arrayTouch[selectedPlayer]['nbDoubleBull']++;
-        else if (dart === 'S25')
-            arrayTouch[selectedPlayer]['nbBull']++;
-        else if (zone === 'S')
-            arrayTouch[selectedPlayer]['nbSingle']++;
-        else if(zone === 'D')
-            arrayTouch[selectedPlayer]['nbDouble']++;
-        else if(zone === 'T')
-            arrayTouch[selectedPlayer]['nbTriple']++;
     }
 }
 
@@ -314,6 +297,31 @@ function isTargetTouched(dart){
     return arrayTargets.includes(zone);
 }
 
+function resetGlobal(){
+    selectedPlayer = 1;
+    round =1;
+    nbThrow = 0;
+    nbTotalAction = 0;
+    isGameOver = false;
+    isNewGame = false;
+    isReturnMenu = false;
+    arrayTouch = [];
+    arrayRound = [];
+    arrayHistoryThrow = [];
+
+    initRound();
+    initGame(nombrePlayer);
+    displayHistoryRound();
+    displayChangedPlayer();
+
+    $('#changePlayer').hide();
+    $('#newGame').hide();
+    $('#returnMenu').hide();
+    $('#zonevictory').hide();
+    $('#bodyHistoryRound').find("td").html(" ");
+    $('#bodyHistoryRound').find(".title").first().html("R1 :");
+}
+
 function getHtmlThrow(i){
     return i === 1 ? '/'
          : i === 2 ? 'X'
@@ -339,4 +347,8 @@ function determineNumberTouchs(zone){
     return zone === "S" ? 1
          : zone === "D" ? 2
          :                3;
+}
+
+function isEasterEggsDisplay(){
+    return Math.random() < easterEggsRatio;
 }
