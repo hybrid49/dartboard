@@ -11,7 +11,7 @@ function initCricket(){
 function manageThrow(dart, number, zone){
 	saveTouch(number, zone);
 	calculateNewScore(number);
-	displayHistoryRound();
+	displayRound();
 }
 
 function saveTouch(dart, position){
@@ -20,14 +20,14 @@ function saveTouch(dart, position){
 }
 
 function calculateNewScore(number){
-	let nb;
+	let nbTouch;
 
 	if (arrayTouch[selectedPlayer][number] > 3) {
-		nb = arrayTouch[selectedPlayer][number] - 3
+		nbTouch = arrayTouch[selectedPlayer][number] - 3
 		for (let i = 1; i <= nombrePlayer; i++) {
 			if (i !== selectedPlayer) {
 				if (arrayTouch[i][number] < 3) {
-					arrayTouch[i]['point'] += number * nb
+					arrayTouch[i]['point'] += number * nbTouch
 				}
 			}
 		}
@@ -58,23 +58,37 @@ function checkVictory(button){
 }
 
 function displayScore(){
-	arrayTouch.forEach((hits, numPlayer) => {
-		hits.forEach((nbHit, target) => {
-			$('#tr'+target).find('.tdPlayer'+numPlayer).html(getHtmlThrow(nbHit));
-			$('#scoreTotal'+numPlayer).html(hits['point']);
-		})
-	});
+	displayHistoryRound();
 
-	if(round >= 3){
-		setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
-		setHtmlHistoryRound(2,round-1, arrayRound[round-1][selectedPlayer]);
-		setHtmlHistoryRound(3,round-2, arrayRound[round-2][selectedPlayer]);
-	}else if(round === 1){
-		setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
-	}else if(round === 2){
-		setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
-		setHtmlHistoryRound(2,round-1, arrayRound[round-1][selectedPlayer]);
+	if (round === 1 && nbThrow === 0)
+		resetDisplayScore();
+	else{
+		arrayTouch.forEach((hits, numPlayer) => {
+			hits.forEach((nbHit, target) => {
+				$('#tr'+target).find('.tdPlayer'+numPlayer).html(getHtmlThrow(nbHit));
+				$('#scoreTotal'+numPlayer).html(hits['point']);
+			})
+		});
 	}
+}
+
+function resetDisplayScore(){
+	for (let i = 0; i < nombrePlayer; i++) {
+		arrayTargets.forEach((target) => {
+			$('#tr'+target).find('.tdPlayer'+i).html(getHtmlThrow(0));
+			$('#scoreTotal'+i).html(0);
+		});
+	}
+}
+
+function displayHistoryRound(){
+	setHtmlHistoryRound(1,round, arrayRound[round][selectedPlayer]);
+
+	if (round > 1)
+		setHtmlHistoryRound(2,round-1, arrayRound[round-1][selectedPlayer]);
+
+	if (round > 2)
+		setHtmlHistoryRound(3,round-2, arrayRound[round-2][selectedPlayer]);
 }
 
 function displayVictoryScreen(){

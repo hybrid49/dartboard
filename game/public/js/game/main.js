@@ -14,6 +14,7 @@ let arrayHistoryThrow = [];
 let previousTimestamp = 0;
 let deltaTimestamp = 0;
 let easterEggsRatio = 0.44;
+let easterEggTimeOutClear = false;
 
 initGame();
 initRound();
@@ -31,6 +32,7 @@ function initGame(){
         arrayTouch[index]['nbThrowRound'] = 0;
         // End game stat
         arrayTouch[index]['nbHit'] = 0;
+        arrayTouch[index]['nbMiss'] = 0;
         arrayTouch[index]['nbSingle'] = 0;
         arrayTouch[index]['nbDouble'] = 0;
         arrayTouch[index]['nbTriple'] = 0;
@@ -46,6 +48,7 @@ function initRound(){
         arrayRound[round][i][1] = '';
         arrayRound[round][i][2] = '';
         arrayRound[round][i][3] = '';
+        arrayRound[round][i]['point'] = 0;
     }
 }
 
@@ -56,17 +59,17 @@ function arduinoEvent(msg){
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
-        displayEasterEggsArduinoEvent(deltaTimestamp);
-
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
         else
             arduinoEventGameOver(msg);
-
     }
 }
 
 function arduinoEventGameInProgress(msg) {
+    displayEasterEggsTimeExceeded(msg);
+    saveInitialization();
+
     if(msg === 'btnValidate'){
         changePlayer();
         saveHistory('btn');
@@ -113,6 +116,11 @@ function arduinoEventGameOver(msg) {
     }
 }
 
+function saveInitialization(){
+    if (round === 1 && nbThrow === 0)
+        arrayHistoryThrow[nbTotalAction] = $.extend(true, [], arrayTouch);
+}
+
 function playThrow(msg){
     let dart = getDart(msg);
     arrayRound[round][selectedPlayer][nbThrow] = dart;
@@ -124,6 +132,7 @@ function playThrow(msg){
         // Exit for special management of certain games
         if (typeof exitPlayThrowMiss === "function")
             exitPlayThrowMiss();
+        arrayTouch[selectedPlayer]['nbMiss']++;
         $('#throw' + nbThrow).html('miss');
     }
 
@@ -148,6 +157,8 @@ function saveThrow(dart){
 }
 
 function manageStat(dart, number, zone){
+    arrayRound[round][selectedPlayer]['point'] += number * determineNumberTouchs(zone);
+
     if (arrayTargets.includes(number.toString())){
         arrayTouch[selectedPlayer]['nbHit'] ++;
 
@@ -211,7 +222,7 @@ function undoLastAction(){
             undoLastThrow();
 
         displayScore();
-        displayHistoryRound();
+        displayRound();
     }
 }
 
@@ -228,18 +239,27 @@ function undoLastChangePlayer(){
 }
 
 function undoLastThrow(){
-    arrayRound[round][selectedPlayer][nbThrow] = '';
+    undoLastThrowRound();
     arrayHistoryThrow[nbTotalAction] = [];
 
     nbThrow--;
     nbTotalAction--;
-
+    console.log('nbTotalAction : '+nbTotalAction);
+    console.log(arrayHistoryThrow);
+    // Check if previous action was ChangePlayer too
     if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
         if(nbTotalAction === 0)
             initGame();
         else
             arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalAction]);
     }
+}
+
+function undoLastThrowRound(){
+    if (arrayRound[round][selectedPlayer][nbThrow] !== 'miss')
+        arrayRound[round][selectedPlayer][nbThrow]['point'] -= arrayRound[round][selectedPlayer][nbThrow];
+
+    arrayRound[round][selectedPlayer][nbThrow] = "";
 }
 
 function newRound(){
@@ -311,7 +331,7 @@ function resetGlobal(){
 
     initRound();
     initGame(nombrePlayer);
-    displayHistoryRound();
+    displayRound();
     displayChangedPlayer();
 
     $('#changePlayer').hide();
@@ -351,4 +371,11 @@ function determineNumberTouchs(zone){
 
 function isEasterEggsDisplay(){
     return Math.random() < easterEggsRatio;
+}
+
+function isEasterEggsRoundSameThrow(target){
+    if (arrayRound[round][selectedPlayer][1].includes(target)
+    &&  arrayRound[round][selectedPlayer][2].includes(target)
+    &&  arrayRound[round][selectedPlayer][3].includes(target))
+        return true;
 }

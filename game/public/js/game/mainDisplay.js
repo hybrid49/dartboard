@@ -1,3 +1,5 @@
+let timeOutID = 0;
+
 function displayModalChangePlayer(){
     isAskChangePlayer = true;
     $('#changePlayer').show()
@@ -13,7 +15,7 @@ function displayModalReturnMenu(){
     isReturnMenu = true;
 }
 
-function displayHistoryRound(){
+function displayRound(){
     for(let i = 1; i <= 3; i++){
         if(i <= nbThrow){
             let zoneText;
@@ -69,48 +71,69 @@ function displayChangedPlayer(){
     $('#zoneScorePlayer'+selectedPlayer).addClass('selected');
 }
 
-function displayEasterEggsArduinoEvent(deltaTimestamp){
-    // TODO : Faire fonctionner cette méthode avec un SetTimeOut plutot qu'au
-    // TODO :  lanceement d'unenouvelle flechette car c'est plus logique
-    if (isEasterEggsDisplay() && !isGameOver){
-        let len = deltaTimestamp.toString().length;
+function displayEasterEggsTimeExceeded(msg){
+    if (easterEggTimeOutClear
+    ||  msg === 'btnCancel'
+    ||  nbThrow === 3){
+        console.log('clear');
+        clearTimeout(timeOutID);}
+    else{
+        let timestamp = Math.floor(Date.now());
+        deltaTimestamp = timestamp - previousTimestamp;
 
-        if (len > 5 && deltaTimestamp > 60000)
-            displayAtWhatTime();
+        timeOutID = setTimeout(function (){
+            if (deltaTimestamp > 50000) {
+                $('#timeExceed').show().delay(3000).fadeOut("fast");
+                easterEggTimeOutClear = true;
+            }
+            displayEasterEggsTimeExceeded();
+        }, 500);
     }
-}
-
-function displayAtWhatTime(){
-
 }
 
 function displayEasterEggsPlayThrow(){
     // fews easterEgg doesn't happen all the time
-    if (isEasterEggsDisplay()){
-        displayLoser();
-        displaySlotMachine();
-        displayUniverseAnswer();
-        displayBigBoss();
+    if (nbThrow === 3){
+        if (isEasterEggsDisplay()){
+            displayLoser();
+            displayBoss();
+            displaySlotMachine();
+            displayUniverseAnswer();
+        }
+        displayNewBestScoreAllTime();
     }
-    displayNewBestScoreAllTime();
 }
 
 function displayLoser(){
-    // TODO : Valeur du round = miss / miss / miss
+    // Valeur du round = miss / miss / miss
+    if (isEasterEggsRoundSameThrow('miss'))
+        $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displaySlotMachine(){
-    // TODO : Valeur du round = S7 / S7 / S7
+    // Valeur du round = S7 / S7 / S7
+    if (isEasterEggsRoundSameThrow('S7'))
+        $('#newGame').show().delay(3000).fadeOut("fast");
+}
+
+function displayBoss(){
+    // Valeur du round = DBull / DBull / DBull
+    if (isEasterEggsRoundSameThrow('DBull'))
+        $('#newGame').show().delay(3000).fadeOut("fast");
+
+    // Valeur du round = bull / bull / bull
+    else if (isEasterEggsRoundSameThrow('bull'))
+        $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displayUniverseAnswer(){
-    // TODO : Valeur du round = 42
+    // Valeur du round = 42 avec 3 flechettes touchées
+    if (arrayTouch[selectedPlayer]['nbHit'] === 3
+    &&  arrayRound[round][selectedPlayer]['point'] === 42)
+        $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displayNewBestScoreAllTime(){
     // TODO : Faire apparaitre une vidéo de Macron, disant qu'il ferait mieux de traverser la rue
 }
 
-function displayBigBoss(){
-    // TODO : Valeur du round = bull / bull / bull
-}
