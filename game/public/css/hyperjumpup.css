@@ -1,0 +1,332 @@
+:root {
+	--main-bg-color: #f44336;
+	--main-bg-color-lighter: #f36e65;
+	--main-bg-color-darker: #c62828;
+	--main-bg-color-darker-transparent: #c6282863;
+}
+
+
+@font-face {
+	font-family: oswald;
+	src: url('../../font/Oswald-VariableFont_wght.ttf');
+}
+
+/*CSS de la cible*/
+body,
+form {
+	margin: 0;
+	padding: 0;
+	background: #999;
+}
+[type="radio"],
+[type="reset"] {
+	position: absolute;
+	top: -999px;
+	left: -999px;
+}
+label {
+	display: block;
+	cursor: pointer;
+	width: 100%;
+	text-align: center;
+}
+.board {
+	position: relative;
+	width: 50vw;
+	height: 50vw;
+	background: radial-gradient(circle farthest-side at 50% 50%,#3c3c3c 0%, #3c3c3c 6%,black 6%, black 6.3%, #3c3c3c 6.3%, #3c3c3c 11%,black 11%, black 11.3%, #585858  11.4%, #585858 52%, #787878 52.5%, #787878 58.5%, #585858  45.833%, #585858  69.444%, #585858  73.611%, #585858  94.5%, #787878 94.5%, #787878 96%, #787878 95%, #787878 100%);
+	border-radius: 50%;
+	overflow: hidden;
+	transform: rotate(-9deg);
+}
+.board > div {
+	position: absolute;
+	top: -50%;
+	left: 50%;
+	width: 100%;
+	height: 100%;
+	transform-origin: 0 100%;
+	overflow: hidden;
+	border: 0.1px solid #3c3c3c;
+}
+.board > div:before {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform-origin: 0 100%;
+	transform: skew(72deg);
+}
+.board > div:before {
+
+}
+.selected:before {
+	background: radial-gradient(circle farthest-side at 0 100%,#3c3c3c00 0%,#3c3c3c00 5.17%, var(--main-bg-color) 4.72%, var(--main-bg-color) 26%, var(--main-bg-color-lighter) 26%, var(--main-bg-color-lighter) 29%, var(--main-bg-color) 29%, var(--main-bg-color) 46.5%, var(--main-bg-color-lighter) 46.5%, var(--main-bg-color-lighter) 50%) !important;
+}
+.board > div:after {
+	position: absolute;
+	color: black;
+	font-family: fantasy;
+	font-size: 4vw;
+}
+.board > div:nth-of-type(1):after {
+	content: "20";
+	transform: skew(72deg) rotate(80deg) translate(2.6vw);
+	top: 83%;
+}
+.board > div:nth-of-type(2):after {
+	content: "1";
+	transform: skew(72deg) rotate(63deg) translate(2.6vw);
+	top: 83%;
+}
+.board > div:nth-of-type(3):after {
+	content: "18";
+	transform: skew(72deg) rotate(45.3deg) translate(2.6vw);
+	top: 84%;
+}
+.board > div:nth-of-type(4):after {
+	content: "4";
+	transform: skew(72deg) rotate(27.4deg) translate(3.9vw);
+	top: 84.5%;
+}
+.board > div:nth-of-type(5):after {
+	content: "13";
+	transform: skew(72deg) rotate(8.9deg) translate(4.6vw,0.5vw);
+	top: 86%;
+}
+.board > div:nth-of-type(6):after {
+	content: "6";
+	transform: skew(72deg) rotate(-9.6deg) translate(1.6vw,2.35vw);
+	top: 84%;
+}
+.board > div:nth-of-type(7):after {
+	content: "10";
+	transform: skew(72deg) rotate(-26.9deg) translate(1.6vw,2.7vw);
+	top: 84.5%;
+}
+.board > div:nth-of-type(8):after {
+	content: "15";
+	transform: skew(72deg) rotate(-45deg) translate(1.6vw,3.5vw);
+	top: 85.5%;
+}
+.board > div:nth-of-type(9):after {
+	content: "2";
+	transform: skew(72deg) rotate(-63deg) translate(0vw,3.5vw);
+	top: 84.5%;
+}
+.board > div:nth-of-type(10):after {
+	content: "17";
+	transform: skew(72deg) rotate(-81deg) translate(-1.4vw,2.5vw);
+	top: 84.5%;
+}
+.board > div:nth-of-type(11):after {
+	content: "3";
+	transform: skew(72deg) rotate(-98deg) translate(-2vw,2.5vw);
+	top: 84.5%;
+}
+.board > div:nth-of-type(12):after {
+	content: "19";
+	transform: skew(72deg) rotate(-116deg) translate(-2.7vw,2.5vw);
+	top: 85.5%;
+}
+.board > div:nth-of-type(13):after {
+	content: "7";
+	transform: skew(72deg) rotate(-133deg) translate(-4vw,2.5vw);
+	top: 85.5%;
+}
+.board > div:nth-of-type(14):after {
+	content: "16";
+	transform: skew(72deg) rotate(208deg) translate(-7.4vw,4.5vw);
+	top: 89%;
+}
+.board > div:nth-of-type(15):after {
+	content: "8";
+	transform: skew(72deg) rotate(-172deg) translate(-6.4vw,0.2vw);
+	top: 86.5%;
+}
+.board > div:nth-of-type(16):after {
+	content: "11";
+	transform: skew(72deg) rotate(-189.2deg) translate(1.6vw,-2.9vw);
+	top: 82%;
+}
+.board > div:nth-of-type(17):after {
+	content: "14";
+	transform: skew(72deg) rotate(153deg) translate(1.6vw,-2vw);
+	top: 82.5%;
+}
+.board > div:nth-of-type(18):after {
+	content: "9";
+	transform: skew(72deg) rotate(134deg) translate(1.6vw,-2.2vw);
+	top: 83%;
+}
+.board > div:nth-of-type(19):after {
+	content: "12";
+	transform: skew(72deg) rotate(117deg) translate(2vw,-1.4vw);
+	top: 83.5%;
+}
+.board > div:nth-of-type(20):after {
+	content: "5";
+	transform: skew(72deg) rotate(99deg) translate(1.3vw,-3.5vw);
+	top: 84.5%;
+}
+.board > div:nth-of-type(5) {
+	transform: skew(-72deg);
+}
+.board > div:nth-of-type(6) {
+	transform: rotate(18deg) skew(-72deg);
+}
+.board > div:nth-of-type(7) {
+	transform: rotate(36deg) skew(-72deg);
+}
+.board > div:nth-of-type(8) {
+	transform: rotate(54deg) skew(-72deg);
+}
+.board > div:nth-of-type(9) {
+	transform: rotate(72deg) skew(-72deg);
+}
+.board > div:nth-of-type(10) {
+	transform: rotate(90deg) skew(-72deg);
+}
+.board > div:nth-of-type(11) {
+	transform: rotate(108deg) skew(-72deg);
+}
+.board > div:nth-of-type(12) {
+	transform: rotate(126deg) skew(-72deg);
+}
+.board > div:nth-of-type(13) {
+	transform: rotate(144deg) skew(-72deg);
+}
+.board > div:nth-of-type(14) {
+	transform: rotate(162deg) skew(-72deg);
+}
+.board > div:nth-of-type(15) {
+	transform: rotate(180deg) skew(-72deg);
+}
+.board > div:nth-of-type(16) {
+	transform: rotate(198deg) skew(-72deg);
+}
+.board > div:nth-of-type(17) {
+	transform: rotate(216deg) skew(-72deg);
+}
+.board > div:nth-of-type(18) {
+	transform: rotate(234deg) skew(-72deg);
+}
+.board > div:nth-of-type(19) {
+	transform: rotate(252deg) skew(-72deg);
+}
+.board > div:nth-of-type(20) {
+	transform: rotate(270deg) skew(-72deg);
+}
+.board > div:nth-of-type(1) {
+	transform: rotate(288deg) skew(-72deg);
+}
+.board > div:nth-of-type(2) {
+	transform: rotate(306deg) skew(-72deg);
+}
+.board > div:nth-of-type(3) {
+	transform: rotate(324deg) skew(-72deg);
+}
+.board > div:nth-of-type(4) {
+	transform: rotate(342deg) skew(-72deg);
+}
+.clignote {
+	animation: clignote 2s linear infinite;
+}
+@keyframes clignote {
+	50% { opacity: 0; }
+}
+
+/* CSS des scores des joueurs */
+.scorePlayer{
+	background-color: #424242;
+	height: 314px;
+	color: black;
+}
+.scorePlayer.selected{
+	background-color: var(--main-bg-color);
+}
+.titlePlayer{
+	height: 7rem;
+	font-size: 34px;
+	border-bottom: 21px solid #2a2929;
+}
+.scorePlayer.selected .titlePlayer{
+	border-bottom: 21px solid var(--main-bg-color-darker);
+}
+.titlePlayer{
+	padding: 0.5em;
+	font-family: oswald, sans-serif;
+	color: #CCC;
+	text-shadow: 1px 1px 5px black;
+}
+
+.scoreP{
+	font-family: oswald, sans-serif;
+	color: #CCC;
+	text-shadow: 1px 1px 5px black;
+	font-size: 117px;
+}
+
+.sectionScore{
+	position: absolute;
+	width: 100%;
+	top: 50em;
+	z-index: -1;
+}
+
+/*CSS game*/
+
+#changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes{
+	position: absolute;
+	top: 3em;
+	background-color: #9a9c98b3;
+	font-size: 114px;
+	padding: 10px 50px;
+	text-align: center;
+	border: 16px solid white;
+	display: none;
+	color: white;
+}
+#zonevictory{
+	top:1em;
+	left: 60px;
+	right: 60px;
+	animation-duration: 2s;
+	animation-name: clignoter;
+	animation-iteration-count: infinite;
+	transition: none;
+	background-color: var(--main-bg-color-darker-transparent);
+	border: 16px solid var(--main-bg-color);
+}
+#changePlayer{
+	left: 60px;
+	right: 60px;
+}
+#returnMenu{
+	left: 60px;
+	right: 60px;
+}
+#newGame{
+	left: 60px;
+	right: 60px;
+}
+#zonebtnno{
+	top:5em;
+	left: 200px;
+	right: 1100px;
+}
+#zonebtyes{
+	top:5em;
+	left: 1100px;
+	right: 200px;
+}
+
+/*ANIMATION DE SCORE*/
+#tag {
+	transform-style: preserve-3d;
+	display: none;
+	position:absolute;
+	transform: translateX(200%);
+	font-size:50px;
+	line-height: 50px;
+}
