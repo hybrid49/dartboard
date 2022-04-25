@@ -11,6 +11,35 @@
 	src: url('../../font/Oswald-VariableFont_wght.ttf');
 }
 
+.row {
+	padding: 0rem;
+	margin-right: 0rem !important;
+}
+.sectionLeft{
+	background-color: black;
+	color: white;
+}
+.titleLeft{
+	padding: 0.5em;
+	font-size: 25px;
+	border-bottom: 8px solid;
+	border-color: var(--main-bg-color);
+}
+.titlePlayer{
+	padding: 0.5em;
+	font-size: 25px;
+}
+.section{
+	padding-top: 0rem;
+	padding-bottom: 0rem;
+}
+.tableLeft{
+	font-size: 30px;
+}
+.sectionCenter{
+	margin-right: 7rem;
+	margin-left: 7rem;
+}
 /*CSS de la cible*/
 body,
 form {
@@ -244,13 +273,16 @@ label {
 }
 .scorePlayer.selected{
 	background-color: var(--main-bg-color);
+	height: 150px;
+	padding-top: 14px;
+	font-size: 60px;
 }
 .titlePlayer{
 	height: 7rem;
 	font-size: 34px;
 	border-bottom: 21px solid #2a2929;
 }
-.scorePlayer.selected .titlePlayer{
+.titlePlayer.selected{
 	border-bottom: 21px solid var(--main-bg-color-darker);
 }
 .titlePlayer{
@@ -275,6 +307,7 @@ label {
 }
 
 /*CSS game*/
+
 
 #changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes{
 	position: absolute;
