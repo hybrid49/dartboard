@@ -63,7 +63,14 @@ label {
 	position: relative;
 	width: 50vw;
 	height: 50vw;
-	background: radial-gradient(circle farthest-side at 50% 50%,#3c3c3c 0%, #3c3c3c 6%,black 6%, black 6.3%, #3c3c3c 6.3%, #3c3c3c 11%,black 11%, black 11.3%, #585858  11.4%, #585858 52%, #787878 52.5%, #787878 58.5%, #585858  45.833%, #585858  69.444%, #585858  73.611%, #585858  94.5%, #787878 94.5%, #787878 96%, #787878 95%, #787878 100%);
+	background: radial-gradient(circle farthest-side at 50% 50%,#3c3c3c 0%, #3c3c3c 6%,
+																black 6%, black 6.1%,
+																#3c3c3c 6.3%, #3c3c3c 11%,
+																black 11%, black 11.3%,
+																#585858  11.4%, #585858 52%,
+																#787878 52.5%, #787878 58.5%,
+																#585858  45.833%, #585858  94.5%,
+																#787878 94.5%, #787878 100%);
 	border-radius: 50%;
 	overflow: hidden;
 	transform: rotate(-9deg);
@@ -76,6 +83,7 @@ label {
 	height: 100%;
 	transform-origin: 0 100%;
 	overflow: hidden;
+	/*border: 0.1px solid #3c3c3c;*/
 	border: 0.1px solid #3c3c3c;
 }
 .board > div:before {

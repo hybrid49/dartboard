@@ -61,8 +61,6 @@ function arduinoEvent(msg){
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
-        console.log('arduinoEvent - isGameOver : '+isGameOver);
-
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
         else
@@ -73,15 +71,12 @@ function arduinoEvent(msg){
 function arduinoEventGameInProgress(msg) {
     displayEasterEggsTimeExceeded(msg);
 
-    console.log('arduinoEventGameInProgress - msg : '+msg);
-
     if(msg === 'btnValidate'){
         changePlayer();
         saveHistory('btn');
     }else if(msg === 'btnCancel'){
         undoLastAction();
     }else if (nbThrow < 3){
-        console.log('arduinoEventGameInProgress - isAskChangePlayer : '+isAskChangePlayer);
         if(!isAskChangePlayer){
             //We don't trigger the function when players hit the board when they remove darts
             nbThrow++;
@@ -127,7 +122,6 @@ function playThrow(msg){
     arrayRound[round][selectedPlayer][nbThrow] = dart;
     arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
 
-    console.log(msg);
     console.log(dart);
 
     if(dart !== 'miss')
@@ -204,6 +198,11 @@ function changePlayer(){
         selectedPlayer = selectedPlayer+1;
         displayChangedPlayer();
     }
+
+    // Exit for special management of certain games
+    if (typeof exitEndChangePlayer === "function")
+        exitEndChangePlayer();
+
     isAskChangePlayer = false;
     displayScore();
 }
@@ -309,9 +308,9 @@ function setHtmlHistoryRound(idRound, numberRound, listeScore){
 }
 
 function isTargetTouched(dart){
-    let zone = dart.substring(1);
+    let area = dart.substring(1);
 
-    return arrayTargets.includes(zone);
+    return arrayTargets.includes(area);
 }
 
 function resetGlobal(){

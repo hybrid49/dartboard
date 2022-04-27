@@ -19,71 +19,88 @@ function initHighJumpUp(){
     arrayTouch.forEach((item, index) => {
         arrayTouch[index]['multiplier'] = 1;
         // Round data
-        arrayTouch[index]['nbMultiplierRound'] = 0;
+        arrayTouch[index]['nbMultiplierHittedRound'] = 0;
         // End game data
         arrayTouch[index]['combo'] = 0;
     });
 
-    for(let i = 1; i <= nombrePlayer; i++)
-        arrayMultiplier[i] = ["1","2","3","4","5"];
+    for(let i = 1; i <= nombrePlayer; i++){
+        arrayMultiplier[i] = [1,2,3,4,5];
         arrayHitted[i] = [];
+    }
+
+    displayTargetZone();
+}
+
+function displayTargetZone(){
+
+    arrayTargets.forEach((item, index) => {
+        if (arrayMultiplier[selectedPlayer].includes(parseInt(item))
+        && !arrayHitted[selectedPlayer].includes(parseInt(item)))
+            $('#zone'+item).addClass('selected');
+        else
+            $('#zone'+item).removeClass('selected');
+    });
 }
 
 function manageThrow(dart, number, zone){
     let numberTouch = determineNumberTouchs(zone);
     let multiplier  = 1;
+    let point  = number;
 
-    if ((arrayMultiplier.includes(number)) && !(arrayHitted.includes(number))){
-        if (number === "25") {
+    if ((arrayMultiplier[selectedPlayer].includes(number))
+    && !(arrayHitted[selectedPlayer].includes(number))){
+        if (number === 25) {
             numberTouch = 1;
-            number = arrayTouch[selectedPlayer]['point'];
+            point = arrayTouch[selectedPlayer]['point'];
         }
         multiplier = manageHittedMultiplier(number, numberTouch);
-    }else if (number === "25")
+    }else if (number === 25)
         numberTouch = 2;
 
-    arrayTouch[selectedPlayer]['point'] += multiplier * numberTouch * number;
+    console.log('multiplier : '+multiplier);
+    console.log('numberTouch : '+numberTouch);
+    console.log('number : '+number);
+
+    arrayTouch[selectedPlayer]['point'] += multiplier * numberTouch * point;
 }
 
 function manageHittedMultiplier(number, numberTouch){
-    let currentMultiplier = (number === "25") ? 1 : arrayTouch[selectedPlayer]['multiplier'];
-    let combo = determineCombo();
+    let currentMultiplier = (number === 25) ? 1 : arrayTouch[selectedPlayer]['multiplier'];
 
-    calculateNewMultiplier(numberTouch);
+    let combo = calculateNewMultiplier(numberTouch);
     determineNewMultiplierZone(numberTouch);
     determineHittedMultiplierZone(number);
 
     return currentMultiplier * combo;
 }
 
-function determineCombo(){
-    arrayTouch[selectedPlayer]['nbMultiplierRound']++;
-
-    return (arrayTouch[selectedPlayer]['nbMultiplierRound'] === 3) ? 3 : 1;
-}
 
 function calculateNewMultiplier(numberTouch){
     arrayTouch[selectedPlayer]['multiplier'] += numberTouch;
-    arrayTouch[selectedPlayer]['nbMultiplierRound']++;
+    arrayTouch[selectedPlayer]['nbMultiplierHittedRound']++;
+
+    //Combo is triggered when player touch 3 times multiplier Area during a round
+    return (arrayTouch[selectedPlayer]['nbMultiplierHittedRound'] === 3) ? 3 : 1;
 }
 
 function determineNewMultiplierZone(numberTouch){
-    let number = arrayMultiplier.slice(-1);
+    let number = arrayMultiplier[selectedPlayer].slice(-1);
 
-    if (number.toString() !== "25"){
-        for (let i = 0; i < numberTouch && number.toString() < "21"; i++) {
+    if (number !== 25){
+        for (let i = 0; i < numberTouch && number < 21; i++) {
             number++;
 
-            if (number.toString() === "21")
-                number = "25";
-            arrayMultiplier.push(number);
+            if (number === 21)
+                number = 25;
+            arrayMultiplier[selectedPlayer].push(number);
         }
     }
 }
 
 function determineHittedMultiplierZone(number){
-    if (number !== "25")
-        arrayMultiplier.push(number);
+    if (number !== 25)
+        arrayHitted[selectedPlayer].push(number);
 }
 
 function checkVictory(button){
@@ -92,6 +109,7 @@ function checkVictory(button){
 }
 
 function displayScore(){
+    displayTargetZone();
     $('#scoreTotal'+selectedPlayer).html(arrayTouch[selectedPlayer]['point']);
 }
 
@@ -116,4 +134,8 @@ function determineWinner(){
     });
 
     return winner;
+}
+
+function exitEndChangePlayer(){
+    arrayTouch[selectedPlayer]['nbMultiplierHittedRound'] = 0;
 }
