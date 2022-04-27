@@ -53,7 +53,7 @@ function manageSteal(){
     for (let i = 1; i <= nombrePlayer && i !== selectedPlayer; i++) {
         if (arrayTouch[i]['point'] === arrayTouch[selectedPlayer]['point']){
             stealGold(i);
-            losePoint(i);
+            stolenCowboyLosePoints(i);
         }
     }
 }
@@ -80,12 +80,12 @@ function displayPoverty(){
     $("#poverty").show().delay(2000).fadeOut("fast");
 }
 
-function losePoint(stoleCowboy){
-    if (arrayTouch[stoleCowboy]['point'] !== pointBeforeTreasure){
-        let currentPoint = pointBeforeTreasure - arrayTouch[stoleCowboy]['point'];
+function stolenCowboyLosePoints(stolenCowboy){
+    if (arrayTouch[stolenCowboy]['point'] !== pointBeforeTreasure){
+        let currentPoint = pointBeforeTreasure - arrayTouch[stolenCowboy]['point'];
         let lostPoint = Math.ceil(currentPoint / 2);
 
-        arrayTouch[stoleCowboy]['point'] += lostPoint;
+        arrayTouch[stolenCowboy]['point'] += lostPoint;
     }
 }
 

@@ -105,32 +105,31 @@ function displayEasterEggsPlayThrow(){
 }
 
 function displayLoser(){
-    // Valeur du round = miss / miss / miss
-    if (isEasterEggsRoundSameThrow('miss'))
-        $('#newGame').show().delay(3000).fadeOut("fast");
+    // // Valeur du round = miss / miss / miss
+    // if (easterEggsIsRoundSameThrows('miss'))
+    //     $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displaySlotMachine(){
-    // Valeur du round = S7 / S7 / S7
-    if (isEasterEggsRoundSameThrow('S7'))
-        $('#newGame').show().delay(3000).fadeOut("fast");
+    // // Valeur du round = S7 / S7 / S7
+    // if (easterEggsIsRoundSameThrows('S7'))
+    //     $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displayBoss(){
-    // Valeur du round = DBull / DBull / DBull
-    if (isEasterEggsRoundSameThrow('DBull'))
-        $('#newGame').show().delay(3000).fadeOut("fast");
-
-    // Valeur du round = bull / bull / bull
-    else if (isEasterEggsRoundSameThrow('bull'))
-        $('#newGame').show().delay(3000).fadeOut("fast");
+    // // Valeur du round = DBull / DBull / DBull
+    // if (easterEggsIsRoundSameThrows('DBull'))
+    //     $('#newGame').show().delay(3000).fadeOut("fast");
+    //
+    // // Valeur du round = bull / bull / bull
+    // else if (easterEggsIsRoundSameThrows('bull'))
+    //     $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displayUniverseAnswer(){
-    // Valeur du round = 42 avec 3 flechettes touchées
-    if (arrayTouch[selectedPlayer]['nbHit'] === 3
-    &&  arrayRound[round][selectedPlayer]['point'] === 42)
-        $('#newGame').show().delay(3000).fadeOut("fast");
+    // // Valeur du round = 42 avec 3 flechettes touchées
+    // if (arrayRound[round][selectedPlayer]['point'] === 42)
+    //     $('#newGame').show().delay(3000).fadeOut("fast");
 }
 
 function displayNewBestScoreAllTime(){

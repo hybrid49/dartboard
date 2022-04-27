@@ -60,7 +60,7 @@ function checkVictory(button){
 function displayScore(){
 	displayHistoryRound();
 
-	if (round === 1 && nbThrow === 0)
+	if (round === 1 && nbThrow === 0 && nbTotalAction === 0)
 		resetDisplayScore();
 	else{
 		arrayTouch.forEach((hits, numPlayer) => {

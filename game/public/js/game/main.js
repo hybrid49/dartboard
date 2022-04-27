@@ -39,6 +39,8 @@ function initGame(){
         arrayTouch[index]['nbBull'] = 0;
         arrayTouch[index]['nbDoubleBull'] = 0;
     });
+
+    arrayHistoryThrow[nbTotalAction] = $.extend(true, [], arrayTouch);
 }
 
 function initRound(){
@@ -59,6 +61,8 @@ function arduinoEvent(msg){
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
+        console.log('arduinoEvent - isGameOver : '+isGameOver);
+
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
         else
@@ -68,7 +72,8 @@ function arduinoEvent(msg){
 
 function arduinoEventGameInProgress(msg) {
     displayEasterEggsTimeExceeded(msg);
-    saveInitialization();
+
+    console.log('arduinoEventGameInProgress - msg : '+msg);
 
     if(msg === 'btnValidate'){
         changePlayer();
@@ -76,6 +81,7 @@ function arduinoEventGameInProgress(msg) {
     }else if(msg === 'btnCancel'){
         undoLastAction();
     }else if (nbThrow < 3){
+        console.log('arduinoEventGameInProgress - isAskChangePlayer : '+isAskChangePlayer);
         if(!isAskChangePlayer){
             //We don't trigger the function when players hit the board when they remove darts
             nbThrow++;
@@ -116,15 +122,13 @@ function arduinoEventGameOver(msg) {
     }
 }
 
-function saveInitialization(){
-    if (round === 1 && nbThrow === 0)
-        arrayHistoryThrow[nbTotalAction] = $.extend(true, [], arrayTouch);
-}
-
 function playThrow(msg){
     let dart = getDart(msg);
     arrayRound[round][selectedPlayer][nbThrow] = dart;
     arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
+
+    console.log(msg);
+    console.log(dart);
 
     if(dart !== 'miss')
         saveThrow(dart);
@@ -214,6 +218,7 @@ function saveHistory(action){
 
 function undoLastAction(){
     $('#changePlayer').hide();
+    isAskChangePlayer = false;
 
     if(nbTotalAction > 0){
         if(arrayHistoryThrow[nbTotalAction] === 'changePlayer')
@@ -239,13 +244,12 @@ function undoLastChangePlayer(){
 }
 
 function undoLastThrow(){
-    undoLastThrowRound();
+    arrayRound[round][selectedPlayer][nbThrow] = '';
     arrayHistoryThrow[nbTotalAction] = [];
 
     nbThrow--;
     nbTotalAction--;
-    console.log('nbTotalAction : '+nbTotalAction);
-    console.log(arrayHistoryThrow);
+
     // Check if previous action was ChangePlayer too
     if(arrayHistoryThrow[nbTotalAction] !== 'changePlayer'){
         if(nbTotalAction === 0)
@@ -253,13 +257,6 @@ function undoLastThrow(){
         else
             arrayTouch = $.extend(true, [], arrayHistoryThrow[nbTotalAction]);
     }
-}
-
-function undoLastThrowRound(){
-    if (arrayRound[round][selectedPlayer][nbThrow] !== 'miss')
-        arrayRound[round][selectedPlayer][nbThrow]['point'] -= arrayRound[round][selectedPlayer][nbThrow];
-
-    arrayRound[round][selectedPlayer][nbThrow] = "";
 }
 
 function newRound(){
@@ -373,7 +370,7 @@ function isEasterEggsDisplay(){
     return Math.random() < easterEggsRatio;
 }
 
-function isEasterEggsRoundSameThrow(target){
+function easterEggsIsRoundSameThrows(target){
     if (arrayRound[round][selectedPlayer][1].includes(target)
     &&  arrayRound[round][selectedPlayer][2].includes(target)
     &&  arrayRound[round][selectedPlayer][3].includes(target))
