@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Starter Template - Materialize</title>
+
+  <!-- CSS  -->
+  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+  <link href="../../css/font-awesome.css" rel="stylesheet">
+  <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="../../css/hyperjumpup.css" rel="stylesheet">
+
+</head>
+<body>
+  <div class="no-pad-bot" id="index-banner">
+    <div class="section">
+        <!--   Icon Section   -->
+        <div class="row">
+          <div class="col s12 m3">
+            <% for(var i=1; i<=nbPlayer; i++) {%>
+              <div class="">
+                <div id="zoneScorePlayer<%- i %>" class=" titlePlayer icon-block row scorePlayer <% if(i === 1){%>selected<%}%>">
+                  <div class="col m8 center ">PLAYER <%- i %></div>
+                  <div class="col m4 center" id="scoreTotal<%- i %>">
+                    <div id="tag">
+                      +100
+                    </div>
+                    <div id="score">
+                      0
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col s12 m7" style="padding-top: 3em;">
+            <div class="board">
+              <div id="zone20" class="selected"></div>
+              <div id="zone01" class=""></div>
+              <div id="zone18" class=""></div>
+              <div id="zone04" class="selected"></div>
+              <div id="zone13" class=""></div>
+              <div id="zone06" class=""></div>
+              <div id="zone10" class=""></div>
+              <div id="zone15" class="selected"></div>
+              <div id="zone02" class=""></div>
+              <div id="zone17" class=""></div>
+              <div id="zone03" class="selected"></div>
+              <div id="zone19" class=""></div>
+              <div id="zone07" class=""></div>
+              <div id="zone16" class=""></div>
+              <div id="zone08" class=""></div>
+              <div id="zone11" class="selected"></div>
+              <div id="zone14" class=""></div>
+              <div id="zone09" class=""></div>
+              <div id="zone12" class=""></div>
+              <div id="zone05" class=""></div>
+            </div>
+          </div>
+
+          <div class="col s12 m2">
+            <div class="icon-block sectionLeft">
+              <div class="center titleLeft">HYPER JUMP</div>
+              <div class="center titleLeft">ROUND <span id="nbRound">1</span> / 20</div>
+              <div class="center tableLeft">
+                <table>
+                  <tbody>
+                    <tr id="HistoryRound1">
+                      <td class="title">R1 :</td>
+                      <td class="T1"></td>
+                      <td class="T2"></td>
+                      <td class="T3"></td>
+                    </tr>
+                    <tr id="HistoryRound2">
+                      <td class="title"></td>
+                      <td class="T1"></td>
+                      <td class="T2"></td>
+                      <td class="T3"></td>
+                    </tr>
+                    <tr id="HistoryRound3">
+                      <td class="title"></td>
+                      <td class="T1"></td>
+                      <td class="T2"></td>
+                      <td class="T3"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+      </div>
+  </div>
+    <div class="sectionScore">
+
+      <!--   Icon Section   -->
+      <div class="row">
+
+
+      </div>
+
+    </div>
+  </div>
+  <div id="changePlayer">
+    CHANGE PLAYER
+  </div>
+  <div id="newGame">
+    Play again ?
+  </div>
+  <div id="returnMenu">
+    Return menu ?
+  </div>
+  <div id="zonevictory">
+    Victory : <span id="zonevictoryPlayer"></span>
+  </div>
+  <div id="zonebtnno">
+    NO <i class="fa fa-circle" style="color: red;"></i>
+  </div>
+  <div id="zonebtyes">
+    YES <i class="fa fa-circle" style="color: blue;"></i>
+  </div>
+  <!--  Scripts-->
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/materialize.min.js"></script>
+  <script src="../../js/socket.io.js"></script>
+  <script src="../../js/dart_target_matrix.js"></script>
+  <script>
+    let nombrePlayer = <%- nbPlayer %>;
+    let maxRound = <%- maxRound %>;
+    let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
+    score = 0;
+
+    function go(x){
+      $({score: 0}).animate({score: x},{
+        duration: 1000,
+        easing:"linear",
+        step: function(now, fx){
+          $("#score").html(score + Math.floor(now));
+        },
+        queue:false,
+        complete: function(now, fx){
+          score += x;
+        }
+      });
+      $("#tag").fadeIn({
+        duration:700,
+        easing:"linear",
+        step:function(now, fx){
+          $(this).css("top", -55 * now  +"px");
+        }
+      }).fadeOut({
+        duration:300,
+        step:function(now, fx){
+          $(this).css("top",-55 * ( 2 - now) + "px");
+        }
+      });
+
+    }
+
+  </script>
+  <script src="../../js/game/main.js"></script>
+  <script src="../../js/game/mainDisplay.js"></script>
+  <script src="../../js/game/highJumpUp.js"></script>
+</body>
+</html>

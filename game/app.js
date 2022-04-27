@@ -36,11 +36,15 @@ app.get('/game/RandomCricket', function(req, res) {
 
 // game 501 page
 app.get('/game/501', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:15, arrayTarget : arrayComplete});
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:15, arrayTargets : arrayComplete});
 });
 // game 501 page
 app.get('/game/301', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:10, arrayTarget : arrayComplete});
+	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:10, arrayTargets : arrayComplete});
+});
+// game 501 page
+app.get('/game/hyperjumpup', function(req, res) {
+	res.render('pages/hyperjumpup', {nbPlayer: req.query.nbPlayer, maxRound:10, arrayTargets : arrayComplete});
 });
 
 // game Gold Hunting page
