@@ -71,6 +71,7 @@ function manageThrow(dart, number, zone){
     let total = multiplier * numberTouch * point;
 
     arrayTouch[selectedPlayer]['point'] += total;
+    displayRound();
 }
 
 function manageHittedMultiplier(number, numberTouch){
