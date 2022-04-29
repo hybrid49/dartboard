@@ -33,13 +33,20 @@ function initHighJumpUp(){
 }
 
 function displayTargetZone(){
-
+    $('.borderRound').hide();
     arrayTargets.forEach((item, index) => {
         if (arrayMultiplier[selectedPlayer].includes(parseInt(item))
         && !arrayHitted[selectedPlayer].includes(parseInt(item)))
+        {
+            if(parseInt(item) === 25)
+                $('.borderRound').show();
+
             $('#zone'+item).addClass('selected');
+        }
         else
             $('#zone'+item).removeClass('selected');
+
+
     });
 }
 
@@ -61,8 +68,9 @@ function manageThrow(dart, number, zone){
     console.log('multiplier : '+multiplier);
     console.log('numberTouch : '+numberTouch);
     console.log('number : '+number);
+    let total = multiplier * numberTouch * point;
 
-    arrayTouch[selectedPlayer]['point'] += multiplier * numberTouch * point;
+    arrayTouch[selectedPlayer]['point'] += total;
 }
 
 function manageHittedMultiplier(number, numberTouch){
@@ -111,6 +119,7 @@ function checkVictory(button){
 function displayScore(){
     displayTargetZone();
     $('#scoreTotal'+selectedPlayer).html(arrayTouch[selectedPlayer]['point']);
+    $('.textMultiple').html('X '+arrayTouch[selectedPlayer]['multiplier']);
 }
 
 function displayVictoryScreen(){
