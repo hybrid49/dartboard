@@ -13,9 +13,8 @@
 
 body{
 	overflow: hidden;
-	background: linear-gradient(-45deg, #999999, #6b6b6b, #e7e7e7, #383838);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
+	background: linear-gradient(-32deg, #999999, #6b6b6b, #c0baba, #383838);
+	background-size: 100% 200%;
 }
 @keyframes gradient {
 	0% {
@@ -44,7 +43,7 @@ body{
 	border-color: var(--main-bg-color);
 }
 .lastDart{
-	background-color: #424242;
+	background-color: #42424225;
 	font-size: 40px;
 	color: white;
 	margin-right: 1em;
@@ -309,7 +308,7 @@ label {
 	color: black;
 }
 .scorePlayer.selected{
-	background-color: var(--main-bg-color);
+	background-color: var(--main-bg-color-darker);
 	height: 150px;
 	padding-top: 14px;
 	font-size: 60px;
@@ -323,7 +322,7 @@ label {
 	border-bottom: 21px solid #2a2929;
 }
 .titlePlayer.selected{
-	border-bottom: 21px solid var(--main-bg-color-darker);
+	border-bottom: 21px solid var(--main-bg-color);
 }
 .titlePlayer{
 	padding: 0.5em;
@@ -413,11 +412,12 @@ label {
 	bottom: -114px;
 }
 .multiple{
-	background-color: var(--main-bg-color);
 	margin: 2em;
 	height: 21em;
 	border-radius: 50%;
+	background-color: var(--main-bg-color);
 }
+
 .borderRound{
 	background-color: var(--main-bg-color);
 	width: 104px;

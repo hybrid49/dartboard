@@ -48,7 +48,7 @@ app.get('/game/701', function(req, res) {
 });
 // game 501 page
 app.get('/game/hyperjumpup', function(req, res) {
-	res.render('pages/hyperjumpup', {nbPlayer: req.query.nbPlayer, maxRound:10, arrayTargets : arrayComplete});
+	res.render('pages/hyperjumpup', {nbPlayer: req.query.nbPlayer, maxRound:12, arrayTargets : arrayComplete});
 });
 
 // game Gold Hunting page
@@ -87,21 +87,21 @@ const fs = require('fs');
 
 let fsTimeout;
 
-// // listen on update on file to check if arduino send informations
-// fs.watch('/srv/dart3/dart.txt', (event, filename) => {
-// 	//define var to stop multiple trigger if a dart is stuck in the board
-// 	if (!fsTimeout) {
-// 		fs.readFile('/srv/dart3/dart.txt', 'utf8', (err, data) => {
-// 			if (err) {
-// 				console.error(err)
-// 				return
-// 			}
-// 			console.log('watch : ' + data);
-// 			io.emit('arduino', data);
-// 			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
-// 		});
-// 	}
-// });
+// listen on update on file to check if arduino send informations
+fs.watch('/srv/dart3/dart.txt', (event, filename) => {
+	//define var to stop multiple trigger if a dart is stuck in the board
+	if (!fsTimeout) {
+		fs.readFile('/srv/dart3/dart.txt', 'utf8', (err, data) => {
+			if (err) {
+				console.error(err)
+				return
+			}
+			console.log('watch : ' + data);
+			io.emit('arduino', data);
+			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
+		});
+	}
+});
 
 io.on('connection', (socket) => {
 	console.log('a user connected');

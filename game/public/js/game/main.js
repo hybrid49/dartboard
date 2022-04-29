@@ -124,9 +124,10 @@ function playThrow(msg){
 
     console.log(dart);
 
-    if(dart !== 'miss')
+    if(dart !== 'miss'){
         saveThrow(dart);
-    else {
+        displayRound();
+    }else {
         // Exit for special management of certain games
         if (typeof exitPlayThrowMiss === "function")
             exitPlayThrowMiss();
@@ -195,7 +196,7 @@ function changePlayer(){
     else if (selectedPlayer === nombrePlayer)
         newRound();
     else{
-        selectedPlayer = selectedPlayer+1;
+        selectedPlayer += 1;
         displayChangedPlayer();
     }
 

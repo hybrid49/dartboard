@@ -65,9 +65,6 @@ function manageThrow(dart, number, zone){
     }else if (number === 25)
         numberTouch = 2;
 
-    console.log('multiplier : '+multiplier);
-    console.log('numberTouch : '+numberTouch);
-    console.log('number : '+number);
     let total = multiplier * numberTouch * point;
 
     arrayTouch[selectedPlayer]['point'] += total;
@@ -113,8 +110,10 @@ function determineHittedMultiplierZone(number){
 }
 
 function checkVictory(button){
-    //button is useless in this game
-    return (round === maxRound);
+    if(button === true)
+        return (round > maxRound)
+    else
+        return  (round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3)
 }
 
 function displayScore(){
