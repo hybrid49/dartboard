@@ -11,7 +11,6 @@ function initCricket(){
 function manageThrow(dart, number, zone){
 	saveTouch(number, zone);
 	calculateNewScore(number);
-	displayRound();
 }
 
 function saveTouch(dart, position){
