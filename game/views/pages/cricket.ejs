@@ -17,43 +17,16 @@
   <div class="section">
     <!--   Icon Section   -->
     <div class="row">
-      <div class="col s12 m2">
-        <div class="icon-block sectionLeft">
-          <div class="center titleLeft">CRICKET CUT THROAT</div>
-          <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
-          <div class="center tableLeft">
-            <table>
-              <tbody id="bodyHistoryRound">
-              <tr id="HistoryRound1">
-                <td class="title">R1 :</td>
-                <td class="T1"></td>
-                <td class="T2"></td>
-                <td class="T3"></td>
-              </tr>
-              <tr id="HistoryRound2">
-                <td class="title"></td>
-                <td class="T1"></td>
-                <td class="T2"></td>
-                <td class="T3"></td>
-              </tr>
-              <tr id="HistoryRound3">
-                <td class="title"></td>
-                <td class="T1"></td>
-                <td class="T2"></td>
-                <td class="T3"></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="col m2">
+
       </div>
 
-      <div class="col s12 m8">
+      <div class="col m8">
         <div class="icon-block sectionCenter">
           <table class="tableCricket">
             <tbody>
               <% for(var i=0; i < arrayTargets.length; i++) { %>
-              <% if(arrayTargets[i] !== 25){ %>
+              <% if(arrayTargets[i] !== '25'){ %>
                 <tr id="tr<%- arrayTargets[i] %>">
                   <td class="tdGame tdPlayer1 selected"></td>
                   <td class="tdGame tdPlayer2"></td>
@@ -77,8 +50,35 @@
         </div>
       </div>
 
-      <div class="col s12 m2">
-
+      <div class="col m2">
+        <div class="icon-block sectionLeft">
+          <div class="center titleLeft">CRICKET CUT THROAT</div>
+          <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
+          <div class="center tableLeft">
+            <table>
+              <tbody id="bodyHistoryRound">
+                <tr id="HistoryRound1">
+                  <td class="title">R1 :</td>
+                  <td class="T1"></td>
+                  <td class="T2"></td>
+                  <td class="T3"></td>
+                </tr>
+                <tr id="HistoryRound2">
+                  <td class="title"></td>
+                  <td class="T1"></td>
+                  <td class="T2"></td>
+                  <td class="T3"></td>
+                </tr>
+                <tr id="HistoryRound3">
+                  <td class="title"></td>
+                  <td class="T1"></td>
+                  <td class="T2"></td>
+                  <td class="T3"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

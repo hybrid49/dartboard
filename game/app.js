@@ -36,11 +36,15 @@ app.get('/game/RandomCricket', function(req, res) {
 
 // game 501 page
 app.get('/game/501', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:15, arrayTargets : arrayComplete});
+	res.render('pages/01', {nbPlayer: req.query.nbPlayer, mode:501, maxRound:15, arrayTargets : arrayComplete});
 });
 // game 501 page
 app.get('/game/301', function(req, res) {
-	res.render('pages/501', {nbPlayer: req.query.nbPlayer, maxRound:10, arrayTargets : arrayComplete});
+	res.render('pages/01', {nbPlayer: req.query.nbPlayer,mode:301, maxRound:10, arrayTargets : arrayComplete});
+});
+// game 501 page
+app.get('/game/701', function(req, res) {
+	res.render('pages/01', {nbPlayer: req.query.nbPlayer,mode:701, maxRound:20, arrayTargets : arrayComplete});
 });
 // game 501 page
 app.get('/game/hyperjumpup', function(req, res) {
@@ -58,8 +62,15 @@ app.get('/', function(req, res) {
 });
 
 // select number player page
-app.get('/lob	by', function(req, res) {
-	res.render('pages/lobby', {game : req.query.game});
+app.get('/lobby', function(req, res) {
+	if(req.query.game === "cricket"){
+		nbPlayer = 4;
+	}else if(req.query.game === "goldHunting"){
+		nbPlayer = 4;
+	}else{
+		nbPlayer = 8;
+	}
+	res.render('pages/lobby', {game : req.query.game, nbPlayerMax : nbPlayer});
 });
 
 function between(min, max) {

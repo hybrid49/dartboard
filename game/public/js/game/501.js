@@ -1,9 +1,10 @@
-init501();
+init01();
 
-function init501(){
+function init01(){
 	arrayTouch.forEach((item, index) => {
-		arrayTouch[index]['point'] = 501;
+		arrayTouch[index]['point'] = mode;
 	});
+	displayScore();
 }
 
 function manageThrow(dart, number, zone){
@@ -17,15 +18,14 @@ function manageThrow(dart, number, zone){
 	}else{
 		arrayTouch[selectedPlayer]['point'] -= nb*number;
 	}
-	displayScore()
+	displayScore();
 }
 
 function displayScore(){
-
+	displayHistoryRound();
+	console.log(arrayTouch);
 	arrayTouch.forEach((hits, numPlayer) => {
-		hits.forEach((nbHit, target) => {
-			$('#scoreTotal'+numPlayer).html(hits['point']);
-		})
+		$('#scoreTotal'+numPlayer).html(hits['point']);
 	});
 	$("#scoreCurrentPlayer").html(arrayTouch[selectedPlayer]['point']);
 
@@ -67,7 +67,7 @@ function displayHistoryRound(){
 function checkVictory(){
 	let isVictory = true;
 
-	if(arrayTouch[selectedPlayer]['point'] !== 501){
+	if(arrayTouch[selectedPlayer]['point'] !== 0){
 		isVictory = false;
 	}
 	if(round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3){
@@ -89,4 +89,11 @@ function displayVictoryScreen(){
 	});
 	$('#zonevictory').show();
 	$('#zonevictoryPlayer').html('Player '+winner);
+
+	setInterval(function(){
+		isNewGame = true;
+		$('#newGame').show();
+		$('#zonebtnno').show();
+		$('#zonebtyes').show();
+	}, 1500);
 }

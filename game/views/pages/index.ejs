@@ -83,6 +83,7 @@
       overflow: hidden;
       color: white;
       padding: 20px;
+      margin-top: 2em;
     }
     .box.selected{
       box-shadow: 0 20px 50px rgb(23, 32, 90);
@@ -265,8 +266,8 @@
               <div class="center titleChoiceGame">Choisissez le jeu</div>
             </div>
             <div class="row">
-              <div class="col s12 m4">
-                <div class="box boxGame1 selected">
+              <div class="col m4">
+                <div class="box boxGame1 selected" data-name="hyperjumpup">
                   <span></span>
                   <span></span>
                   <span></span>
@@ -278,8 +279,8 @@
 
                 </div>
               </div>
-              <div class="col s12 m4">
-                <div class="box boxGame2">
+              <div class="col m4">
+                <div class="box boxGame2" data-name="501">
                   <span></span>
                   <span></span>
                   <span></span>
@@ -290,14 +291,50 @@
 
                 </div>
               </div>
-              <div class="col s12 m4">
-                <div class="box boxGame3">
+              <div class="col m4">
+                <div class="box boxGame3" data-name="301">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
                     <h2>301 </h2>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col m4">
+                <div class="box boxGame4" data-name="701">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div class="content">
+                    <h2>701 </h2>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col m4">
+                <div class="box boxGame5" data-name="goldHunting">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div class="content">
+                    <h2>Gold Hunting </h2>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col m4">
+                <div class="box boxGame6" data-name="hyperjumpup">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div class="content">
+                    <h2>High Jump </h2>
                   </div>
 
                 </div>
@@ -333,7 +370,7 @@
   <script>
     var socket = io();
     let gameSelected = 1;
-    let nbTotalGame = 3;
+    let nbTotalGame = 6;
     let lastMsg = '';
 
     socket.on('dart', function(msg) {
@@ -351,8 +388,9 @@
           }
           $('.box').removeClass('selected');
           $('.boxGame'+gameSelected).addClass('selected');
-        }else if(msg === 'btnValidater'){
-          window.location.replace("/lobby?game=cricket");
+        }else if(msg === 'btnValidate'){
+          let nameGame = $('.boxGame'+gameSelected).data('name');
+          window.location.replace("/lobby?game="+nameGame);
         }
       }
 

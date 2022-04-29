@@ -17,10 +17,51 @@
     <div class="section">
         <!--   Icon Section   -->
         <div class="row">
+          <div class="col s12 m3">
+            <% for(var i=1; i<=nbPlayer; i++) {%>
+              <div class="">
+                <div id="zoneScorePlayer<%- i %>" class=" titlePlayer icon-block row scorePlayer <% if(i === 1){%>selected<%}%>">
+                  <div class="col m7 center ">PLAYER <%- i %></div>
+                  <div class="col m5 center" id="scoreTotal<%- i %>">
+                    <div id="score">
+                      0
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col s12 m7">
+            <div class="icon-block sectionCenter">
+             <div id="scoreCurrentPlayer">
+               <%- mode %>
+             </div>
+
+            </div>
+            <div class="row">
+              <div class="col s12 m4">
+                <div class="icon-block lastDart center" id="throw1">
+                  -
+                </div>
+              </div>
+              <div class="col s12 m4">
+                <div class="icon-block lastDart center" id="throw2">
+                  -
+                </div>
+              </div>
+              <div class="col s12 m4">
+                <div class="icon-block lastDart center" id="throw3">
+                  -
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="col s12 m2">
             <div class="icon-block sectionLeft">
-              <div class="center titleLeft">501</div>
-              <div class="center titleLeft">ROUND <span id="nbRound">1</span> / 20</div>
+              <div class="center titleLeft"><%- mode %></div>
+              <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
               <div class="center tableLeft">
                 <table>
                   <tbody>
@@ -46,18 +87,6 @@
                 </table>
               </div>
             </div>
-          </div>
-
-          <div class="col s12 m8">
-            <div class="icon-block sectionCenter">
-             <div id="scoreCurrentPlayer">
-               501
-             </div>
-            </div>
-          </div>
-
-          <div class="col s12 m2">
-
         </div>
       </div>
   </div>
@@ -68,46 +97,11 @@
         <div class="col s12 m2">
         </div>
         <div class="col s12 m8">
-          <div class="row">
-            <div class="col s12 m4">
-              <div class="icon-block lastDart center" id="throw1">
-                -
-              </div>
-            </div>
-            <div class="col s12 m4">
-              <div class="icon-block lastDart center" id="throw2">
-                -
-              </div>
-            </div>
-            <div class="col s12 m4">
-              <div class="icon-block lastDart center" id="throw3">
-                -
-              </div>
-            </div>
-          </div>
+
         </div>
         <div class="col s12 m2">
         </div>
       </div>
-
-    </div>
-    <div class="section">
-
-      <!--   Icon Section   -->
-      <div class="row">
-        <% for(var i=1; i<=nbPlayer; i++) {%>
-          <div class="col s12 m3">
-            <div id="zoneScorePlayer<%- i %>" class="icon-block scorePlayer <% if(i === 1){%>selected<%}%>">
-              <div class="center titlePlayer">Player <%- i %></div>
-              <div id="scoreTotal<%- i %>" class="center scoreP">
-                0
-              </div>
-            </div>
-          </div>
-        <% } %>
-
-      </div>
-
     </div>
   </div>
   <div id="changePlayer">
@@ -115,6 +109,9 @@
   </div>
   <div id="newGame">
     Play again ?
+  </div>
+  <div id="timeExceed">
+    A QUELLE HEURE ?!
   </div>
   <div id="returnMenu">
     Return menu ?
@@ -137,6 +134,7 @@
     let nombrePlayer = <%- nbPlayer %>;
     let maxRound = <%- maxRound %>;
     let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
+    let mode = <%- mode %>;
   </script>
   <script src="../../js/game/main.js"></script>
   <script src="../../js/game/mainDisplay.js"></script>

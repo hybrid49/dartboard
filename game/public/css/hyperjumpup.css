@@ -314,6 +314,8 @@ label {
 	padding-top: 14px;
 	font-size: 60px;
 	margin-right: 0em !important;
+	border-top-right-radius: 5px 5px;
+	border-bottom-right-radius: 5px 5px;
 }
 .titlePlayer{
 	height: 7rem;

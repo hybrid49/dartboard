@@ -7,11 +7,32 @@
 	font-family: myFirstFont;
 	src: url('../../font/PlayPretend.otf');
 }
-body{
-	font-family: myFirstFont;
-	background-color: #60605f;
-	height: 1080px;
+
+@font-face {
+	font-family: oswald;
+	src: url('../../font/Oswald-VariableFont_wght.ttf');
 }
+body{
+	height: 1080px;
+	font-family: myFirstFont, sans-serif;
+	text-shadow: 1px 1px 5px black;
+	overflow: hidden;
+	background: linear-gradient(-45deg, #999999, #6b6b6b, #e7e7e7, #383838);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 .row .col {
 	padding: 0rem;
 }
@@ -39,6 +60,7 @@ body{
 .sectionCenter{
 	margin-right: 7rem;
 	margin-left: 7rem;
+	margin-top: 20%;
 }
 td{
 	width: 20%;
@@ -129,6 +151,7 @@ td{
 	color: white;
 	margin-right: 1em;
 }
+/* CSS des scores des joueurs */
 .scorePlayer{
 	background-color: #424242;
 	height: 314px;
@@ -136,19 +159,43 @@ td{
 }
 .scorePlayer.selected{
 	background-color: var(--main-bg-color);
+	height: 150px;
+	padding-top: 14px;
+	font-size: 60px;
+	margin-right: 0em !important;
+	border-top-right-radius: 5px 5px;
+	border-bottom-right-radius: 5px 5px;
 }
 .titlePlayer{
 	height: 7rem;
 	font-size: 34px;
 	border-bottom: 21px solid #2a2929;
 }
-.scorePlayer.selected .titlePlayer{
+.titlePlayer.selected{
 	border-bottom: 21px solid var(--main-bg-color-darker);
 }
-.scoreP{
-	font-size: 130px;
+.titlePlayer{
+	padding: 0.5em;
+	font-family: oswald, sans-serif;
+	color: #CCC;
+	text-shadow: 1px 1px 5px black;
+	margin-right: 1em !important;
 }
-#changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes{
+
+.scoreP{
+	font-family: oswald, sans-serif;
+	color: #CCC;
+	text-shadow: 1px 1px 5px black;
+	font-size: 117px;
+}
+
+.sectionScore{
+	position: absolute;
+	width: 100%;
+	top: 50em;
+	z-index: -1;
+}
+#changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes, #timeExceed{
 	position: absolute;
 	top: 3em;
 	background-color: #9a9c98b3;
@@ -191,6 +238,12 @@ td{
 	top:5em;
 	left: 1100px;
 	right: 200px;
+}
+.DoubleShot{
+	color : #9c27b0;
+}
+.TripleShot{
+	color : #e91e63;
 }
 .DoubleShot{
 	color : #9c27b0;

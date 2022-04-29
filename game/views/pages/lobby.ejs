@@ -74,8 +74,8 @@
     }
     .box{
       transform: translate(0%, 0%);
-      width: 300px;
-      height: 300px;
+      width: 150px;
+      height: 150px;
       background: #e53935;
       box-sizing: border-box;
       overflow: hidden;
@@ -122,7 +122,7 @@
     .box .content h2{
       font-family: Play;
       font-size: 43px;
-      margin-top: 2em;
+      margin-top: 0.4em;
     }
     .box .content h2 a{
       color: white;
@@ -265,57 +265,23 @@
               <div class="center titleChoiceGame">Nombre de joueur</div>
             </div>
             <div class="row">
-              <div class="col s12 m4">
-                <div class="box boxGame1 selected">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2><a id="aCricket">1</a> </h2>
-                  </div>
+              <% for(var i=1; i<=nbPlayerMax; i++) {%>
+                <div class="col s12 m3">
+                  <div class="box boxGame<%- i %>" data-nbPlayer=" <%- i %>">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <div class="content">
+                      <h2><a id="aCricket"><%- i %></a> </h2>
+                    </div>
 
-                </div>
-              </div>
-              <div class="col s12 m4">
-                <div class="box boxGame2">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>2 </h2>
                   </div>
-
                 </div>
-              </div>
-              <div class="col s12 m4">
-                <div class="box boxGame3">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>3 </h2>
-                  </div>
-
-                </div>
-              </div>
-              <div class="col s12 m4">
-                <div class="box boxGame4">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>4 </h2>
-                  </div>
-
-                </div>
-              </div>
+              <% } %>
             </div>
           </div>
-          <div class="col s12 m3  ">
+          <div class="col s12 m3">
             <div class="box boxLastGame" >
               <span></span>
               <span></span>
@@ -324,9 +290,6 @@
               <div class="content">
                 <h2 style="margin-top: 0em;"><a href="">Regles</a> </h2>
                 <p style="text-align: left; font-size: 21px;">
-                  le principe du cricket consiste à valider votre tableau de score pour les valeurs allant de 20 à 15 !<br><br>
-
-                  Quand un joueur marque des points dans un secteur qu’il a fermé, il donne des points à ses adversaires qui n’en ont pas fait de même. Le vainqueur est donc le premier à fermer toutes les zones, avec le score le plus faible.
                 </p>
               </div>
 
@@ -349,13 +312,13 @@
   <script>
     var socket = io();
     let gameSelected = 1;
-    let nbTotalGame = 4;
+    let nbTotalGame = <%- nbPlayerMax %>;
     let lastMsg = '';
 
     socket.on('dart', function(msg) {
       changeGame(msg);
     });
-
+    $('.boxGame1').addClass('selected');
     function changeGame(msg){
       if(lastMsg === '') {
         lastMsg = msg;
@@ -367,8 +330,12 @@
           }
           $('.box').removeClass('selected');
           $('.boxGame'+gameSelected).addClass('selected');
-        }else if(msg === 'btnValidater'){
-          window.location.replace("/game/cricket?nbPlayer="+gameSelected);
+        }else if(msg === 'btnValidate'){
+          let nbPLayer = $('.boxGame'+gameSelected).data('nbplayer');
+          let game = "<%- game %>";
+          window.location.replace("/game/"+game+"?nbPlayer="+nbPLayer);
+        }else if(msg === 'btnCancel'){
+          window.location.replace("/");
         }
       }
 
