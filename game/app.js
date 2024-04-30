@@ -88,7 +88,7 @@ const fs = require('fs');
 let fsTimeout;
 
 // listen on update on file to check if arduino send informations
-fs.watch('/srv/dart3/dart.txt', (event, filename) => {
+fs.watch('../comArduino/dart.txt', (event, filename) => {
 	//define var to stop multiple trigger if a dart is stuck in the board
 	if (!fsTimeout) {
 		fs.readFile('/srv/dart3/dart.txt', 'utf8', (err, data) => {
