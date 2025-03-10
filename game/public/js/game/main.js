@@ -58,10 +58,10 @@ function arduinoEvent(msg){
     let timestamp = Math.floor(Date.now());
     deltaTimestamp = timestamp - previousTimestamp;
 
-    if(msg !== '' && deltaTimestamp >= '800' ){
+    if(msg !== '' && msg !== 'btnNext' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
-        if(nbTotalAction === 0)
+        if(nbTotalAction === 0 && msg === 'btnCancel')
             window.location.replace("/");
 
         if(!isGameOver)
