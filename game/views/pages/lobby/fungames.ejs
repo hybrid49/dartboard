@@ -26,7 +26,7 @@
           </div>
           <div class="col s12 m2">
             <div class="icon-block">
-              <div class="center titleMenuLeft">Marie</div>
+              <div class="center titleMenuLeft">Ni</div>
             </div>
           </div>
           <div class="col s12 m1">
@@ -79,6 +79,7 @@
               <span></span>
               <div class="content">
                 <h2>Regles</h2>
+                <div id="RulesBox">dededede</div>
               </div>
 
             </div>
@@ -96,12 +97,16 @@
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/materialize.min.js"></script>
   <script src="../../js/socket.io.js"></script>
+  <script src="../../js/lobby.js"></script>
 
   <script>
     var socket = io();
     let gameSelected = 1;
     let nbTotalGame = 3;
     let lastMsg = '';
+
+    let nameGame = $('.boxGame'+gameSelected).data('name');
+    $('#RulesBox').html(arrayGamesRules[nameGame]);
 
     socket.on('arduino', function(msg) {
       arduinoEvent(msg);
@@ -118,8 +123,10 @@
           }
           $('.box').removeClass('selected');
           $('.boxGame'+gameSelected).addClass('selected');
+          nameGame = $('.boxGame'+gameSelected).data('name');
+          $('#RulesBox').html(arrayGamesRules[nameGame]);
         }else if(msg === 'btnValidate'){
-          let nameGame = $('.boxGame'+gameSelected).data('name');
+          nameGame = $('.boxGame'+gameSelected).data('name');
           window.location.replace("/selectionJoueur?game="+nameGame);
         }
         else if(msg === 'btnCancel'){

@@ -29,18 +29,20 @@
               <% if(arrayTargets[i] !== '25'){ %>
                 <tr id="tr<%- arrayTargets[i] %>">
                   <td class="tdGame tdPlayer1 selected"></td>
-                  <td class="tdGame tdPlayer2"></td>
-                  <td class="tdGame tableChiffreCenter"><%if (mode === "random"){ %>?<%}else{%><%- arrayTargets[i] %><%}%></td>
-                  <td class="tdGame tdPlayer3"></td>
-                  <td class="tdGame tdPlayer4"></td>
+                  <% if(nbPlayer <= 2){%><td class="tdGame tableChiffreCenter"><%if (mode === "random"){ %>?<%}else{%><%- arrayTargets[i] %><%}%></td><%}%>
+                  <% if(nbPlayer >= 2){%><td class="tdGame tdPlayer2"></td><%}%>
+                  <% if(nbPlayer > 2){%><td class="tdGame tableChiffreCenter"><%if (mode === "random"){ %>?<%}else{%><%- arrayTargets[i] %><%}%></td><%}%>
+                  <% if(nbPlayer >= 3){%><td class="tdGame tdPlayer3"></td><%}%>
+                  <% if(nbPlayer >= 4){%><td class="tdGame tdPlayer4"></td><%}%>
                 </tr>
                 <% }else{ %>
                   <tr id="tr25">
                     <td class="tdGame tdPlayer1 selected"></td>
-                    <td class="tdGame tdPlayer2"></td>
-                    <td class="tdGame tableChiffreCenter">BULL</td>
-                    <td class="tdGame tdPlayer3"></td>
-                    <td class="tdGame tdPlayer4"></td>
+                    <% if(nbPlayer <= 2){%><td class="tdGame tableChiffreCenter">BULL</td><%}%>
+                   <% if(nbPlayer >= 2){%><td class="tdGame tdPlayer2"></td><%}%>
+                    <% if(nbPlayer > 2){%><td class="tdGame tableChiffreCenter">BULL</td><%}%>
+                    <% if(nbPlayer >= 3){%><td class="tdGame tdPlayer3"></td><%}%>
+                    <% if(nbPlayer >= 4){%><td class="tdGame tdPlayer4"></td><%}%>
                   </tr>
                 <% } %>
               <% } %>
@@ -116,9 +118,13 @@
 
     <!--   Icon Section   -->
     <div class="row">
+      <% if(nbPlayer <= 2){ %>
+        <div class="col s12 m3">
+        </div>
+      <% }%>
       <% for(var i=1; i<=nbPlayer; i++) {%>
         <div class="col s12 m3">
-          <div id="zoneScorePlayer<%- i %>" class="icon-block scorePlayer <% if(i === 1){%>selected<%}%>">
+          <div class="icon-block scorePlayer zoneScorePlayer<%- i %> <% if(i === 1){%>selected<%}%>" id="zoneScorePlayer<%- i %>">
             <div class="center titlePlayer">Player <%- i %></div>
             <div id="scoreTotal<%- i %>" class="center scoreP">
               0

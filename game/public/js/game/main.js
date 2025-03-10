@@ -334,7 +334,7 @@ function resetGlobal(){
 function getHtmlThrow(i){
     return i === 1 ? '/'
          : i === 2 ? 'X'
-         : i === 3 ? '0'
+         : i === 3 ? 'Ø'
          :           '';
 }
 
