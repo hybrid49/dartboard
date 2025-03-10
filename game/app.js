@@ -91,7 +91,7 @@ let fsTimeout;
 fs.watch('../comArduino/dart.txt', (event, filename) => {
 	//define var to stop multiple trigger if a dart is stuck in the board
 	if (!fsTimeout) {
-		fs.readFile('/srv/dart3/dart.txt', 'utf8', (err, data) => {
+		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
 			if (err) {
 				console.error(err)
 				return
