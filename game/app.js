@@ -14,7 +14,7 @@ app.use(express.static(__dirname + '/public'));
 arrayComplete = ["20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","25"]
 // game cricket page
 app.get('/game/cricket', function(req, res) {
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:["20","19","18","17","16","15","25"], mode: "cricket"});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:20, arrayTargets:["20","19","18","17","16","15","25"], mode: "cricket"});
 });
 
 // game cricket page
@@ -31,7 +31,7 @@ app.get('/game/RandomCricket', function(req, res) {
 		return a - b;
 	});
 
-	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:2, arrayTargets:array, mode: "cricket"});
+	res.render('pages/cricket', {nbPlayer: req.query.nbPlayer, maxRound:20, arrayTargets:array, mode: "cricket"});
 });
 
 // game 501 page
@@ -88,20 +88,20 @@ const fs = require('fs');
 let fsTimeout;
 
 // listen on update on file to check if arduino send informations
-fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
-	//define var to stop multiple trigger if a dart is stuck in the board
-	if (!fsTimeout) {
-		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
-			if (err) {
-				console.error(err)
-				return
-			}
-			console.log('watch : ' + data);
-			io.emit('arduino', data);
-			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
-		});
-	}
-});
+// fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
+// 	//define var to stop multiple trigger if a dart is stuck in the board
+// 	if (!fsTimeout) {
+// 		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
+// 			if (err) {
+// 				console.error(err)
+// 				return
+// 			}
+// 			console.log('watch : ' + data);
+// 			io.emit('arduino', data);
+// 			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
+// 		});
+// 	}
+// });
 
 io.on('connection', (socket) => {
 	console.log('a user connected');

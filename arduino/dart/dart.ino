@@ -1,4 +1,4 @@
-  int masterLines = 8; //Change here to the number of lines of your Master Layer
+int masterLines = 8; //Change here to the number of lines of your Master Layer
 int slaveLines = 8; //Change here to the number of lines of your Slave Layer
 
 int matrixMaster[] = {13, 12, 11, 10, 9, 8, 7, 6}; //Put here the pins you connected the lines of your Master Layer

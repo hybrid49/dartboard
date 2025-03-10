@@ -250,7 +250,7 @@
           </div>
           <div class="col s12 m8">
             <div class="icon-block">
-              <div class="center titleMenu">CRICKET CUT THROAT</div>
+              <div class="center titleMenu">Nombre de joueur</div>
             </div>
           </div>
           <div class="col s12 m2">
@@ -267,7 +267,7 @@
             <div class="row">
               <% for(var i=1; i<=nbPlayerMax; i++) {%>
                 <div class="col s12 m3">
-                  <div class="box boxGame<%- i %>" data-nbPlayer=" <%- i %>">
+                  <div class="box boxGame<%- i %>" data-nbPlayer="<%- i %>">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -322,7 +322,7 @@
     function changeGame(msg){
       if(lastMsg === '') {
         lastMsg = msg;
-        if(msg === 'nextBtn'){
+        if(msg === 'btnNext'){
           if(gameSelected < nbTotalGame){
             gameSelected++;
           }else{
