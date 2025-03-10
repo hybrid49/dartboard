@@ -1,7 +1,7 @@
 let selectedPlayer = 1;
 let round =1;
-let r = document.querySelector(':root');
-const socket = io()
+let r = document.querySelector(':root'); //TODO rename DOM
+const socket = io();
 let nbThrow = 0;
 let nbTotalAction = 0;
 let isGameOver = false;
@@ -60,6 +60,9 @@ function arduinoEvent(msg){
 
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
+
+        if(nbTotalAction === 0)
+            window.location.replace("/");
 
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
@@ -270,28 +273,17 @@ function newRound(){
 }
 
 function isCurrentPlayerHasBetterStatThanCurrentWinner(player, currentWinner){
-    if (player['nbHit'] > currentWinner['nbHit'])
-        return true;
-    else if(player['nbHit'] === currentWinner['nbHit']){
-        if (player['nbDoubleBull'] > currentWinner['nbDoubleBull'])
+    const keys = ['nbHit', 'nbDoubleBull', 'nbBull', 'nbTriple', 'nbDouble', 'nbSingle'];
+
+    for (const key of keys) {
+        if (player[key] < currentWinner[key]) {
+            return false;
+        }
+        if (player[key] > currentWinner[key]) {
             return true;
-        else if(player['nbDoubleBull'] === currentWinner['nbDoubleBull']){
-            if (player['nbBull'] > currentWinner['nbBull'])
-                return true;
-            else if(player['nbBull'] === currentWinner['nbBull']){
-                  if (player['nbTriple'] > currentWinner['nbTriple'])
-                    return true;
-                else if(player['nbTriple'] === currentWinner['nbTriple']){
-                    if (player['nbDouble'] > currentWinner['nbDouble'])
-                        return true;
-                    else if(player['nbDouble'] === currentWinner['nbDouble']){
-                        if (player['nbSingle'] > currentWinner['nbSingle'])
-                            return true;
-                    }
-                }
-            }
         }
     }
+    return true;
 }
 
 function setHtmlHistoryRound(idRound, numberRound, listeScore){

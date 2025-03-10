@@ -21,12 +21,12 @@
           </div>
           <div class="col s12 m8">
             <div class="icon-block">
-              <div class="center titleMenu">Choisissez le jeu</div>
+              <div class="center titleMenu">Choisissez le mode de jeu fun</div>
             </div>
           </div>
           <div class="col s12 m2">
             <div class="icon-block">
-              <div class="center titleMenuLeft">Ni</div>
+              <div class="center titleMenuLeft">Marie</div>
             </div>
           </div>
           <div class="col s12 m1">
@@ -34,52 +34,51 @@
           <div class="col s12 m7 choiceGameSection">
             <div class="row">
               <div class="col m4">
-                <div class="box boxGame1 selected" data-name="lobby/crickets">
+                <div class="box boxGame1 selected" data-name="goldHunting">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>crickets</h2>
+                    <h2>Gold Hunting </h2>
                   </div>
 
                 </div>
               </div>
               <div class="col m4">
-                <div class="box boxGame2" data-name="lobby/01">
+                <div class="box boxGame2" data-name="hyperjumpup">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>01 Games </h2>
+                    <h2>High Jump </h2>
                   </div>
 
                 </div>
               </div>
               <div class="col m4">
-                <div class="box boxGame3" data-name="lobby/fungames">
+                <div class="box boxGame3" data-name="lejeudelato">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>Fun games </h2>
+                    <h2>Le jeu de l'ato </h2>
                   </div>
 
                 </div>
               </div>
             </div>
           </div>
-          <div class="col s12 m3">
+          <div class="col s12 m3  ">
             <div class="box boxLastGame">
               <span></span>
               <span></span>
               <span></span>
               <span></span>
               <div class="content">
-                <h2>Joyeux Anniversaire</h2>
-                <img src="../../img/marie.jpg" style="width: 100%"/>
+                <h2>Regles</h2>
               </div>
 
             </div>
@@ -121,7 +120,10 @@
           $('.boxGame'+gameSelected).addClass('selected');
         }else if(msg === 'btnValidate'){
           let nameGame = $('.boxGame'+gameSelected).data('name');
-          window.location.replace(""+nameGame);
+          window.location.replace("/selectionJoueur?game="+nameGame);
+        }
+        else if(msg === 'btnCancel'){
+          window.location.replace("/");
         }
       }
 

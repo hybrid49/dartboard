@@ -316,10 +316,11 @@
     let lastMsg = '';
 
     socket.on('arduino', function(msg) {
-      changeGame(msg);
+      arduinoEvent(msg);
     });
     $('.boxGame1').addClass('selected');
-    function changeGame(msg){
+    
+    function arduinoEvent(msg){
       if(lastMsg === '') {
         lastMsg = msg;
         if(msg === 'btnNext'){

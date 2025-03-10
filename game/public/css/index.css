@@ -1,0 +1,204 @@
+@font-face {
+    font-family: game;
+    src: url('../../font/GameCube.ttf');
+}
+@font-face {
+    font-family: testt;
+    src: url('../../font/CollegiateFLF.ttf');
+}
+@font-face {
+    font-family: jap;
+    src: url('../../font/SAKURATA.ttf');
+}
+@font-face {
+    font-family: bypass;
+    src: url('../../font/Bypass.ttf');
+}
+@font-face {
+    font-family: Play;
+    src: url('../../font/PlayPretend.otf');
+}
+@font-face {
+    font-family: Bebas;
+    src: url('../../font/BebasNeue-Regular.otf');
+}
+@font-face {
+    font-family: Cormo;
+    src: url('../../font/CormorantGaramond-Bold.ttf');
+}
+body{
+    height: 1080px;
+    background-color: #222222;
+    background-size: cover;
+}
+.titleMenu{
+    font-family: Cormo;
+    font-size: 50px;
+    background-color: #d10e56;
+    padding: 0.5em 1em;
+}
+.titleMenuLeft{
+    font-family: jap;
+    font-size: 50px;
+    padding: 0.5em 1em;
+}
+.choiceGameSection{
+    margin-top: 1rem;
+}
+.row{
+    margin-bottom: 0px;
+}
+.lastGameSection{
+    margin-top: 1rem;
+    background-color: #e53935;
+    height: 55rem;
+}
+.titleChoiceGame{
+    font-family: Cormo;
+    font-size: 45px;
+}
+.sectionGame{
+    font-family: Cormo;
+    background-color: #e53935;
+    border: 14px solid #681a18;
+    text-align: center;
+    height: 12rem;
+    border-radius: 5px;
+    font-size: 40px;
+}
+.box{
+    transform: translate(0%, 0%);
+    width: 300px;
+    height: 150px;
+    background: #d10e9e;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: white;
+    padding: 20px;
+    margin-top: 2em;
+}
+.box.selected{
+    box-shadow: 0 20px 50px rgb(23, 32, 90);
+    border: 2px solid #2a3cad;
+}
+
+.box .content{
+    position:absolute;
+    top:15px;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    border:1px solid #f0a591;
+    padding:20px;
+    text-align:center;
+    box-shadow: 0 5px 10px rgba(9,0,0,0.5);
+
+}
+
+.box .content h2{
+    margin-top: 1.5rem;
+    font-family: testt;
+    font-size: 28px;
+}
+.box .content h2 a{
+    color: white;
+}
+
+.box span{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+
+}
+
+.box span:nth-child(1)
+{
+    transform:rotate(0deg);
+}
+
+.box span:nth-child(2)
+{
+    transform:rotate(180deg);
+}
+
+
+
+.box.selected span:before
+{
+    content: '';
+    position: absolute;
+    width:100%;
+    height: 5px;
+    background: #50dfdb;
+    animation: animate 4s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        transform:scaleX(0);
+        transform-origin: left;
+    }
+    50%
+    {
+        transform:scaleX(1);
+        transform-origin: left;
+    }
+    50.1%
+    {
+        transform:scaleX(1);
+        transform-origin: right;
+
+    }
+
+    100%
+    {
+        transform:scaleX(0);
+        transform-origin: right;
+
+    }
+}
+
+.boxLastGame{
+    margin-top: 3rem;
+    width: 125%;
+    height: 750px;
+}
+
+.boxLastGame span:before
+{
+    content: '';
+    position: absolute;
+    width:100%;
+    height: 2px;
+    background: #50dfdb;
+    animation: animate2 10s linear infinite;
+}
+
+@keyframes animate2 {
+    0% {
+        transform:scaleX(0);
+        transform-origin: left;
+    }
+    50%
+    {
+        transform:scaleX(1);
+        transform-origin: left;
+    }
+    50.1%
+    {
+        transform:scaleX(1);
+        transform-origin: right;
+
+    }
+
+    100%
+    {
+        transform:scaleX(0);
+        transform-origin: right;
+
+    }
+}
