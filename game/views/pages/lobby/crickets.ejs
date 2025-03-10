@@ -10,6 +10,7 @@
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="../../css/index.css" type="text/css" rel="stylesheet"/>
 
+
 </head>
 <body>
   <div class="section no-pad-bot" id="index-banner">
@@ -21,12 +22,12 @@
           </div>
           <div class="col s12 m8">
             <div class="icon-block">
-              <div class="center titleMenu">Choisissez le jeu</div>
+              <div class="center titleMenu">Choisissez le mode de jeu pour le cricket</div>
             </div>
           </div>
           <div class="col s12 m2">
             <div class="icon-block">
-              <div class="center titleMenuLeft">Ni</div>
+              <div class="center titleMenuLeft">Marie</div>
             </div>
           </div>
           <div class="col s12 m1">
@@ -34,52 +35,59 @@
           <div class="col s12 m7 choiceGameSection">
             <div class="row">
               <div class="col m4">
-                <div class="box boxGame1 selected" data-name="lobby/crickets">
+                <div class="box boxGame1 selected" data-name="cricket">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>crickets</h2>
+                    <h2>normal</h2>
                   </div>
-
                 </div>
               </div>
               <div class="col m4">
-                <div class="box boxGame2" data-name="lobby/01">
+                <div class="box boxGame2" data-name="cricket">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>01 Games </h2>
+                    <h2>normal random</h2>
                   </div>
-
                 </div>
               </div>
               <div class="col m4">
-                <div class="box boxGame3" data-name="lobby/fungames">
+                <div class="box boxGame3" data-name="cricket">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>Fun games </h2>
+                    <h2>cut throat</h2>
                   </div>
-
+                </div>
+              </div>
+              <div class="col m4">
+                <div class="box boxGame4" data-name="cricket">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div class="content">
+                    <h2>cut throat random</h2>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col s12 m3">
+          <div class="col s12 m3  ">
             <div class="box boxLastGame">
               <span></span>
               <span></span>
               <span></span>
               <span></span>
               <div class="content">
-                <h2>Joyeux Anniversaire</h2>
-                <img src="../../img/marie.jpg" style="width: 100%"/>
+                <h2>Regles</h2>
               </div>
 
             </div>
@@ -101,7 +109,7 @@
   <script>
     var socket = io();
     let gameSelected = 1;
-    let nbTotalGame = 3;
+    let nbTotalGame = 4;
     let lastMsg = '';
 
     socket.on('arduino', function(msg) {
@@ -121,7 +129,9 @@
           $('.boxGame'+gameSelected).addClass('selected');
         }else if(msg === 'btnValidate'){
           let nameGame = $('.boxGame'+gameSelected).data('name');
-          window.location.replace(""+nameGame);
+          window.location.replace("/selectionJoueur?game="+nameGame);
+        }else if(msg === 'btnCancel'){
+          window.location.replace("/");
         }
       }
 

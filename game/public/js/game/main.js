@@ -61,6 +61,9 @@ function arduinoEvent(msg){
     if(msg !== '' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
+        if(nbTotalAction === 0)
+            window.location.replace("/");
+
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
         else
