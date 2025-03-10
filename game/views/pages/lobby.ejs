@@ -315,7 +315,7 @@
     let nbTotalGame = <%- nbPlayerMax %>;
     let lastMsg = '';
 
-    socket.on('dart', function(msg) {
+    socket.on('arduino', function(msg) {
       changeGame(msg);
     });
     $('.boxGame1').addClass('selected');
