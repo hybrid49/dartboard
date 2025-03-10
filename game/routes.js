@@ -33,8 +33,28 @@ router.get('/selectionJoueur', function(req, res) {
 router.get('/game/cricket', function(req, res) {
     res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], mode: "cricket"});
 });
+router.get('/game/cricketshorty', function(req, res) {
+    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 10, arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], mode: "cricket"});
+});
+router.get('/game/cricketcutthroat', function(req, res) {
+    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], mode: "cricket"});
+});
 
-router.get('/game/RandomCricket', function(req, res) {
+router.get('/game/cricketrandom', function(req, res) {
+    let array = [25];
+    do {
+        let nb = between(1, 20);
+        if (!array.includes(nb))
+            array.push(nb);
+    } while (array.length < 7);
+
+    array.sort(function(a, b) {
+        return a - b;
+    });
+
+    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: array, mode: "cricket"});
+});
+router.get('/game/cricketcutthroatrandom', function(req, res) {
     let array = [25];
     do {
         let nb = between(1, 20);
