@@ -168,12 +168,6 @@ sudo systemctl start app-web
   sudo systemctl disable <nom-du-service>
   ```
 
-## Conclusion
-Avec cette configuration, Redis, le serveur Arduino et l'application web démarrent automatiquement à chaque boot, sans nécessiter d'ouverture de terminal. 🚀
-
-
-
-
 ## Auteurs
 - **Charrier Paul**
 
