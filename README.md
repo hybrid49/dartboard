@@ -47,6 +47,112 @@ Le projet repose sur plusieurs technologies :
    ```
    http://localhost:3000
    ```
+# Automatisation du Lancement avec systemd
+
+## Description
+Ce guide explique comment configurer **systemd** pour démarrer automatiquement les services nécessaires à l'application, notamment **Redis**, le **serveur Arduino**, et l'**application web** au démarrage du système.
+
+## Étapes d'installation et de configuration
+
+### 1. Création du service Redis
+Créer un fichier `redis-custom.service` :
+```sh
+sudo nano /etc/systemd/system/redis-custom.service
+```
+Ajouter le contenu suivant :
+```ini
+[Unit]
+Description=Redis Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/redis-server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+Enregistrer (`CTRL+X`, `Y`, `Entrée`), puis activer et démarrer le service :
+```sh
+sudo systemctl enable redis-custom
+sudo systemctl start redis-custom
+```
+
+### 2. Création du service pour le serveur Arduino
+Créer un fichier `server-arduino.service` :
+```sh
+sudo nano /etc/systemd/system/server-arduino.service
+```
+Ajouter le contenu suivant :
+```ini
+[Unit]
+Description=Serveur Arduino
+After=redis-custom.service
+
+[Service]
+ExecStart=/usr/bin/node /chemin/vers/ton/projet/server.js
+Restart=always
+User=<ton-utilisateur>
+WorkingDirectory=/chemin/vers/ton/projet
+
+[Install]
+WantedBy=multi-user.target
+```
+Activer et démarrer le service :
+```sh
+sudo systemctl enable server-arduino
+sudo systemctl start server-arduino
+```
+
+### 3. Création du service pour l'application web
+Créer un fichier `app-web.service` :
+```sh
+sudo nano /etc/systemd/system/app-web.service
+```
+Ajouter le contenu suivant :
+```ini
+[Unit]
+Description=Application Web
+After=server-arduino.service
+
+[Service]
+ExecStart=/usr/bin/node /chemin/vers/ton/projet/app.js
+Restart=always
+User=<ton-utilisateur>
+WorkingDirectory=/chemin/vers/ton/projet
+
+[Install]
+WantedBy=multi-user.target
+```
+Activer et démarrer le service :
+```sh
+sudo systemctl enable app-web
+sudo systemctl start app-web
+```
+
+## Commandes utiles
+- **Vérifier le statut d'un service** :
+  ```sh
+  sudo systemctl status <nom-du-service>
+  ```
+- **Redémarrer un service** :
+  ```sh
+  sudo systemctl restart <nom-du-service>
+  ```
+- **Arrêter un service** :
+  ```sh
+  sudo systemctl stop <nom-du-service>
+  ```
+- **Désactiver un service au démarrage** :
+  ```sh
+  sudo systemctl disable <nom-du-service>
+  ```
+
+## Conclusion
+Avec cette configuration, Redis, le serveur Arduino et l'application web démarrent automatiquement à chaque boot, sans nécessiter d'ouverture de terminal. 🚀
+
+
+
 
 ## Auteurs
 - **Charrier Paul**
