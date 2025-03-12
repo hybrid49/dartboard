@@ -5,7 +5,9 @@ const url=require('url');
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const routes = require('./routes');
+const bdd = require('./src/bdd/bddPlayers');
+const routes = require('./src/route/routes');
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -18,7 +20,6 @@ app.use(routes);
 const { Server }  = require('socket.io', {wsEngine: 'ws' });
 
 const io = new Server(http);
-
 const fs = require('fs');
 
 let fsTimeout;
@@ -41,7 +42,19 @@ fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
 
 io.on('connection', (socket) => {
 	console.log('a user connected');
+	// Écouter l'événement envoyé par le client
+	socket.on('addPlayer', (data) => {
+		bdd.addPlayers(data);
+		console.log('add player');
+	});
+	// Écouter l'événement envoyé par le client
+	socket.on('deletePlayer', (data) => {
+		bdd.deletePlayer(data);
+		console.log('delete player');
+	});
 });
 
 // console.log(parser);
 http.listen(PORT);
+
+
