@@ -70,7 +70,7 @@ socket.on('deletePlayer', (data) => {
 ```
 
 ## Auteur
-- **Votre Nom**
+- **Charrier Paul**
 
 ## Licence
 Ce projet est sous licence **MIT**.
