@@ -21,6 +21,15 @@ Le projet repose sur plusieurs technologies :
 - Communication **temps réel** entre les clients via **WebSockets**
 - Déploiement sur un serveur local ou distant
 
+## Gestion des Arduino
+
+**Le projet utilise deux Arduino pour gérer différentes fonctionnalités :**
+
+- Arduino 1 : Récupère les données de la cible de fléchette et gère deux boutons (validation et retour en arrière, comme sur une cible commerciale).
+- Arduino 2 : Gère les LED et les boutons de navigation.
+
+Ces Arduino communiquent avec le raspebery pi via le port série.
+
 ## Installation et Lancement
 ### Prérequis
 - **Node.js**, **redis** et **npm** installés
