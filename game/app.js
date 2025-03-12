@@ -6,6 +6,8 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const routes = require('./routes');
+const redis = require('redis');
+const subscriber = redis.createClient();
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -23,21 +25,28 @@ const fs = require('fs');
 
 let fsTimeout;
 
-// listen on update on file to check if arduino send informations
-fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
-	//define var to stop multiple trigger if a dart is stuck in the board
-	if (!fsTimeout) {
-		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
-			if (err) {
-				console.error(err)
-				return
-			}
-			console.log('watch : ' + data);
-			io.emit('arduino', data);
-			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
-		});
-	}
+// TODO : check si redis est mieux que d'ecrire sur un fichier :D
+subscriber.subscribe('dartboard'); // Écoute les données de Redis
+subscriber.on('message', (channel, message) => {
+	console.log('Donnée reçue depuis Redis:', message);
+	// io.emit('arduino', message); // Envoie les données aux clients via WebSocket
 });
+
+// listen on update on file to check if arduino send informations
+// fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
+// 	//define var to stop multiple trigger if a dart is stuck in the board
+// 	if (!fsTimeout) {
+// 		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
+// 			if (err) {
+// 				console.error(err)
+// 				return
+// 			}
+// 			console.log('watch : ' + data);
+// 			io.emit('arduino', data);
+// 			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
+// 		});
+// 	}
+// });
 
 io.on('connection', (socket) => {
 	console.log('a user connected');
