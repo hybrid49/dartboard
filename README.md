@@ -1,7 +1,9 @@
 # Projet Dartboard Connecté
 
 ## Description
-Ce projet est une application complète permettant de gérer un jeu de fléchettes connecté avec un Arduino. Il se compose de quatres parties principales :
+Ce projet est une application complète permettant de gérer un jeu de fléchettes connecté avec un Arduino. 
+La genèse de ce projet vient de la lecture et du suivi de ce tuto (pour la connexion d'une cible de fléchette à un Arduino) : https://www.hackster.io/ricardo-alves/opendarts-homemade-dartboard-machine-2a2914 
+Il se compose de quatres parties principales :
 
 1. **Un serveur de communication avec l'Arduino** : Ce serveur récupère les informations envoyées par l'Arduino via un port série et les enregistre dans un fichier texte.
 2. **Une application web** : Cette interface utilisateur permet de gérer les joueurs et d'afficher les scores en temps réel grâce à la communication via WebSockets.
@@ -21,12 +23,12 @@ Le projet repose sur plusieurs technologies :
 - **Socket.io** : Permet la communication en temps réel entre le serveur et l'interface utilisateur.
 - **SerialPort** : Gère la connexion avec l'Arduino pour récupérer les données.
 - **EJS** : Utilisé comme moteur de rendu pour l'interface web.
+- **redis** : Pour la communication entre les deux serveurs node.
 
 ## Fonctionnalités Principales
 - Récupération des informations de l'Arduino via **port série**
 - Sauvegarde des données reçues dans un fichier `dart.txt`
 - Interface utilisateur permettant de **gérer les joueurs** et **afficher les scores**
-- Communication **temps réel** entre les clients via **WebSockets**
 - Déploiement sur un serveur local ou distant
 
 ## Gestion des Arduino
