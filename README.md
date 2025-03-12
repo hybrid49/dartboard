@@ -8,6 +8,13 @@ Ce projet est une application complète permettant de gérer un jeu de fléchett
 3. **Un serveur redis** : Le serveur sert de communication entre les deux application
 4. **Le code des arduino** : Pour gerer les information recus par la cible de flechette et la gestion des bandes leds
 
+## Prerequis
+- **Une cible de flechette** : Pour commencer une cible de flechette de type basique (dacathlon)
+- **Un fer à souder**
+- **Un arduino** : Amélioration avec un esp32 si j'avais de meilleurs capacité de soudure
+- **Un raspebery pi 4** : Gestion du serveur web et de l'affichage et de la communication avec l'arduino
+- **Des Led** : Optionnel mais toujours fun !
+
 ## Architecture du Projet
 Le projet repose sur plusieurs technologies :
 - **Node.js & Express** : Utilisés pour créer le serveur web et le serveur de communication avec l'Arduino.
