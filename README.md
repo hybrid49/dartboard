@@ -5,6 +5,7 @@ Ce projet est une application complète permettant de gérer un jeu de fléchett
 
 1. **Un serveur de communication avec l'Arduino** : Ce serveur récupère les informations envoyées par l'Arduino via un port série et les enregistre dans un fichier texte.
 2. **Une application web** : Cette interface utilisateur permet de gérer les joueurs et d'afficher les scores en temps réel grâce à la communication via WebSockets.
+3. **Un serveur redis** : Le serveur sert de communication entre les deux application
 
 ## Architecture du Projet
 Le projet repose sur plusieurs technologies :
@@ -22,7 +23,7 @@ Le projet repose sur plusieurs technologies :
 
 ## Installation et Lancement
 ### Prérequis
-- **Node.js** et **npm** installés
+- **Node.js**, **redis** et **npm** installés
 - **Un Arduino** configuré pour envoyer des données
 
 ### Étapes d'installation
