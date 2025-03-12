@@ -1,4 +1,4 @@
-# Projet de Matrice de Boutons et Contrôle de LED
+# Projet de lecture de matrice de cible de flechette, de Boutons poussoirs et Contrôle de LED
 
 ## Description
 Ce projet utilise une cible de flechete dont la matrice est connectée a l'arduino de boutons et une bande de LED pour créer une interface interactive. Le fichier `dart.ino` gère la matrice et deux boutons poussoirs, tandis que le fichier `led.ino` contrôle la bande de LED, les boutons de navigation et des commandes reçues via la communication série.
