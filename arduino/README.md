@@ -1,7 +1,7 @@
 # Projet de Matrice de Boutons et Contrôle de LED
 
 ## Description
-Ce projet utilise une matrice de boutons et une bande de LED pour créer une interface interactive. Le fichier `dart.ino` gère la matrice de boutons, tandis que le fichier `led.ino` contrôle la bande de LED en fonction des entrées des boutons et des commandes reçues via la communication série.
+Ce projet utilise une cible de flechete dont la matrice est connectée a l'arduino de boutons et une bande de LED pour créer une interface interactive. Le fichier `dart.ino` gère la matrice et deux boutons poussoirs, tandis que le fichier `led.ino` contrôle la bande de LED, les boutons de navigation et des commandes reçues via la communication série.
 
 ## Table des Matières
 - [Installation](#installation)
@@ -23,7 +23,8 @@ Ce projet utilise une matrice de boutons et une bande de LED pour créer une int
 
 ## Fonctionnalités
 - **Matrice de Boutons (`dart.ino`)** :
-   - Détecte les appuis sur les boutons de la matrice.
+   - Détecte les appuis sur les touche de la cible via la matrice.
+   - Detecte les appuis sur les deux boutons de validation et retour en arriere.
    - Envoie les coordonnées des boutons appuyés via la communication série.
    - Gère deux boutons supplémentaires pour les actions de validation et d'annulation.
 
