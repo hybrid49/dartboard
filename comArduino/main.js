@@ -15,12 +15,15 @@ const async = require('async')
 const server = http.createServer(app);
 const { Server } = require("socket.io", {cors:{origin: "*"}});
 const io = new Server(server);
+const redis = require('redis');
+const publisher = redis.createClient();
 
 const fs = require('fs');
 
 
 var darts = []
 parser.on('data', function(data) {
+	publisher.publish('dartboard', data);
 	fs.writeFileSync('dart.txt', data);
 })
 parser2.on('data', function(data) {
