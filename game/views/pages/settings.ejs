@@ -8,7 +8,7 @@
   <!-- CSS  -->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="../../css/index.css" type="text/css" rel="stylesheet"/>
+  <link href="../../css/settings.css" type="text/css" rel="stylesheet"/>
 
 </head>
 <body>
@@ -21,7 +21,7 @@
           </div>
           <div class="col s12 m8">
             <div class="icon-block">
-              <div class="center titleMenu">Choisissez le jeu</div>
+              <div class="center titleMenu">Gestion des joueurs</div>
             </div>
           </div>
           <div class="col s12 m2">
@@ -32,67 +32,49 @@
           <div class="col s12 m1">
           </div>
           <div class="col s12 m7 choiceGameSection">
-            <div class="row">
-              <div class="col m4">
-                <div class="box boxGame1 selected" data-name="lobby/crickets">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>crickets</h2>
-                  </div>
-
-                </div>
-              </div>
-              <div class="col m4">
-                <div class="box boxGame2" data-name="lobby/01">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>01 Games </h2>
-                  </div>
-
-                </div>
-              </div>
-              <div class="col m4">
-                <div class="box boxGame3" data-name="lobby/fungames">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>Fun games </h2>
-                  </div>
-
-                </div>
-              </div>
-            </div>
+            <table class="tableCricket">
+              <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Parties</th>
+                <th>Touches</th>
+                <th>Triples</th>
+                <th>Doubles</th>
+                <th>Bulles</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <% players.forEach(function(player) { %>
+                <tr>
+                  <td><%= player.name %></td>
+                  <td><%= player.nbgames %></td>
+                  <td><%= player.nbhit %></td>
+                  <td><%= player.nbtriple %></td>
+                  <td><%= player.nbdouble %></td>
+                  <td><%= player.nbbull %></td>
+                  <td onclick="deletePlayer('<%= player.name %>')" style="font-size: 25px; cursor: pointer;"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                </tr>
+              <% }); %>
+              </tbody>
+            </table>
           </div>
           <div class="col s12 m3">
             <div class="box boxLastGame">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
               <div class="content">
-                <h2>Regles</h2>
-<!--                <img src="../../img/marie.jpg" style="width: 100%"/>-->
+                <h2>Ajouter un joueur</h2>
+                <input type="text" id="namePLayer" placeholder="nom du joueur">
+                <button class="btn waves-effect waves-light red accent-3" type="button" name="action" onclick="addPlayer()">Ajouter
+                </button>
               </div>
-
             </div>
-            <!--<div class="icon-block">-->
-            <!--  <div class="center titleChoiceGame">Dernieres parties</div>-->
-            <!--</div>-->
           </div>
           <div class="col s12 m1">
           </div>
 
         </div>
       </div>
-    <a href="/settings"><i class="fa fa-cog" aria-hidden="true"></i></a>
+    <a href="/"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
 
   </div>
   <!--  Scripts-->
@@ -109,7 +91,6 @@
     socket.on('arduino', function(msg) {
       arduinoEvent(msg);
     });
-
     function arduinoEvent(msg){
       if(lastMsg === '') {
         lastMsg = msg;
@@ -131,6 +112,19 @@
         lastMsg = '';
       }, 500);
 
+    }
+
+    function addPlayer(){
+      playername = $('#namePLayer').val();
+      socket.emit('addPlayer', playername);
+      window.location.reload();
+    }
+
+    function deletePlayer(id){
+      if (window.confirm("Voulez vous supprimer le joueur ?")) {
+        socket.emit('deletePlayer', id);
+        window.location.reload();
+      }
     }
   </script>
 </body>

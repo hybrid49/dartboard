@@ -1,4 +1,5 @@
 const express = require('express');
+const bdd = require('..//bdd/bddPlayers');
 const router = express.Router();
 
 arrayComplete = ["20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","25"]
@@ -6,6 +7,14 @@ arrayComplete = ["20","19","18","17","16","15","14","13","12","11","10","9","8",
 
 router.get('/', function(req, res) {
     res.render('pages/index');
+});
+router.get('/settings', async function (req, res) {
+    try {
+        const arrayPlayers = await bdd.getPlayers(); // Attendez la résolution de la promesse
+        res.render('pages/settings', {players: arrayPlayers});
+    } catch (error) {
+        console.error("Erreur lors de l'obtention des joueurs :", error);
+    }
 });
 
 router.get('/lobby/01', function(req, res) {
@@ -98,6 +107,5 @@ function between(min, max) {
         Math.random() * (max - min + 1) + min
     )
 }
-
 
 module.exports = router;

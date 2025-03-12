@@ -5,7 +5,9 @@ const url=require('url');
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const routes = require('./routes');
+const bdd = require('./src/bdd/bddPlayers');
+const routes = require('./src/route/routes');
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -18,30 +20,41 @@ app.use(routes);
 const { Server }  = require('socket.io', {wsEngine: 'ws' });
 
 const io = new Server(http);
-
 const fs = require('fs');
 
 let fsTimeout;
 
 // listen on update on file to check if arduino send informations
-fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
-	//define var to stop multiple trigger if a dart is stuck in the board
-	if (!fsTimeout) {
-		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
-			if (err) {
-				console.error(err)
-				return
-			}
-			console.log('watch : ' + data);
-			io.emit('arduino', data);
-			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
-		});
-	}
-});
+// fs.watch('/srv/dartboard/comArduino/dart.txt', (event, filename) => {
+// 	//define var to stop multiple trigger if a dart is stuck in the board
+// 	if (!fsTimeout) {
+// 		fs.readFile('/srv/dartboard/comArduino/dart.txt', 'utf8', (err, data) => {
+// 			if (err) {
+// 				console.error(err)
+// 				return
+// 			}
+// 			console.log('watch : ' + data);
+// 			io.emit('arduino', data);
+// 			fsTimeout = setTimeout(function() { fsTimeout=null }, 500) // give 5 seconds for multiple events
+// 		});
+// 	}
+// });
 
 io.on('connection', (socket) => {
 	console.log('a user connected');
+	// Écouter l'événement envoyé par le client
+	socket.on('addPlayer', (data) => {
+		bdd.addPlayers(data);
+		console.log('add player');
+	});
+	// Écouter l'événement envoyé par le client
+	socket.on('deletePlayer', (data) => {
+		bdd.deletePlayer(data);
+		console.log('delete player');
+	});
 });
 
 // console.log(parser);
 http.listen(PORT);
+
+
