@@ -1,11 +1,12 @@
 # Projet Dartboard Connecté
 
 ## Description
-Ce projet est une application complète permettant de gérer un jeu de fléchettes connecté avec un Arduino. Il se compose de deux parties principales :
+Ce projet est une application complète permettant de gérer un jeu de fléchettes connecté avec un Arduino. Il se compose de quatres parties principales :
 
 1. **Un serveur de communication avec l'Arduino** : Ce serveur récupère les informations envoyées par l'Arduino via un port série et les enregistre dans un fichier texte.
 2. **Une application web** : Cette interface utilisateur permet de gérer les joueurs et d'afficher les scores en temps réel grâce à la communication via WebSockets.
 3. **Un serveur redis** : Le serveur sert de communication entre les deux application
+4. **Le code des arduino** : Pour gerer les information recus par la cible de flechette et la gestion des bandes leds
 
 ## Architecture du Projet
 Le projet repose sur plusieurs technologies :
