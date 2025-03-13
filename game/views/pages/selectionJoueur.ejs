@@ -210,6 +210,14 @@
       animation: animate2 10s linear infinite;
     }
 
+    /* Styles pour les profils de joueurs actifs */
+    .player-selection.active .card {
+      box-shadow: 0 10px 20px rgb(23, 32, 90);
+      border: 2px solid #2a3cad;
+      transform: scale(1.02);
+      transition: all 0.3s ease;
+    }
+
     @keyframes animate2 {
       0% {
         transform:scaleX(0);
@@ -275,10 +283,45 @@
                     <div class="content">
                       <h2><a id="aCricket"><%- i %></a> </h2>
                     </div>
-
                   </div>
                 </div>
               <% } %>
+            </div>
+            
+            <!-- Ajout de la section de sélection des profils de joueurs -->
+            <div class="row player-profiles" style="display: none; margin-top: 2em;">
+              <div class="col s12">
+                <div class="icon-block">
+                  <div class="center titleChoiceGame">Sélection des joueurs</div>
+                </div>
+              </div>
+              
+              <% for(var i=1; i<=4; i++) { /* Limité à 4 joueurs maximum */ %>
+                <div class="col s12 player-selection player-<%- i %>" style="display: none; margin-bottom: 1em;">
+                  <div class="card" style="background-color: #e53935; color: white; border-radius: 5px;">
+                    <div class="card-content">
+                      <span class="card-title">Joueur <%- i %></span>
+                      <div class="input-field">
+                        <select id="player-<%- i %>-select" class="browser-default">
+                          <option value="default">Joueur <%- i %> (Anonyme)</option>
+                          <% if (typeof players !== 'undefined' && players.length > 0) { %>
+                            <% players.forEach(function(player) { %>
+                              <option value="<%- player.id %>"><%- player.name %></option>
+                            <% }); %>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+              
+              <div class="col s12 center-align" style="margin-top: 1em;">
+                <button id="startGameBtn" class="btn waves-effect waves-light" style="background-color: #2a3cad;">
+                  Commencer la partie
+                  <i class="fa fa-arrow-right right"></i>
+                </button>
+              </div>
             </div>
           </div>
           <div class="col s12 m3">
@@ -312,8 +355,10 @@
   <script>
     var socket = io();
     let gameSelected = 1;
-    let nbTotalGame = <%- nbPlayerMax %>;
+    let nbTotalGame = parseInt("<%- nbPlayerMax %>");
     let lastMsg = '';
+    let selectedPlayers = {};
+    let isPlayerSelectionMode = false;
 
     socket.on('arduino', function(msg) {
       arduinoEvent(msg);
@@ -324,27 +369,136 @@
       if(lastMsg === '') {
         lastMsg = msg;
         if(msg === 'btnNext'){
-          if(gameSelected < nbTotalGame){
-            gameSelected++;
-          }else{
-            gameSelected=1
+          if(!isPlayerSelectionMode) {
+            // Mode sélection du nombre de joueurs
+            if(gameSelected < nbTotalGame){
+              gameSelected++;
+            }else{
+              gameSelected=1
+            }
+            $('.box').removeClass('selected');
+            $('.boxGame'+gameSelected).addClass('selected');
+          } else {
+            // Mode sélection des profils - faire défiler les sélections de joueurs
+            let visiblePlayers = [];
+            $('.player-selection').each(function() {
+              if ($(this).is(':visible')) {
+                // Extraire le numéro du joueur de la classe (par ex. "player-1" -> 1)
+                const playerClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('player-'));
+                if (playerClass) {
+                  const playerNumber = parseInt(playerClass.replace('player-', ''));
+                  visiblePlayers.push(playerNumber);
+                }
+              }
+            });
+            
+            // Trouver l'indice du joueur actif
+            let currentActivePlayer = 0;
+            $('.player-selection.active').each(function() {
+              const playerClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('player-'));
+              if (playerClass) {
+                currentActivePlayer = parseInt(playerClass.replace('player-', ''));
+              }
+            });
+            
+            let currentActiveIndex = visiblePlayers.indexOf(currentActivePlayer);
+            if (currentActiveIndex === -1) currentActiveIndex = 0;
+            
+            // Passer au joueur suivant ou revenir au premier
+            let nextIndex = (currentActiveIndex + 1) % visiblePlayers.length;
+            let nextPlayer = visiblePlayers[nextIndex];
+            
+            // Mise à jour de l'interface
+            $('.player-selection').removeClass('active');
+            $('.player-' + nextPlayer).addClass('active');
           }
-          $('.box').removeClass('selected');
-          $('.boxGame'+gameSelected).addClass('selected');
         }else if(msg === 'btnValidate'){
-          let nbPLayer = $('.boxGame'+gameSelected).data('nbplayer');
-          let game = "<%- game %>";
-          window.location.replace("/game/"+game+"?nbPlayer="+nbPLayer);
+          if(!isPlayerSelectionMode) {
+            // Premier appui sur btnValidate - affiche la sélection des profils
+            let nbPLayer = $('.boxGame'+gameSelected).data('nbplayer');
+            showPlayerSelection(nbPLayer);
+            isPlayerSelectionMode = true;
+          } else {
+            // Second appui sur btnValidate - démarre la partie
+            startGame();
+          }
         }else if(msg === 'btnCancel'){
-          window.location.replace("/");
+          if(isPlayerSelectionMode) {
+            // Retour à la sélection du nombre de joueurs
+            isPlayerSelectionMode = false;
+            $('.player-profiles').hide();
+            $('.choiceGameSection > .row:first-child').show();
+          } else {
+            // Retour au menu principal
+            window.location.replace("/");
+          }
         }
       }
 
       setInterval(function(){
         lastMsg = '';
       }, 500);
-
     }
+
+    // Gestion de la sélection des joueurs
+    function showPlayerSelection(numPlayers) {
+      // Cacher la sélection du nombre de joueurs
+      $('.choiceGameSection > .row:first-child').hide();
+      
+      // Afficher la section des profils de joueurs
+      $('.player-profiles').show();
+      
+      // Afficher seulement le nombre de sélections de joueurs nécessaires
+      for (let i = 1; i <= numPlayers; i++) {
+        $('.player-' + i).show();
+      }
+      
+      // Initialiser le tableau des joueurs sélectionnés
+      for (let i = 1; i <= numPlayers; i++) {
+        selectedPlayers[i] = 'default';
+      }
+      
+      // Mettre la première sélection en surbrillance
+      $('.player-1').addClass('active');
+    }
+    
+    // Gestion des changements de sélection
+    $(document).on('change', 'select[id^="player-"]', function() {
+      const playerId = $(this).attr('id').split('-')[1];
+      selectedPlayers[playerId] = $(this).val();
+    });
+    
+    // Fonction de démarrage du jeu
+    function startGame() {
+      let game = "<%- game %>";
+      let nbPLayer = 0;
+      
+      // En mode sélection de profils, compter le nombre de joueurs affichés
+      $('.player-selection').each(function() {
+        if ($(this).is(':visible')) {
+          nbPLayer++;
+        }
+      });
+      
+      if (nbPLayer === 0) {
+        // Fallback si aucun joueur n'est affiché (peu probable)
+        nbPLayer = $('.boxGame'+gameSelected).data('nbplayer');
+      }
+      
+      let playerQuery = '';
+      
+      // Construire la chaîne de requête avec les ID des joueurs
+      for (let i = 1; i <= nbPLayer; i++) {
+        playerQuery += '&player' + i + '=' + (selectedPlayers[i] || 'default');
+      }
+      
+      window.location.replace("/game/" + game + "?nbPlayer=" + nbPLayer + playerQuery);
+    }
+    
+    // Gestion du bouton de démarrage
+    $('#startGameBtn').on('click', function() {
+      startGame();
+    });
 
     function forceSelectGame(){
       window.location.replace("/game/cricket?nbPlayer=4");

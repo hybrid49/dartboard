@@ -125,7 +125,13 @@
       <% for(var i=1; i<=nbPlayer; i++) {%>
         <div class="col s12 m3">
           <div class="icon-block scorePlayer zoneScorePlayer<%- i %> <% if(i === 1){%>selected<%}%>" id="zoneScorePlayer<%- i %>">
-            <div class="center titlePlayer">Player <%- i %></div>
+            <div class="center titlePlayer">
+              <% if(typeof playerNames !== 'undefined' && playerNames[i-1]) { %>
+                <%- playerNames[i-1] %>
+              <% } else { %>
+                Player <%- i %>
+              <% } %>
+            </div>
             <div id="scoreTotal<%- i %>" class="center scoreP">
               0
             </div>
@@ -140,8 +146,17 @@
 <div id="changePlayer">
   CHANGE PLAYER
 </div>
-<div id="newGame">
-  Play again ?
+<div id="zonevictory">
+  <div class="victory-title">VICTORY!</div>
+  <div id="zonevictoryPlayer"></div>
+  <div class="score-summary">
+    <!-- Score summary will be filled dynamically -->
+  </div>
+  <div id="newGame">Play again?</div>
+  <div class="victory-buttons">
+    <div id="zonebtnno">NO <i class="fa fa-circle"></i></div>
+    <div id="zonebtyes">YES <i class="fa fa-circle"></i></div>
+  </div>
 </div>
 <div id="timeExceed">
   A QUELLE HEURE ?!
@@ -149,25 +164,17 @@
 <div id="returnMenu">
   Return menu ?
 </div>
-<div id="zonevictory">
-  Victory : <span id="zonevictoryPlayer"></span>
-</div>
-<div id="zonebtnno">
-  NO <i class="fa fa-circle" style="color: red;"></i>
-</div>
-<div id="zonebtyes">
-  YES <i class="fa fa-circle" style="color: blue;"></i>
-</div>
 <!--  Scripts-->
 <script src="../../js/jquery-2.1.1.min.js"></script>
 <script src="../../js/materialize.min.js"></script>
 <script src="../../js/socket.io.js"></script>
 <script src="../../js/dart_target_matrix.js"></script>
 <script>
-  let nombrePlayer = <%- nbPlayer %>;
-  let maxRound = <%- maxRound %>;
-  let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
+  let nombrePlayer = parseInt("<%- nbPlayer %>");
+  let maxRound = parseInt("<%- maxRound %>");
+  let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
 </script>
+<script src="../../js/game/statsManager.js"></script>
 <script src="../../js/game/mainDisplay.js"></script>
 <script src="../../js/game/main.js"></script>
 <script src="../../js/game/cricket.js"></script>

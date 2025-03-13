@@ -18,18 +18,20 @@
         <!--   Icon Section   -->
         <div class="row">
           <div class="col s12 m3">
-            <% for(var i=1; i<=nbPlayer; i++) {%>
-              <div class="">
-                <div id="zoneScorePlayer<%- i %>" class=" titlePlayer icon-block row scorePlayer <% if(i === 1){%>selected<%}%>">
-                  <div class="col m7 center ">PLAYER <%- i %></div>
-                  <div class="col m5 center" id="scoreTotal<%- i %>">
-                    <div id="score">
-                      0
+            <div class="section">
+              <div class="row">
+                <% for(var i=1; i<=nbPlayer; i++) {%>
+                  <div class="col s12 m<%= 12/nbPlayer %>">
+                    <div class="zoneScorePlayer<%= i %> icon-block scorePlayer <% if(i === 1){%>selected<%}%>">
+                      <div class="center titlePlayer"><%= playerNames[i-1] || 'Joueur ' + i %></div>
+                      <div id="scoreTotal<%= i %>" class="center scoreP">
+                        0
+                      </div>
                     </div>
                   </div>
-                </div>
+                <% } %>
               </div>
-            <% } %>
+            </div>
           </div>
 
           <div class="col s12 m7" style="margin-top: 0.5em;">
@@ -120,9 +122,9 @@
   <script src="../../js/socket.io.js"></script>
   <script src="../../js/dart_target_matrix.js"></script>
   <script>
-    let nombrePlayer = <%- nbPlayer %>;
-    let maxRound = <%- maxRound %>;
-    let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
+    let nombrePlayer = parseInt("<%- nbPlayer %>");
+    let maxRound = parseInt("<%- maxRound %>");
+    let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
 
     score = 0;
 
@@ -141,8 +143,9 @@
     }
 
   </script>
-  <script src="../../js/game/main.js"></script>
+  <script src="../../js/game/statsManager.js"></script>
   <script src="../../js/game/mainDisplay.js"></script>
-  <script src="../../js/game/highJumpUp.js"></script>
+  <script src="../../js/game/main.js"></script>
+  <script src="../../js/game/jumpUp.js"></script>
 </body>
 </html>

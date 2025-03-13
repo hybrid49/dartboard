@@ -50,6 +50,22 @@
 
       </div>
     </div>
+    
+    <div class="row">
+      <div class="col s12 center">
+        <div class="player-names-container" style="margin-bottom: 20px;">
+          <% for(var i=1; i <= nbPlayer; i++) { %>
+            <div class="player-name <% if(i === 1){ %>active<% } %>" data-player="<%-i %>">
+              <% if(typeof playerNames !== 'undefined' && playerNames[i-1]) { %>
+                <%- playerNames[i-1] %>
+              <% } else { %>
+                Joueur <%- i %>
+              <% } %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="section">
 
@@ -88,7 +104,7 @@
       <% for(var i=1; i<=nbPlayer; i++) {%>
         <div class="col s12 m3">
           <div id="zoneScorePlayer<%- i %>" class="icon-block scorePlayer <% if(i === 1){%>selected<%}%>">
-            <div class="center titlePlayer">Player <%- i %></div>
+            <div class="center titlePlayer"><%= playerNames[i-1] || 'Joueur ' + i %></div>
             <div id="scoreTotal<%- i %>" class="center scoreP">
               0
             </div>
@@ -127,10 +143,11 @@
 <script src="../../js/socket.io.js"></script>
 <script src="../../js/dart_target_matrix.js"></script>
 <script>
-  let nombrePlayer = <%- nbPlayer %>;
-  let maxRound = <%- maxRound %>;
-  let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
+  let nombrePlayer = parseInt("<%- nbPlayer %>");
+  let maxRound = parseInt("<%- maxRound %>");
+  let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
 </script>
+<script src="../../js/game/statsManager.js"></script>
 <script src="../../js/game/mainDisplay.js"></script>
 <script src="../../js/game/main.js"></script>
 <script src="../../js/game/goldHunting.js"></script>

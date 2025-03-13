@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Dartboard - Choisissez votre jeu</title>
 
   <!-- CSS  -->
   <link href="../../css/font-awesome.css" rel="stylesheet">
@@ -12,12 +12,15 @@
 
 </head>
 <body>
+  <!-- Effet de fond -->
+  <div class="background-effect"></div>
+  
   <div class="section no-pad-bot" id="index-banner">
     <div class="section">
         <!--   Icon Section   -->
         <div class="row">
           <div class="col s12 m2">
-
+            <!-- Logo ou image à gauche si nécessaire -->
           </div>
           <div class="col s12 m8">
             <div class="icon-block">
@@ -41,8 +44,10 @@
                   <span></span>
                   <div class="content">
                     <h2>crickets</h2>
+                    <div class="game-icon">
+                      <i class="fa fa-bullseye"></i>
+                    </div>
                   </div>
-
                 </div>
               </div>
               <div class="col m4">
@@ -52,9 +57,11 @@
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>01 Games </h2>
+                    <h2>01 Games</h2>
+                    <div class="game-icon">
+                      <i class="fa fa-trophy"></i>
+                    </div>
                   </div>
-
                 </div>
               </div>
               <div class="col m4">
@@ -64,9 +71,11 @@
                   <span></span>
                   <span></span>
                   <div class="content">
-                    <h2>Fun games </h2>
+                    <h2>Fun games</h2>
+                    <div class="game-icon">
+                      <i class="fa fa-gamepad"></i>
+                    </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -78,23 +87,26 @@
               <span></span>
               <span></span>
               <div class="content">
-                <h2>Regles</h2>
-<!--                <img src="../../img/marie.jpg" style="width: 100%"/>-->
+                <h2>Règles</h2>
+                <div class="rules-content">
+                  <p>Découvrez les règles des différents jeux disponibles.</p>
+                  <i class="fa fa-book rules-icon"></i>
+                </div>
               </div>
-
             </div>
-            <!--<div class="icon-block">-->
-            <!--  <div class="center titleChoiceGame">Dernieres parties</div>-->
-            <!--</div>-->
           </div>
           <div class="col s12 m1">
           </div>
-
         </div>
       </div>
-    <a href="/settings"><i class="fa fa-cog" aria-hidden="true"></i></a>
-
+    <a href="/settings" class="settings-link"><i class="fa fa-cog" aria-hidden="true"></i></a>
+    
+    <!-- Information sur le jeu sélectionné -->
+    <div class="game-mode-info">
+      Mode de jeu : <span id="selected-game-name">Cricket</span>
+    </div>
   </div>
+  
   <!--  Scripts-->
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/materialize.min.js"></script>
@@ -105,6 +117,30 @@
     let gameSelected = 1;
     let nbTotalGame = 3;
     let lastMsg = '';
+    
+    // Noms des jeux pour l'affichage
+    const gameNames = ['Cricket', '01 Games', 'Fun Games'];
+    
+    // Mettre à jour l'information du jeu sélectionné
+    function updateSelectedGameInfo() {
+      $('#selected-game-name').text(gameNames[gameSelected-1]);
+    }
+    
+    // Initialiser l'information du jeu sélectionné
+    updateSelectedGameInfo();
+    
+    // Ajouter des effets visuels lors de la sélection
+    $('.box').click(function() {
+      $('.box').removeClass('selected');
+      $(this).addClass('selected');
+      
+      // Obtenir l'index du jeu sélectionné
+      gameSelected = $(this).hasClass('boxGame1') ? 1 : 
+                     $(this).hasClass('boxGame2') ? 2 : 
+                     $(this).hasClass('boxGame3') ? 3 : gameSelected;
+      
+      updateSelectedGameInfo();
+    });
 
     socket.on('arduino', function(msg) {
       arduinoEvent(msg);
@@ -121,17 +157,24 @@
           }
           $('.box').removeClass('selected');
           $('.boxGame'+gameSelected).addClass('selected');
+          
+          // Mettre à jour l'affichage du jeu sélectionné
+          updateSelectedGameInfo();
         }else if(msg === 'btnValidate'){
           let nameGame = $('.boxGame'+gameSelected).data('name');
           window.location.replace(""+nameGame);
         }
       }
 
-      setInterval(function(){
+      setTimeout(function(){
         lastMsg = '';
       }, 500);
-
     }
+    
+    // Ajouter un effet de pulse pour le titre
+    $(document).ready(function() {
+      $('.titleMenu').addClass('animated');
+    });
   </script>
 </body>
 </html>

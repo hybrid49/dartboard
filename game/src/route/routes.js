@@ -29,27 +29,110 @@ router.get('/lobby/fungames', function(req, res) {
     res.render('pages/lobby/fungames');
 });
 
-router.get('/selectionJoueur', function(req, res) {
+router.get('/selectionJoueur', async function(req, res) {
     let nbPlayer;
     if (req.query.game === "cricket" || req.query.game === "goldHunting") {
         nbPlayer = 4;
     } else {
         nbPlayer = 8;
     }
-    res.render('pages/selectionJoueur', {game: req.query.game, nbPlayerMax: nbPlayer});
+    
+    try {
+        const arrayPlayers = await bdd.getPlayers();
+        res.render('pages/selectionJoueur', {
+            game: req.query.game, 
+            nbPlayerMax: nbPlayer,
+            players: arrayPlayers || []
+        });
+    } catch (error) {
+        console.error("Erreur lors de l'obtention des joueurs :", error);
+        res.render('pages/selectionJoueur', {
+            game: req.query.game, 
+            nbPlayerMax: nbPlayer,
+            players: []
+        });
+    }
 });
 
-router.get('/game/cricket', function(req, res) {
-    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], mode: "cricket"});
-});
-router.get('/game/cricketshorty', function(req, res) {
-    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 10, arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], mode: "cricket"});
-});
-router.get('/game/cricketcutthroat', function(req, res) {
-    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], mode: "cricket"});
+// Fonction pour récupérer les noms des joueurs sélectionnés
+async function getPlayerNames(req) {
+    try {
+        // Récupérer la liste des joueurs depuis la BDD
+        const arrayPlayers = await bdd.getPlayers();
+        
+        // Préparer un tableau pour les noms des joueurs
+        const playerNames = [];
+        
+        // Pour chaque joueur dans la partie
+        for (let i = 1; i <= req.query.nbPlayer; i++) {
+            const playerId = req.query['player' + i];
+            
+            // Si un joueur a été sélectionné dans la BDD
+            if (playerId && playerId !== 'default') {
+                // Trouver le joueur dans la liste
+                const selectedPlayer = arrayPlayers.find(player => player.id.toString() === playerId);
+                if (selectedPlayer) {
+                    playerNames.push(selectedPlayer.name);
+                } else {
+                    playerNames.push('Joueur ' + i);
+                }
+            } else {
+                // Joueur anonyme
+                playerNames.push('Joueur ' + i);
+            }
+        }
+        
+        return playerNames;
+    } catch (error) {
+        console.error("Erreur lors du chargement des profils de joueurs :", error);
+        
+        // Fallback si erreur
+        const playerNames = [];
+        for (let i = 1; i <= req.query.nbPlayer; i++) {
+            playerNames.push('Joueur ' + i);
+        }
+        
+        return playerNames;
+    }
+}
+
+router.get('/game/cricket', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    
+    res.render('pages/game/cricket', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 2, 
+        arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
+        mode: "cricket",
+        playerNames: playerNames
+    });
 });
 
-router.get('/game/cricketrandom', function(req, res) {
+router.get('/game/cricketshorty', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    
+    res.render('pages/game/cricket', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 10, 
+        arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
+        mode: "cricket",
+        playerNames: playerNames
+    });
+});
+
+router.get('/game/cricketcutthroat', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    
+    res.render('pages/game/cricket', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 20, 
+        arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
+        mode: "cricket",
+        playerNames: playerNames
+    });
+});
+
+router.get('/game/cricketrandom', async function(req, res) {
     let array = [25];
     do {
         let nb = between(1, 20);
@@ -61,9 +144,18 @@ router.get('/game/cricketrandom', function(req, res) {
         return a - b;
     });
 
-    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: array, mode: "cricket"});
+    const playerNames = await getPlayerNames(req);
+    
+    res.render('pages/game/cricket', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 20, 
+        arrayTargets: array, 
+        mode: "cricket",
+        playerNames: playerNames
+    });
 });
-router.get('/game/cricketcutthroatrandom', function(req, res) {
+
+router.get('/game/cricketcutthroatrandom', async function(req, res) {
     let array = [25];
     do {
         let nb = between(1, 20);
@@ -75,30 +167,79 @@ router.get('/game/cricketcutthroatrandom', function(req, res) {
         return a - b;
     });
 
-    res.render('pages/game/cricket', {nbPlayer: req.query.nbPlayer, maxRound: 20, arrayTargets: array, mode: "cricket"});
+    const playerNames = await getPlayerNames(req);
+    
+    res.render('pages/game/cricket', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 20, 
+        arrayTargets: array, 
+        mode: "cricket",
+        playerNames: playerNames
+    });
 });
 
-router.get('/01', function(req, res) {
-    res.render('pages/game/01', {nbPlayer: req.query.nbPlayer, mode: 501, maxRound: 15, arrayTargets: arrayComplete});
-});
-router.get('/game/501', function(req, res) {
-    res.render('pages/game/01', {nbPlayer: req.query.nbPlayer, mode: 501, maxRound: 15, arrayTargets: arrayComplete});
-});
-
-router.get('/game/301', function(req, res) {
-    res.render('pages/game/01', {nbPlayer: req.query.nbPlayer, mode: 301, maxRound: 10, arrayTargets: arrayComplete});
-});
-
-router.get('/game/701', function(req, res) {
-    res.render('pages/game/01', {nbPlayer: req.query.nbPlayer, mode: 701, maxRound: 20, arrayTargets: arrayComplete});
+router.get('/01', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/01', {
+        nbPlayer: req.query.nbPlayer, 
+        mode: 501, 
+        maxRound: 15, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames
+    });
 });
 
-router.get('/game/hyperjumpup', function(req, res) {
-    res.render('pages/game/hyperjumpup', {nbPlayer: req.query.nbPlayer, maxRound: 12, arrayTargets: arrayComplete});
+router.get('/game/501', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/01', {
+        nbPlayer: req.query.nbPlayer, 
+        mode: 501, 
+        maxRound: 2, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames
+    });
 });
 
-router.get('/game/goldHunting', function(req, res) {
-    res.render('pages/game/goldHunting', {nbPlayer: req.query.nbPlayer, maxRound: 10, arrayTargets: arrayComplete});
+router.get('/game/301', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/01', {
+        nbPlayer: req.query.nbPlayer, 
+        mode: 301, 
+        maxRound: 10, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames
+    });
+});
+
+router.get('/game/701', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/01', {
+        nbPlayer: req.query.nbPlayer, 
+        mode: 701, 
+        maxRound: 20, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames
+    });
+});
+
+router.get('/game/hyperjumpup', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/hyperjumpup', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 2, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames
+    });
+});
+
+router.get('/game/goldHunting', async function(req, res) {
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/goldHunting', {
+        nbPlayer: req.query.nbPlayer, 
+        maxRound: 10, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames
+    });
 });
 
 
