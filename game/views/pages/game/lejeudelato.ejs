@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Le Jeu de l'ATO - Dartboard</title>
+
+  <!-- CSS  -->
+  <link href="../../css/font-awesome.css" rel="stylesheet">
+  <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="../../css/lejeudelato.css" rel="stylesheet">
+</head>
+<body>
+  <div class="no-pad-bot" id="index-banner">
+    <div class="section">
+        <!--   Icon Section   -->
+        <div class="row">
+          <div class="col s12 m3">
+            <div class="section">
+              <div class="row">
+                <% for(var i=1; i<=nbPlayer; i++) {%>
+                  <div class="col s12 m<%= 12/nbPlayer %>">
+                    <div class="zoneScorePlayer<%= i %> icon-block scorePlayer <% if(i === 1){%>selected<%}%>">
+                      <div class="center titlePlayer"><%= playerNames[i-1] || 'Joueur ' + i %></div>
+                      <div id="scoreTotal<%= i %>" class="center scoreP">
+                        0
+                      </div>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m7" style="margin-top: 0.5em;">
+            <div class="board">
+              <div id="zone20" class=""></div>
+              <div id="zone1" class=""></div>
+              <div id="zone18" class=""></div>
+              <div id="zone4" class=""></div>
+              <div id="zone13" class=""></div>
+              <div id="zone6" class=""></div>
+              <div id="zone10" class=""></div>
+              <div id="zone15" class=""></div>
+              <div id="zone2" class=""></div>
+              <div id="zone17" class=""></div>
+              <div id="zone3" class=""></div>
+              <div id="zone19" class=""></div>
+              <div id="zone7" class=""></div>
+              <div id="zone16" class=""></div>
+              <div id="zone8" class=""></div>
+              <div id="zone11" class=""></div>
+              <div id="zone14" class=""></div>
+              <div id="zone9" class=""></div>
+              <div id="zone12" class=""></div>
+              <div id="zone5" class=""></div>
+            </div>
+            <div class="col s12 m11" style="margin-top: 1em;">
+              <div class="row" style="margin-bottom: 0em;">
+                <div class="col s12 m4">
+                  <div class="icon-block lastDart center" id="throw1">
+                    -
+                  </div>
+                </div>
+                <div class="col s12 m4">
+                  <div class="icon-block lastDart center" id="throw2">
+                    -
+                  </div>
+                </div>
+                <div class="col s12 m4">
+                  <div class="icon-block lastDart center" id="throw3">
+                    -
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m2">
+            <div class="icon-block sectionLeft">
+              <div class="center titleLeft">JEU DE L'ATO</div>
+              <div class="center titleLeft">TOUR <span id="nbRound">1</span> / 12</div>
+            </div>
+            
+            <!-- Cible actuelle -->
+            <div class="icon-block sectionLeft" style="margin-top: 20px;">
+              <div class="center" style="margin-top: 10px;">
+                <span style="color: white; font-size: 18px;">VISEZ</span>
+              </div>
+              <div class="currentTarget">12</div>
+              <div class="target-type">SIMPLE</div>
+              
+              <!-- Indicateur de progression -->
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 0%">0%</div>
+              </div>
+              
+              <!-- Information sur le tour actuel -->
+              <div class="target-info">
+                Chaque fléchette qui touche le 12 marque des points
+              </div>
+              
+              <!-- Nombre de fléchettes lancées -->
+              <div class="darts-thrown">
+                Fléchettes lancées: <span id="dartsThrown">0</span>
+              </div>
+            </div>
+            
+            <!-- Tooltip d'aide -->
+            <div class="tooltip" style="margin-top: 20px; display: block; width: 100%; text-align: center;">
+              <i class="fa fa-question-circle" style="color: white; font-size: 24px;"></i>
+              <span class="tooltiptext">
+                À chaque tour, vous devez viser une cible spécifique.<br>
+                Tour 1: 12<br>
+                Tour 2: 13<br>
+                Tour 3: 14<br>
+                Tour 4: Tous les doubles<br>
+                Tour 5: 15<br>
+                Tour 6: 16<br>
+                Tour 7: 17<br>
+                Tour 8: Tous les triples<br>
+                Tour 9: 18<br>
+                Tour 10: 19<br>
+                Tour 11: 20<br>
+                Tour 12: Bull<br>
+                Si aucune des 3 fléchettes ne touche la cible, votre score est divisé par 2!
+              </span>
+            </div>
+        </div>
+      </div>
+  </div>
+
+  </div>
+  <div class="borderRound">
+    <div class="insideRound">
+
+    </div>
+  </div>
+  <div id="changePlayer">
+    CHANGE PLAYER
+  </div>
+  <div id="newGame">
+    Play again ?
+  </div>
+  <div id="returnMenu">
+    Return menu ?
+  </div>
+  <div id="zonevictory">
+    Victory : <span id="zonevictoryPlayer"></span>
+  </div>
+  <div id="zonebtnno">
+    NO <i class="fa fa-circle" style="color: red;"></i>
+  </div>
+  <div id="zonebtyes">
+    YES <i class="fa fa-circle" style="color: blue;"></i>
+  </div>
+  
+  <!--  Scripts-->
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/materialize.min.js"></script>
+  <script src="../../js/socket.io.js"></script>
+  <script src="../../js/dart_target_matrix.js"></script>
+  <script>
+    let nombrePlayer = parseInt("<%- nbPlayer %>");
+    let maxRound = 12; // Le jeu de l'ATO a 12 tours fixes
+    let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
+
+    score = 0;
+
+    function go(x){
+      $({score: 0}).animate({score: x},{
+        duration: 1000,
+        easing:"linear",
+        step: function(now, fx){
+          $("#score").html(score + Math.floor(now));
+        },
+        queue:false,
+        complete: function(now, fx){
+          score += x;
+        }
+      });
+    }
+  </script>
+  <script src="../../js/game/statsManager.js"></script>
+  <script src="../../js/game/mainDisplay.js"></script>
+  <script src="../../js/game/main.js"></script>
+  <script src="../../js/game/lejeudelato.js"></script>
+</body>
+</html> 

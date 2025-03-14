@@ -1,0 +1,26 @@
+/* Thème par défaut pour Dartboard */
+
+html[data-theme="default"] {
+  /* Couleurs principales */
+  --primary-color: #e53935;
+  --primary-dark: #c62828;
+  --primary-light: #ff6f60;
+  
+  /* Couleurs secondaires */
+  --secondary-color: #2a3cad;
+  --secondary-dark: #1a237e;
+  --secondary-light: #534bae;
+  
+  /* Couleurs d'interface */
+  --background-color: #1a1a1a;
+  --background-gradient: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
+  --text-color: #ffffff;
+  --card-color: #e53935;
+  --border-color: #2a3cad;
+  --highlight-color: #50dfdb;
+  
+  /* Éléments d'animation */
+  --animation-color: #50dfdb;
+  --selection-border: #2a3cad;
+  --selection-shadow: rgb(23, 32, 90);
+} 
