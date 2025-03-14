@@ -1,352 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-theme="<%= typeof theme !== 'undefined' ? theme : 'default' %>">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Sélection des joueurs - Dartboard</title>
 
   <!-- CSS  -->
-
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <style>
-    @font-face {
-      font-family: game;
-      src: url('../../font/GameCube.ttf');
-    }
-    @font-face {
-      font-family: jap;
-      src: url('../../font/SAKURATA.ttf');
-    }
-    @font-face {
-      font-family: bypass;
-      src: url('../../font/Bypass.ttf');
-    }
-    @font-face {
-      font-family: Play;
-      src: url('../../font/PlayPretend.otf');
-    }
-    @font-face {
-      font-family: Bebas;
-      src: url('../../font/BebasNeue-Regular.otf');
-    }
-    @font-face {
-      font-family: Cormo;
-      src: url('../../font/CormorantGaramond-Bold.ttf');
-    }
-    body{
-      height: 1080px;
-    }
-    .titleMenu{
-      font-family: Play;
-      font-size: 50px;
-      background-color: #e53935;
-      padding: 0.5em 1em;
-    }
-    .titleMenuLeft{
-      font-family: jap;
-      font-size: 50px;
-      padding: 0.5em 1em;
-    }
-    .choiceGameSection{
-      margin-top: 1rem;
-    }
-    .row{
-      margin-bottom: 0px;
-    }
-    .lastGameSection{
-      margin-top: 1rem;
-      background-color: #e53935;
-      height: 55rem;
-    }
-    .titleChoiceGame{
-      font-family: Cormo;
-      font-size: 45px;
-    }
-    .sectionGame{
-      font-family: Cormo;
-      background-color: #e53935;
-      border: 14px solid #681a18;
-      text-align: center;
-      height: 12rem;
-      border-radius: 5px;
-      font-size: 40px;
-    }
-    .box{
-      transform: translate(0%, 0%);
-      width: 150px;
-      height: 150px;
-      background: #e53935;
-      box-sizing: border-box;
-      overflow: hidden;
-      color: white;
-      padding: 20px;
-      margin-top: 3em;
-    }
-    .box.selected{
-      box-shadow: 0 20px 50px rgb(23, 32, 90);
-      border: 2px solid #2a3cad;
-    }
-
-    .box:before{
-      content: '';
-      position:absolute;
-      top:0;
-      left:-100%;
-      width:100%;
-      height:100%;
-      background: rgba(255,255,255,0.1);
-      transition:0.5s;
-      pointer-events: none;
-    }
-
-    .box:hover:before{
-      left:-50%;
-      transform: skewX(-5deg);
-    }
-
-
-    .box .content{
-      position:absolute;
-      top:15px;
-      left:15px;
-      right:15px;
-      bottom:15px;
-      border:1px solid #f0a591;
-      padding:20px;
-      text-align:center;
-      box-shadow: 0 5px 10px rgba(9,0,0,0.5);
-
-    }
-
-    .box .content h2{
-      font-family: Play;
-      font-size: 43px;
-      margin-top: 0.4em;
-    }
-    .box .content h2 a{
-      color: white;
-    }
-
-    .box span{
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-      box-sizing: border-box;
-
-    }
-
-    .box span:nth-child(1)
-    {
-      transform:rotate(0deg);
-    }
-
-    .box span:nth-child(2)
-    {
-      transform:rotate(90deg);
-    }
-
-    .box span:nth-child(3)
-    {
-      transform:rotate(180deg);
-    }
-
-    .box span:nth-child(4)
-    {
-      transform:rotate(270deg);
-    }
-
-    .box.selected span:before
-    {
-      content: '';
-      position: absolute;
-      width:100%;
-      height: 2px;
-      background: #50dfdb;
-      animation: animate 4s linear infinite;
-    }
-
-    @keyframes animate {
-      0% {
-        transform:scaleX(0);
-        transform-origin: left;
-      }
-      50%
-      {
-        transform:scaleX(1);
-        transform-origin: left;
-      }
-      50.1%
-      {
-        transform:scaleX(1);
-        transform-origin: right;
-
-      }
-
-      100%
-      {
-        transform:scaleX(0);
-        transform-origin: right;
-
-      }
-    }
-
-    .boxLastGame{
-      margin-top: 3rem;
-      width: 125%;
-      height: 750px;
-    }
-
-    .boxLastGame span:before
-    {
-      content: '';
-      position: absolute;
-      width:100%;
-      height: 2px;
-      background: #50dfdb;
-      animation: animate2 10s linear infinite;
-    }
-
-    /* Styles pour les profils de joueurs actifs */
-    .player-selection.active .card {
-      box-shadow: 0 10px 20px rgb(23, 32, 90);
-      border: 2px solid #2a3cad;
-      transform: scale(1.02);
-      transition: all 0.3s ease;
-    }
-
-    @keyframes animate2 {
-      0% {
-        transform:scaleX(0);
-        transform-origin: left;
-      }
-      50%
-      {
-        transform:scaleX(1);
-        transform-origin: left;
-      }
-      50.1%
-      {
-        transform:scaleX(1);
-        transform-origin: right;
-
-      }
-
-      100%
-      {
-        transform:scaleX(0);
-        transform-origin: right;
-
-      }
-    }
-  </style>
-
-
+  <link href="../../css/theme-base.css" type="text/css" rel="stylesheet"/>
+  <link href="../../css/themes/<%= typeof theme !== 'undefined' ? theme : 'default' %>.css" type="text/css" rel="stylesheet"/>
 </head>
+
 <body>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="section">
-        <!--   Icon Section   -->
-        <div class="row">
-          <div class="col s12 m2">
-            <div class="icon-block">
-              <div class="center titleMenuLeft">DART</div>
-            </div>
+  <div class="main-container">
+    <div class="section" style="padding: 10px 0;">
+      <div class="row" style="margin-bottom: 0;">
+        <div class="col s12 m2">
+          <div class="icon-block">
+            <div class="center titleMenuLeft">DART</div>
           </div>
+        </div>
+        <div class="col s12 m8">
+          <div class="icon-block">
+            <div class="center titleMenu">Nombre de joueur</div>
+          </div>
+        </div>
+        <div class="col s12 m2">
+          <div class="icon-block">
+            <div class="center titleMenuLeft">DART</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="content-section">
+        <div class="row">
           <div class="col s12 m8">
             <div class="icon-block">
-              <div class="center titleMenu">Nombre de joueur</div>
-            </div>
-          </div>
-          <div class="col s12 m2">
-            <div class="icon-block">
-              <div class="center titleMenuLeft">DART</div>
-            </div>
-          </div>
-          <div class="col s12 m1">
-          </div>
-          <div class="col s12 m7 choiceGameSection">
-            <div class="icon-block">
-              <div class="center titleChoiceGame">Nombre de joueur</div>
-            </div>
-            <div class="row">
-              <% for(var i=1; i<=nbPlayerMax; i++) {%>
-                <div class="col s12 m3">
-                  <div class="box boxGame<%- i %>" data-nbPlayer="<%- i %>">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <div class="content">
-                      <h2><a id="aCricket"><%- i %></a> </h2>
-                    </div>
-                  </div>
-                </div>
-              <% } %>
+              <div class="center titleChoiceGame">Choisissez le nombre de joueurs</div>
             </div>
             
-            <!-- Ajout de la section de sélection des profils de joueurs -->
-            <div class="row player-profiles" style="display: none; margin-top: 2em;">
-              <div class="col s12">
-                <div class="icon-block">
-                  <div class="center titleChoiceGame">Sélection des joueurs</div>
-                </div>
-              </div>
-              
-              <% for(var i=1; i<=4; i++) { /* Limité à 4 joueurs maximum */ %>
-                <div class="col s12 player-selection player-<%- i %>" style="display: none; margin-bottom: 1em;">
-                  <div class="card" style="background-color: #e53935; color: white; border-radius: 5px;">
-                    <div class="card-content">
-                      <span class="card-title">Joueur <%- i %></span>
-                      <div class="input-field">
-                        <select id="player-<%- i %>-select" class="browser-default">
-                          <option value="default">Joueur <%- i %> (Anonyme)</option>
-                          <% if (typeof players !== 'undefined' && players.length > 0) { %>
-                            <% players.forEach(function(player) { %>
-                              <option value="<%- player.id %>"><%- player.name %></option>
-                            <% }); %>
-                          <% } %>
-                        </select>
+            <!-- Sélection du nombre de joueurs -->
+            <div class="player-number-selection">
+              <div class="row" style="display: flex; justify-content: center;">
+                <% for(var i=1; i<=nbPlayerMax; i++) {%>
+                  <div class="col s3 m3" style="text-align: center;">
+                    <div class="box boxGame<%- i %>" data-nbPlayer="<%- i %>">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <div class="content">
+                        <h2><a id="aCricket"><%- i %></a></h2>
                       </div>
                     </div>
                   </div>
-                </div>
-              <% } %>
+                <% } %>
+              </div>
+            </div>
+            
+            <!-- Sélection des profils de joueurs dans un format compact -->
+            <div class="player-profiles" style="display: none;">
+              <div class="icon-block">
+                <div class="center titleChoiceGame">Sélection des joueurs</div>
+              </div>
               
-              <div class="col s12 center-align" style="margin-top: 1em;">
-                <button id="startGameBtn" class="btn waves-effect waves-light" style="background-color: #2a3cad;">
+              <div class="player-grid">
+                <% for(var i=1; i<=4; i++) { %>
+                  <div class="player-selection player-<%- i %>" style="display: none;">
+                    <div class="card">
+                      <div class="card-content">
+                        <span class="card-title">Joueur <%- i %></span>
+                        <div class="input-field" style="margin: 10px 0;">
+                          <select id="player-<%- i %>-select" class="browser-default" style="display: block !important;">
+                            <option value="default">Joueur <%- i %> (Anonyme)</option>
+                            <% if (typeof players !== 'undefined' && players.length > 0) { %>
+                              <% players.forEach(function(player) { %>
+                                <option value="<%- player.id %>"><%- player.name %></option>
+                              <% }); %>
+                            <% } %>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+              
+              <div class="game-buttons">
+                <button id="startGameBtn" class="btn-action">
                   Commencer la partie
-                  <i class="fa fa-arrow-right right"></i>
+                  <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
             </div>
           </div>
-          <div class="col s12 m3">
-            <div class="box boxLastGame" >
+          
+          <div class="col s12 m4">
+            <div class="box boxLastGame">
               <span></span>
               <span></span>
               <span></span>
               <span></span>
               <div class="content">
-                <h2 style="margin-top: 0em;"><a href="">Regles</a> </h2>
-                <p style="text-align: left; font-size: 21px;">
+                <h2 style="margin-top: 0;"><a href="">Règles</a></h2>
+                <p style="text-align: left; font-size: 16px; margin-top: 20px;">
+                  Sélectionnez d'abord le nombre de joueurs, puis choisissez un profil pour chaque joueur ou laissez-les en anonyme.
                 </p>
               </div>
-
             </div>
-            <!--<div class="icon-block">-->
-            <!--  <div class="center titleChoiceGame">Dernieres parties</div>-->
-            <!--</div>-->
           </div>
-          <div class="col s12 m1">
-          </div>
-
         </div>
       </div>
+    </div>
   </div>
+  
   <!--  Scripts-->
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/materialize.min.js"></script>
@@ -427,7 +195,7 @@
             // Retour à la sélection du nombre de joueurs
             isPlayerSelectionMode = false;
             $('.player-profiles').hide();
-            $('.choiceGameSection > .row:first-child').show();
+            $('.player-number-selection').show();
           } else {
             // Retour au menu principal
             window.location.replace("/");
@@ -435,7 +203,7 @@
         }
       }
 
-      setInterval(function(){
+      setTimeout(function(){
         lastMsg = '';
       }, 500);
     }
@@ -443,7 +211,7 @@
     // Gestion de la sélection des joueurs
     function showPlayerSelection(numPlayers) {
       // Cacher la sélection du nombre de joueurs
-      $('.choiceGameSection > .row:first-child').hide();
+      $('.player-number-selection').hide();
       
       // Afficher la section des profils de joueurs
       $('.player-profiles').show();
@@ -460,7 +228,45 @@
       
       // Mettre la première sélection en surbrillance
       $('.player-1').addClass('active');
+      
+      // Réinitialiser les sélecteurs pour s'assurer qu'ils sont affichés correctement
+      setTimeout(function() {
+        $('select.browser-default').each(function() {
+          $(this).css('display', 'block');
+        });
+      }, 100);
     }
+    
+    // Ajouter les gestionnaires d'événements pour la sélection des joueurs au clic
+    $(document).ready(function() {
+      // Désactivation de l'initialisation Materialize pour les sélecteurs
+      // qui pourrait interférer avec notre affichage
+      // $('select').formSelect();
+      
+      // S'assurer que tous les sélecteurs sont visibles
+      $('select.browser-default').css('display', 'block');
+      
+      // Sélection du nombre de joueurs au clic
+      $('.box[data-nbPlayer]').on('click', function() {
+        // Mettre à jour la boîte sélectionnée
+        $('.box').removeClass('selected');
+        $(this).addClass('selected');
+        
+        // Mettre à jour l'index du jeu sélectionné
+        gameSelected = parseInt($(this).attr('class').split('boxGame')[1].split(' ')[0]);
+        
+        // Afficher la sélection des profils
+        let nbPlayer = $(this).data('nbplayer');
+        showPlayerSelection(nbPlayer);
+        isPlayerSelectionMode = true;
+      });
+      
+      // Navigation entre les joueurs au clic
+      $(document).on('click', '.player-selection', function() {
+        $('.player-selection').removeClass('active');
+        $(this).addClass('active');
+      });
+    });
     
     // Gestion des changements de sélection
     $(document).on('change', 'select[id^="player-"]', function() {
@@ -506,3 +312,4 @@
   </script>
 </body>
 </html>
+

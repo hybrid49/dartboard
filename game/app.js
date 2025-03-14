@@ -15,6 +15,15 @@ app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 app.use(express.static(__dirname + '/public'));
+
+// Middleware pour assurer que toutes les vues ont accès à une variable de thème par défaut
+app.use((req, res, next) => {
+	// Nous n'utilisons pas de session, mais nous pouvons définir une variable locale 
+	// qui sera disponible pour toutes les vues
+	res.locals.theme = 'light';
+	next();
+});
+
 // game cricket page
 app.use(routes);
 
@@ -45,13 +54,46 @@ io.on('connection', (socket) => {
 	console.log('a user connected');
 	// Écouter l'événement envoyé par le client
 	socket.on('addPlayer', (data) => {
-		bdd.addPlayers(data);
-		console.log('add player');
+		if (data && data.name) {
+			// Ajouter le joueur avec ses couleurs personnalisées
+			bdd.addPlayers({
+				name: data.name,
+				color: data.color,
+				colorDarker: data.colorDarker,
+				colorTransparent: data.colorTransparent
+			}).then(() => {
+				console.log(`Joueur ajouté: ${data.name} avec les couleurs ${data.color}, ${data.colorDarker}, ${data.colorTransparent}`);
+			}).catch(err => {
+				console.error(`Erreur lors de l'ajout du joueur ${data.name}:`, err);
+			});
+		}
 	});
 	// Écouter l'événement envoyé par le client
 	socket.on('deletePlayer', (data) => {
 		bdd.deletePlayer(data);
 		console.log('delete player');
+	});
+	
+	// Écouter l'événement pour mettre à jour la couleur du joueur
+	socket.on('updatePlayerColor', (data) => {
+		if (data && data.name && data.color) {
+			// Mettre à jour la couleur de base et les variantes
+			bdd.updatePlayerColor(
+				data.name, 
+				{
+					color: data.color,
+					colorDarker: data.colorDarker,
+					colorTransparent: data.colorTransparent
+				}
+			).then(success => {
+				if (success) {
+					console.log(`Couleurs du joueur ${data.name} mises à jour avec succès`);
+				} else {
+					console.error(`Échec de la mise à jour des couleurs pour ${data.name}`);
+				}
+			});
+			console.log(`Mise à jour des couleurs pour ${data.name}: ${data.color}, ${data.colorDarker}, ${data.colorTransparent}`);
+		}
 	});
 	
 	// Écouter l'événement pour sauvegarder les statistiques de la partie
@@ -104,7 +146,6 @@ io.on('connection', (socket) => {
 	});
 });
 
-// console.log(parser);
 http.listen(PORT);
 
 

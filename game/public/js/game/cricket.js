@@ -92,26 +92,36 @@ function displayHistoryRound(){
 
 function displayVictoryScreen(){
 	let winner = determineWinner();
-
-	if(winner === 1){
-		r.style.setProperty('--main-bg-color', '#f44336');
-		r.style.setProperty('--main-bg-color-darker', '#c62828');
-		r.style.setProperty('--main-bg-color-darker-transparent', '#f4433663');
-	}
-	if(winner === 2){
-		r.style.setProperty('--main-bg-color', '#fdd835');
-		r.style.setProperty('--main-bg-color-darker', '#c7aa2b');
-		r.style.setProperty('--main-bg-color-darker-transparent', '#fdd83563');
-	}
-	if(winner === 3){
-		r.style.setProperty('--main-bg-color', '#2fc536');
-		r.style.setProperty('--main-bg-color-darker', '#1d8122');
-		r.style.setProperty('--main-bg-color-darker-transparent', '#2fc53663');
-	}
-	if(winner === 4){
-		r.style.setProperty('--main-bg-color', '#03a9f4');
-		r.style.setProperty('--main-bg-color-darker', '#016795');
-		r.style.setProperty('--main-bg-color-darker-transparent', '#03a9f463');
+	
+	// Si nous avons des données de couleur pour le joueur gagnant, les utiliser
+	if (typeof playerData !== 'undefined' && playerData[winner-1]) {
+		const player = playerData[winner-1];
+		r.style.setProperty('--main-bg-color', player.color);
+		r.style.setProperty('--main-bg-color-darker', player.colorDarker);
+		r.style.setProperty('--main-bg-color-darker-transparent', player.colorTransparent);
+	} 
+	// Sinon, utiliser les couleurs par défaut basées sur le numéro du joueur
+	else {
+		if(winner === 1){
+			r.style.setProperty('--main-bg-color', '#f44336');
+			r.style.setProperty('--main-bg-color-darker', '#c62828');
+			r.style.setProperty('--main-bg-color-darker-transparent', '#f4433663');
+		}
+		if(winner === 2){
+			r.style.setProperty('--main-bg-color', '#fdd835');
+			r.style.setProperty('--main-bg-color-darker', '#c7aa2b');
+			r.style.setProperty('--main-bg-color-darker-transparent', '#fdd83563');
+		}
+		if(winner === 3){
+			r.style.setProperty('--main-bg-color', '#2fc536');
+			r.style.setProperty('--main-bg-color-darker', '#1d8122');
+			r.style.setProperty('--main-bg-color-darker-transparent', '#2fc53663');
+		}
+		if(winner === 4){
+			r.style.setProperty('--main-bg-color', '#03a9f4');
+			r.style.setProperty('--main-bg-color-darker', '#016795');
+			r.style.setProperty('--main-bg-color-darker-transparent', '#03a9f463');
+		}
 	}
 	
 	// Récupérer le nom du joueur gagnant
