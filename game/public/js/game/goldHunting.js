@@ -114,11 +114,36 @@ function displayCatchUp(enemyCowboy){
         $('#trPoint').find('.tdPlayer'+enemyCowboy).html('-');
 }
 
-function displayVictoryScreen(){
-    let winner = determineWinner();
+function displayVictoryScreen(player) {
+    let winner = player;
+    let max = 0;
+    $(".scorePlayer").each(function (index) {
+        let current = parseInt($("#scoreTotal" + (index + 1)).text());
+        if (current > max) {
+            max = current;
+            winner = index + 1;
+        }
+    });
 
-    $('#zonevictory').show();
-    $('#zonevictoryPlayer').html('Player '+winner);
+    // Préparation des stats spécifiques au mode GoldHunting
+    let customStats = {};
+    for (let i = 1; i <= nombrePlayer; i++) {
+        customStats[i] = {
+            gold: arrayTouch[i]['gold'] || 0,
+            steals: arrayTouch[i]['steals'] || 0
+        };
+    }
+    
+    // Sauvegarde des statistiques
+    saveGameStats(winner, "GoldHunting", customStats);
+
+    $("#changePlayer").fadeOut();
+    $("#newGame").fadeIn();
+    $("#returnMenu").fadeIn();
+    $("#zonevictory").fadeIn();
+    $("#zonevictoryPlayer").html($('#zoneScorePlayer' + winner + ' .titlePlayer').text());
+    $("#zonebtnno").fadeIn();
+    $("#zonebtyes").fadeIn();
 }
 
 function determineWinner(){

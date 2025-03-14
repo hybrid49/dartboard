@@ -1,0 +1,476 @@
+/* Fichier consolidé pour la gestion des thèmes */
+
+/* Déclaration des polices */
+@font-face {
+    font-family: game;
+    src: url('../../font/GameCube.ttf');
+}
+@font-face {
+    font-family: testt;
+    src: url('../../font/CollegiateFLF.ttf');
+}
+@font-face {
+    font-family: jap;
+    src: url('../../font/SAKURATA.ttf');
+}
+@font-face {
+    font-family: bypass;
+    src: url('../../font/Bypass.ttf');
+}
+@font-face {
+    font-family: Play;
+    src: url('../../font/PlayPretend.otf');
+}
+@font-face {
+    font-family: Bebas;
+    src: url('../../font/BebasNeue-Regular.otf');
+}
+@font-face {
+    font-family: Cormo;
+    src: url('../../font/CormorantGaramond-Bold.ttf');
+}
+
+/* Thème par défaut - Design actuel */
+:root {
+  /* Couleurs principales */
+  --primary-color: #e53935;
+  --primary-dark: #c62828;
+  --primary-light: #ff6f60;
+  
+  /* Couleurs secondaires */
+  --secondary-color: #2a3cad;
+  --secondary-dark: #1a237e;
+  --secondary-light: #534bae;
+  
+  /* Couleurs d'interface */
+  --background-color: #1a1a1a;
+  --background-gradient: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
+  --text-color: #ffffff;
+  --card-color: #e53935;
+  --border-color: #2a3cad;
+  --highlight-color: #50dfdb;
+  
+  /* Éléments d'animation */
+  --animation-color: #50dfdb;
+  --selection-border: #2a3cad;
+  --selection-shadow: rgb(23, 32, 90);
+}
+
+/* Styles de base pour toutes les pages */
+html, body {
+  height: 100vh;
+  max-height: 1080px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--background-color);
+  background-image: var(--background-gradient);
+  background-size: cover;
+  color: var(--text-color);
+}
+
+.main-container {
+  height: 100vh;
+  max-height: 1080px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Éléments d'en-tête et de titre */
+.titleMenu {
+  font-family: Cormo, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 50px;
+  background-color: var(--primary-color);
+  padding: 0.5em 1em;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.titleMenuLeft {
+  font-family: jap;
+  font-size: 40px;
+  padding: 0.5em 1em;
+  color: var(--text-color);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.titleChoiceGame {
+  font-family: Cormo;
+  font-size: 36px;
+  margin: 5px 0;
+  color: var(--text-color);
+}
+
+/* Layout general */
+.row {
+  margin-bottom: 10px;
+}
+
+.choiceGameSection {
+  margin-top: 2rem;
+}
+
+.content-section {
+  flex: 1;
+  padding: 0 10px;
+  max-height: 730px;
+  overflow: hidden;
+}
+
+/* Boîtes de sélection */
+.box {
+  width: 300px;
+  height: 150px;
+  background: var(--primary-color);
+  box-sizing: border-box;
+  overflow: hidden;
+  color: var(--text-color);
+  padding: 20px;
+  margin-top: 2em;
+  position: relative;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.box.selected {
+  box-shadow: 0 20px 50px var(--selection-shadow);
+  border: 2px solid var(--selection-border);
+  transform: translateY(-15px) scale(1.05);
+  animation: pulse 2s infinite;
+}
+
+.box .content {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  color: var(--text-color);
+}
+
+.box .content h2 {
+  margin: 0;
+  padding: 0;
+  font-family: testt, 'Arial', sans-serif;
+  font-size: 32px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+}
+
+.box:hover .content h2 {
+  transform: scale(1.1);
+}
+
+.box .content h2 a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.box span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+.box span:nth-child(1) {
+  transform: rotate(0deg);
+}
+
+.box span:nth-child(2) {
+  transform: rotate(180deg);
+}
+.box.selected span:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background: var(--animation-color);
+  animation: animate 4s linear infinite;
+}
+
+/* Boîte pour les règles du jeu */
+.boxLastGame {
+  margin-top: 3rem;
+  width: 100%;
+  height: 450px;
+  background-color: var(--primary-color);
+  margin: 10px 0;
+  border-radius: 15px;
+}
+
+.boxLastGame .content {
+  border-radius: 10px;
+}
+
+.boxLastGame span:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: var(--animation-color);
+  animation: animate2 10s linear infinite;
+}
+
+/* Styles pour la page de sélection des joueurs */
+.player-selection .card {
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 0;
+}
+
+.player-selection .card-content {
+  padding: 12px;
+}
+
+.player-selection .card-title {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.player-selection.active .card {
+  box-shadow: 0 6px 12px var(--selection-shadow);
+  border: 2px solid var(--selection-border);
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
+
+.player-profiles {
+  max-height: 550px;
+}
+
+/* Grille des joueurs */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-height: 400px;
+}
+
+/* Style des sélecteurs */
+.custom-select, .browser-default {
+  background-color: #fff !important;
+  border: 1px solid rgba(0,0,0,0.2) !important;
+  border-radius: 4px !important;
+  color: #333 !important;
+  padding: 6px !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+.custom-select option, .browser-default option {
+  background-color: #fff;
+  color: #333;
+}
+
+select.browser-default {
+  display: block !important;
+  height: auto !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Boutons d'action */
+.game-buttons {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-action {
+  margin: 0 10px;
+  padding: 8px 20px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+  background-color: var(--secondary-light);
+  transform: translateY(-2px);
+}
+
+/* Icônes et éléments décoratifs */
+.fa-cog {
+  position: absolute;
+  right: 53px;
+  bottom: 53px;
+  font-size: 60px;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fa-cog:hover {
+  color: var(--highlight-color);
+  transform: rotate(90deg);
+}
+
+.fa-arrow-left {
+    position: absolute;
+    right: 53px;
+    bottom: 53px;
+    font-size: 60px;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+.fa-arrow-left:hover {
+color: var(--highlight-color);
+transform: rotate(90deg);
+}
+
+.game-mode-info {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: var(--text-color);
+  font-family: Bebas, sans-serif;
+  font-size: 24px;
+  opacity: 0.7;
+}
+
+.game-icon {
+  margin-top: 15px;
+  font-size: 32px;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.box:hover .game-icon {
+  transform: scale(1.2);
+}
+
+.box:hover .game-icon i {
+  animation: bounce 1s infinite;
+}
+
+.background-effect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.7) 100%);
+  z-index: -1;
+}
+
+/* Animations et effets visuels */
+@keyframes animate {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+@keyframes animate2 {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Responsive design */
+@media only screen and (max-width: 992px) {
+  .box {
+    width: 100%;
+    height: 120px;
+  }
+  
+  .boxLastGame {
+    width: 100%;
+    height: 300px;
+    margin-top: 1rem;
+  }
+  
+  .titleMenu {
+    font-size: 40px;
+  }
+  
+  
+}
+.fa-cog {
+    font-size: 40px;
+    right: 20px;
+    bottom: 20px;
+  }
+  
+.fa-arrow-left {
+    font-size: 40px;
+    right: 20px;
+    bottom: 20px;
+  }
+/* Note: Ce fichier sert de base pour les thèmes.
+   Pour créer des thèmes supplémentaires, il suffit d'ajouter 
+   des classes CSS qui redéfinissent ces variables */ 

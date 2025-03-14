@@ -16,6 +16,9 @@ let deltaTimestamp = 0;
 let easterEggsRatio = 0.44;
 let easterEggTimeOutClear = false;
 
+// Variable pour enregistrer le temps de début de partie
+window.gameStartTime = new Date().getTime();
+
 initGame();
 initRound();
 
@@ -368,3 +371,140 @@ function easterEggsIsRoundSameThrows(target){
     &&  arrayRound[round][selectedPlayer][3].includes(target))
         return true;
 }
+
+// Initialisation des statistiques de jeu
+function initGameStats() {
+    // Initialiser le temps de début de jeu
+    window.gameStartTime = new Date().getTime();
+    
+    // Initialiser les statistiques pour chaque joueur
+    for (let i = 1; i <= nombrePlayer; i++) {
+        if (!arrayTouch[i]) {
+            arrayTouch[i] = {};
+        }
+        
+        // Stats de base
+        arrayTouch[i]['nbHit'] = 0;
+        arrayTouch[i]['nbMiss'] = 0;
+        arrayTouch[i]['nbSingle'] = 0;
+        arrayTouch[i]['nbDouble'] = 0;
+        arrayTouch[i]['nbTriple'] = 0;
+        arrayTouch[i]['nbBull'] = 0;
+        arrayTouch[i]['nbDoubleBull'] = 0;
+    }
+}
+
+// Mise à jour des statistiques lors d'un lancer
+function updateStats(player, zone, number) {
+    // Si c'est un miss, incrémenter le compteur de miss
+    if (zone === 'miss') {
+        arrayTouch[player]['nbMiss']++;
+        return;
+    }
+    
+    // Incrémenter le compteur de hit
+    arrayTouch[player]['nbHit']++;
+    
+    // Comptabiliser par type de zone
+    if (zone === 'S') {
+        arrayTouch[player]['nbSingle']++;
+    } else if (zone === 'D') {
+        arrayTouch[player]['nbDouble']++;
+    } else if (zone === 'T') {
+        arrayTouch[player]['nbTriple']++;
+    }
+    
+    // Comptabiliser les Bulls
+    if (number === '25') {
+        if (zone === 'S') {
+            arrayTouch[player]['nbBull']++;
+        } else if (zone === 'D') {
+            arrayTouch[player]['nbDoubleBull']++;
+        }
+    }
+}
+
+// Modification de la fonction addThrow existante pour inclure le suivi des statistiques
+function addThrow(target, zone, isVictory = false) {
+    if (nbTotalAction === 3) {
+        return;
+    }
+
+    // Mettre à jour l'historique des lancers
+    if (target === "miss") {
+        arrayRound[round][selectedPlayer][nbThrow + 1] = "miss";
+        // Mettre à jour les statistiques pour un lancer manqué
+        if (!arrayTouch[selectedPlayer]['nbMiss']) {
+            arrayTouch[selectedPlayer]['nbMiss'] = 0;
+        }
+        arrayTouch[selectedPlayer]['nbMiss']++;
+    } else {
+        let targetPosition = determinePosition(target);
+        let targetZone = determineZone(zone);
+
+        if (targetPosition === 25) {
+            if (targetZone === "D") {
+                target = 50;
+                // Mettre à jour les statistiques pour un double bull
+                if (!arrayTouch[selectedPlayer]['nbDoubleBull']) {
+                    arrayTouch[selectedPlayer]['nbDoubleBull'] = 0;
+                }
+                arrayTouch[selectedPlayer]['nbDoubleBull']++;
+            } else {
+                target = 25;
+                // Mettre à jour les statistiques pour un bull simple
+                if (!arrayTouch[selectedPlayer]['nbBull']) {
+                    arrayTouch[selectedPlayer]['nbBull'] = 0;
+                }
+                arrayTouch[selectedPlayer]['nbBull']++;
+            }
+            targetPosition = target;
+            targetZone = "S";
+        }
+
+        // Mettre à jour les statistiques selon le type de zone touchée
+        if (!arrayTouch[selectedPlayer]['nbHit']) {
+            arrayTouch[selectedPlayer]['nbHit'] = 0;
+        }
+        arrayTouch[selectedPlayer]['nbHit']++;
+
+        if (targetZone === "S" && targetPosition !== 25 && targetPosition !== 50) {
+            if (!arrayTouch[selectedPlayer]['nbSingle']) {
+                arrayTouch[selectedPlayer]['nbSingle'] = 0;
+            }
+            arrayTouch[selectedPlayer]['nbSingle']++;
+        } else if (targetZone === "D") {
+            if (!arrayTouch[selectedPlayer]['nbDouble']) {
+                arrayTouch[selectedPlayer]['nbDouble'] = 0;
+            }
+            arrayTouch[selectedPlayer]['nbDouble']++;
+        } else if (targetZone === "T") {
+            if (!arrayTouch[selectedPlayer]['nbTriple']) {
+                arrayTouch[selectedPlayer]['nbTriple'] = 0;
+            }
+            arrayTouch[selectedPlayer]['nbTriple']++;
+        }
+
+        arrayRound[round][selectedPlayer][nbThrow + 1] = targetZone + targetPosition;
+        manageThrow(targetPosition, target, targetZone);
+    }
+
+    nbThrow++;
+    nbTotalAction++;
+
+    if (nbThrow === 3) {
+        manageNbThrow();
+    }
+
+    displayScore();
+
+    // Vérifier la victoire après la mise à jour du score
+    if (checkVictory(isVictory)) {
+        displayVictoryScreen();
+    }
+}
+
+// Appeler l'initialisation des statistiques au démarrage du jeu
+window.addEventListener('load', function() {
+    initGameStats();
+});

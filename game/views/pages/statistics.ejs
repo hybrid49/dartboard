@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="<%= typeof theme !== 'undefined' ? theme : 'default' %>">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Dartboard - Statistiques</title>
+
+  <!-- CSS  -->
+  <link href="../../css/font-awesome.css" rel="stylesheet">
+  <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="../../css/theme-base.css" type="text/css" rel="stylesheet"/>
+  <link href="../../css/themes/<%= typeof theme !== 'undefined' ? theme : 'default' %>.css" type="text/css" rel="stylesheet"/>
+  
+  <style>
+    .stats-container {
+      padding: 20px;
+    }
+    .stats-card {
+      background-color: var(--primary-color);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      padding: 20px;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+    .stats-title {
+      font-size: 1.8rem;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+    .stats-subtitle {
+      font-size: 1.4rem;
+      color: var(--text-color);
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+    .player-stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s;
+    }
+    .player-stat-item:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .player-name {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .color-badge {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .player-stats {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .player-stat-value {
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .game-card {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s;
+    }
+    .game-card:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .game-info {
+      flex-grow: 1;
+    }
+    .game-date {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    .game-type {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background-color: var(--accent-color);
+      font-size: 0.8rem;
+      margin-right: 10px;
+    }
+    .game-winner {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    .total-stat {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .total-stat-label {
+      font-weight: bold;
+    }
+    .total-stat-value {
+      font-size: 1.2rem;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 2px 10px;
+      border-radius: 15px;
+    }
+    .no-data-message {
+      text-align: center;
+      padding: 30px;
+      opacity: 0.7;
+      font-style: italic;
+    }
+    /* Styles pour les barres de progression */
+    .stats-bar {
+      height: 10px;
+      background-color: rgba(255,255,255,0.2);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+      margin: 5px 0;
+      width: 100px;
+    }
+    .stats-bar-fill {
+      position: absolute;
+      height: 100%;
+      border-radius: 5px;
+      background: linear-gradient(to right, var(--accent-color), var(--accent-color-light));
+      transition: width 0.5s;
+    }
+    /* Animation pour les statistiques */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .player-stat-item, .game-card, .total-stat {
+      animation: fadeIn 0.5s forwards;
+      opacity: 0;
+    }
+    .player-stat-item:nth-child(2) { animation-delay: 0.1s; }
+    .player-stat-item:nth-child(3) { animation-delay: 0.2s; }
+    .player-stat-item:nth-child(4) { animation-delay: 0.3s; }
+    .player-stat-item:nth-child(5) { animation-delay: 0.4s; }
+    .game-card:nth-child(2) { animation-delay: 0.1s; }
+    .game-card:nth-child(3) { animation-delay: 0.2s; }
+    .game-card:nth-child(4) { animation-delay: 0.3s; }
+    .game-card:nth-child(5) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <!-- Effet de fond -->
+  <div class="background-effect"></div>
+  
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="section">
+      <div class="row">
+        <div class="col s12">
+          <div class="icon-block">
+            <div class="center titleMenu">Statistiques</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stats-container">
+        <div class="row">
+          <!-- Statistiques globales -->
+          <div class="col s12">
+            <div class="total-stat">
+              <div class="total-stat-label">
+                <i class="fa fa-gamepad"></i> Total des parties jouées
+              </div>
+              <div class="total-stat-value"><%= totalGames %></div>
+            </div>
+          </div>
+          
+          <!-- Statistiques des joueurs -->
+          <div class="col s12 m6">
+            <div class="stats-card">
+              <div class="stats-title">Classement des joueurs</div>
+              
+              <% if (players && players.length > 0) { %>
+                <div class="stats-subtitle">Top joueurs</div>
+                
+                <% players.slice(0, 5).forEach(function(player) { %>
+                  <div class="player-stat-item">
+                    <div class="player-name">
+                      <span class="color-badge" style="background-color: <%= player.color || '#e53935' %>;"></span>
+                      <%= player.name %>
+                    </div>
+                    <div class="player-stats">
+                      <div>
+                        Parties : <span class="player-stat-value"><%= player.nbgames || 0 %></span>
+                        Victoires : <span class="player-stat-value"><%= player.wins || 0 %></span>
+                      </div>
+                      <div>
+                        <div>Précision :
+                          <div class="stats-bar">
+                            <div class="stats-bar-fill" style="width: <%= player.accuracy %>%;"></div>
+                          </div>
+                          <span class="player-stat-value"><%= player.accuracy %>%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <div class="no-data-message">
+                  <p>Aucun joueur enregistré pour le moment.</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          
+          <!-- Dernières parties -->
+          <div class="col s12 m6">
+            <div class="stats-card">
+              <div class="stats-title">Dernières parties</div>
+              
+              <% if (games && games.length > 0) { %>
+                <% games.forEach(function(game) { %>
+                  <div class="game-card">
+                    <div class="game-info">
+                      <div>
+                        <span class="game-type"><%= game.type %></span>
+                        <span class="game-date"><%= game.formattedDate %></span>
+                      </div>
+                      <div>
+                        <% if (game.playerNames && game.playerNames.length > 0) { %>
+                          Joueurs : <%= game.playerNames.join(', ') %>
+                        <% } else { %>
+                          Joueurs : non spécifiés
+                        <% } %>
+                      </div>
+                      <div>
+                        Vainqueur : <span class="game-winner"><%= game.winner %></span>
+                      </div>
+                    </div>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <div class="no-data-message">
+                  <p>Aucune partie enregistrée pour le moment.</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <a href="/" class="settings-link"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+  </div>
+  
+  <!--  Scripts-->
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/materialize.min.js"></script>
+  <script src="../../js/socket.io.js"></script>
+
+  <script>
+    var socket = io();
+    
+    // Animation pour les barres de statistiques
+    $(document).ready(function() {
+      $('.titleMenu').addClass('animated');
+      
+      // Animation pour les barres de progression
+      $('.stats-bar-fill').each(function() {
+        const width = $(this).css('width');
+        $(this).css('width', '0');
+        setTimeout(() => {
+          $(this).css('width', width);
+        }, 300);
+      });
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,26 @@
+/* Thème sombre pour Dartboard */
+
+html[data-theme="dark"] {
+  /* Couleurs principales */
+  --primary-color: #2a3cad;
+  --primary-dark: #1a237e;
+  --primary-light: #534bae;
+  
+  /* Couleurs secondaires */
+  --secondary-color: #e53935;
+  --secondary-dark: #c62828;
+  --secondary-light: #ff6f60;
+  
+  /* Couleurs d'interface */
+  --background-color: #121212;
+  --background-gradient: linear-gradient(to bottom right, #121212, #1e1e1e);
+  --text-color: #ffffff;
+  --card-color: #2a3cad;
+  --border-color: #e53935;
+  --highlight-color: #50dfdb;
+  
+  /* Éléments d'animation */
+  --animation-color: #50dfdb;
+  --selection-border: #e53935;
+  --selection-shadow: rgba(144, 23, 23, 0.7);
+} 

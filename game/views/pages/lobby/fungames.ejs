@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-theme="<%= theme %>">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Fun Games - Sélection du mode de jeu</title>
 
   <!-- CSS  -->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="../../css/theme-base.css" type="text/css" rel="stylesheet"/>
   <link href="../../css/index.css" type="text/css" rel="stylesheet"/>
 
 </head>
@@ -33,7 +34,7 @@
           </div>
           <div class="col s12 m7 choiceGameSection">
             <div class="row">
-              <div class="col m4">
+              <div class="col m3">
                 <div class="box boxGame1 selected" data-name="goldHunting">
                   <span></span>
                   <span></span>
@@ -45,7 +46,7 @@
 
                 </div>
               </div>
-              <div class="col m4">
+              <div class="col m3">
                 <div class="box boxGame2" data-name="hyperjumpup">
                   <span></span>
                   <span></span>
@@ -57,7 +58,7 @@
 
                 </div>
               </div>
-              <div class="col m4">
+              <div class="col m3">
                 <div class="box boxGame3" data-name="lejeudelato">
                   <span></span>
                   <span></span>
@@ -65,6 +66,18 @@
                   <span></span>
                   <div class="content">
                     <h2>Le jeu de l'ato </h2>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col m3">
+                <div class="box boxGame4" data-name="clockgame">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div class="content">
+                    <h2>Tour d'Horloge</h2>
                   </div>
 
                 </div>
@@ -102,7 +115,7 @@
   <script>
     var socket = io();
     let gameSelected = 1;
-    let nbTotalGame = 3;
+    let nbTotalGame = 4;
     let lastMsg = '';
 
     let nameGame = $('.boxGame'+gameSelected).data('name');
@@ -134,7 +147,7 @@
         }
       }
 
-      setInterval(function(){
+      setTimeout(function(){
         lastMsg = '';
       }, 500);
 

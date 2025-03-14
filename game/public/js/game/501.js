@@ -87,8 +87,18 @@ function displayVictoryScreen(){
 			winner = index;
 		}
 	});
+	
 	$('#zonevictory').show();
 	$('#zonevictoryPlayer').html('Player '+winner);
+	
+	// Détermine le mode de jeu en fonction de la valeur initiale des points
+	let gameMode = "01";
+	if (mode === 301) gameMode = "301";
+	else if (mode === 501) gameMode = "501";
+	else if (mode === 701) gameMode = "701";
+	
+	// Sauvegarde des statistiques
+	saveGameStats(winner, gameMode);
 
 	setInterval(function(){
 		isNewGame = true;
