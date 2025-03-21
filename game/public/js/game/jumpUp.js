@@ -69,39 +69,10 @@ function displayScore(){
 }
 
 function displayVictoryScreen(){
-    // Détermination du gagnant
-    let winner = 1;
-    let maxScore = parseInt($("#scoreTotal1").text());
-    
-    for (let i = 2; i <= nombrePlayer; i++) {
-        let currentScore = parseInt($("#scoreTotal" + i).text());
-        if (currentScore > maxScore) {
-            maxScore = currentScore;
-            winner = i;
-        }
-    }
-    
-    // Préparation des stats spécifiques au mode JumpUp
-    let customStats = {};
-    for (let i = 1; i <= nombrePlayer; i++) {
-        customStats[i] = {
-            highestMultiplier: arrayTouch[i]['highestMultiplier'] || 1,
-            totalMultiplied: arrayTouch[i]['totalMultiplied'] || 0,
-            jumps: arrayTouch[i]['jumps'] || 0
-        };
-    }
-    
-    // Sauvegarde des statistiques
-    saveGameStats(winner, "HyperJumpUp", customStats);
-    
-    // Affichage de l'écran de victoire
-    $("#changePlayer").fadeOut();
-    $("#newGame").fadeIn();
-    $("#returnMenu").fadeIn();
-    $("#zonevictory").fadeIn();
-    $("#zonevictoryPlayer").html($('.zoneScorePlayer' + winner + ' .titlePlayer').text() || 'Joueur ' + winner);
-    $("#zonebtnno").fadeIn();
-    $("#zonebtyes").fadeIn();
+    let winner = determineWinner();
+
+    $('#zonevictory').show();
+    $('#zonevictoryPlayer').html('Player '+winner);
 }
 
 function determineWinner(){
