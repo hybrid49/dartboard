@@ -8,132 +8,73 @@
   <!-- CSS  -->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="../../css/theme-base.css" type="text/css" rel="stylesheet"/>
   <link href="../../css/themes/<%= typeof theme !== 'undefined' ? theme : 'default' %>.css" type="text/css" rel="stylesheet"/>
+  
+  <style>
+
+  </style>
 
 </head>
 <body>
-  <!-- Effet de fond -->
-  <div class="background-effect"></div>
+  <div class="header flex-container">
+    <div class="header-left flex-items">
+      <div class="flex-container">
+        <div class="subtitle subtitle-left-left flex-items"><div>fais</div><div>ton</div><div>choix</div></div>
+        <div class="title-left flex-items">JEUX</div>
+        <div class="subtitle subtitle-left-right flex-items"><div>fais</div><div>ton</div><div>choix</div></div>
+      </div>
+    </div>
+    <div class="header-right flex-items">
+      <div class="flex-container">
+        <div class="subtitle subtitle-left-left flex-items"><div>pas</div><div>de</div><div>triche</div></div>
+        <div class="title-right flex-items">Dernières Parties</div>
+        <div class="subtitle subtitle-left-right flex-items"><div>pas</div><div>de</div><div>triche</div></div>
+      </div>
+    </div>
+  </div>
   
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="section">
-        <!--   Icon Section   -->
-        <div class="row">
-          <div class="col s12 m2">
-            <!-- Logo ou image à gauche si nécessaire -->
-          </div>
-          <div class="col s12 m8">
-            <div class="icon-block">
-              <div class="center titleMenu">Choisissez le jeu</div>
-            </div>
-          </div>
-          <div class="col s12 m2">
-            <div class="icon-block">
-              <div class="center titleMenuLeft">Ni</div>
-            </div>
-          </div>
-          <div class="col s12 m1">
-          </div>
-          <div class="col s12 m7 choiceGameSection">
-            <div class="row">
-              <div class="col m4">
-                <div class="box boxGame1 selected" data-name="lobby/crickets">
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>crickets</h2>
-                    <div class="game-icon">
-                      <i class="fa fa-bullseye"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col m4">
-                <div class="box boxGame2" data-name="lobby/01">
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>01 Games</h2>
-                    <div class="game-icon">
-                      <i class="fa fa-trophy"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col m4">
-                <div class="box boxGame3" data-name="lobby/fungames">
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>Fun games</h2>
-                    <div class="game-icon">
-                      <i class="fa fa-gamepad"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col s12 m3">
-            <div class="box boxLastGame">
-              <span></span>
-              <span></span>
-              <div class="content">
-                <h2>Dernières Parties</h2>
-                <div class="recent-games-table">
-                  <% if (typeof recentGames !== 'undefined' && recentGames.length > 0) { %>
-                    <table class="compact-table">
-                      <thead>
-                        <tr>
-                          <th>Type</th>
-                          <th>Date</th>
-                          <th>Gagnant</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% recentGames.forEach(function(game) { %>
-                          <tr>
-                            <td><%= game.type %></td>
-                            <td><%= game.formattedDate %></td>
-                            <td class="winner-cell"><i class="fa fa-trophy trophy-icon"></i> <%= game.winner %></td>
-                          </tr>
-                        <% }); %>
-                      </tbody>
-                    </table>
-                  <% } else { %>
-                    <div class="no-games">
-                      <p>Aucune partie récente</p>
-                    </div>
-                  <% } %>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Nouveau bloc pour les statistiques -->
-            <div class="box boxStats" data-name="statistics" style="margin-top: 20px;">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <div class="content">
-                <h2>Statistiques</h2>
-                <div class="stats-content">
-                  <p>Consultez les performances des joueurs et les dernières parties.</p>
-                  <i class="fa fa-bar-chart stats-icon"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col s12 m1">
-          </div>
+  <div class="content flex-container">
+    <div class="content-left flex-items">
+      <div class="games-list">
+        <div class="game-item selected boxGame1 box" data-name="lobby/crickets">
+          <div class="game-number"><div class="game-number-text game-number-text-top-left">1</div></div>
+          <div class="game-name">Cricket</div>
+        </div>
+        <div class="game-item boxGame2 box" data-name="lobby/01">
+          <div class="game-number"><div class="game-number-text game-number-text-bottom">2</div></div>
+          <div class="game-name">01 Games</div>
+        </div>
+        <div class="game-item boxGame3 box" data-name="lobby/fungames">
+          <div class="game-number"><div class="game-number-text game-number-text-middle">3</div></div>
+          <div class="game-name">Fun games</div>
         </div>
       </div>
-    <a href="/settings" class="settings-link"><i class="fa fa-cog" aria-hidden="true"></i></a>
-    
-    <!-- Information sur le jeu sélectionné -->
-    <div class="game-mode-info">
-      Mode de jeu : <span id="selected-game-name">Cricket</span>
+    </div>
+    <div class="content-right flex-items">
+      <% if (typeof recentGames !== 'undefined' && recentGames.length > 0) { %>
+        <table class="compact-table">
+          <thead>
+            <tr>
+              <th>Jeu</th>
+              <th>Date</th>
+              <th>Gagnant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% recentGames.forEach(function(game) { %>
+              <tr>
+                <td><%= game.type %></td>
+                <td><%= game.formattedDate %></td>
+                <td class="winner-cell"><i class="fa fa-trophy trophy-icon"></i> <%= game.winner %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <div class="no-games">
+          <p>Aucune partie récente</p>
+        </div>
+      <% } %>
     </div>
   </div>
   
@@ -151,9 +92,20 @@
     // Noms des jeux pour l'affichage
     const gameNames = ['Cricket', '01 Games', 'Fun Games'];
     
+    // Descriptions des jeux
+    const gameDescriptions = [
+      "Vous pouvez jouer à différents mode du jeu cricket, comme le cutthroat, le normal ou le random",
+      "Vous pouvez choisir les différents mode du jeu 01, du 301 au 901",
+      "Vous pouvez jouer à différents mode de fungames, comme le gold hunting, le high jump ou l'atomics",
+    ];
+    
     // Mettre à jour l'information du jeu sélectionné
     function updateSelectedGameInfo() {
-      $('#selected-game-name').text(gameNames[gameSelected-1]);
+      // Récupérer le nom du jeu sélectionné depuis l'élément HTML
+      const selectedGameName = $('.game-item.selected .game-name').text();
+      
+      // Mettre à jour la description dans le content-right
+      $('.content-right p').text(gameDescriptions[gameSelected-1]);
     }
     
     // Initialiser l'information du jeu sélectionné
@@ -213,57 +165,25 @@
     // Ajouter un effet de pulse pour le titre
     $(document).ready(function() {
       $('.titleMenu').addClass('animated');
+      
+      // Gestion de la sélection des jeux
+      $('.game-item').click(function() {
+        $('.game-item').removeClass('selected');
+        $(this).addClass('selected');
+        
+        // Obtenir l'index du jeu sélectionné (1-indexé)
+        const gameIndex = $(this).index() + 1;
+        gameSelected = gameIndex;
+        
+        // Mise à jour de l'interface utilisateur si nécessaire
+        updateSelectedGameInfo();
+      });
     });
   </script>
 
   <style>
     /* Styles pour le tableau des dernières parties */
-    .recent-games-table {
-      margin-top: 10px;
-      max-height: 180px;
-      overflow-y: auto;
-    }
     
-    .compact-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-    
-    .compact-table th, 
-    .compact-table td {
-      padding: 6px 4px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .compact-table th {
-      font-weight: bold;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
-    
-    .compact-table tbody tr:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .winner-cell {
-      color: var(--accent-color);
-      font-weight: bold;
-    }
-    
-    .trophy-icon {
-      font-size: 0.8rem;
-      margin-right: 4px;
-    }
-    
-    .no-games {
-      text-align: center;
-      opacity: 0.7;
-      font-style: italic;
-      padding: 30px 0;
-    }
     
     /* Personnalisation de la barre de défilement */
     .recent-games-table::-webkit-scrollbar {

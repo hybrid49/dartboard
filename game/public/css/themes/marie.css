@@ -1,0 +1,340 @@
+@font-face {
+    font-family: 'Aujournuit';
+    src: url('../../font/Aujournuit-VariableVF.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Cy';
+    src: url('../../font/Cy-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+.header-right {
+    background-color: #F4C3E4;
+    width: 50%;
+    height: 200px;
+}
+
+.header-left {
+    background-color: #F0B444;
+    width: 50%;
+    height: 200px;
+}
+
+.content-left {
+    background-color: #F4C3E4;
+    width: 50%;
+    height: 880px;
+}
+
+.content-right {
+    background-color: #F0B444;
+    width: 50%;
+    height: 880px;
+}
+.content-right p {
+    font-family: 'Aujournuit', sans-serif;
+    color: #A66321;
+    font-size: 44px;
+    text-align: justify;
+    font-weight: bolder;
+    margin: 25px 56px 36px 51px;
+    text-shadow: 1px 0 #A66321;
+}
+.title-left {
+    font-family: 'Cy', sans-serif;
+    color: #A66321;
+    font-size: 130px;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 2px 0 #A66321;
+    -webkit-text-stroke: 4px;
+}
+.title-right {
+  font-family: 'Cy', sans-serif;
+  color: #A66321;
+  font-size: 81px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 2px 0 #A66321;
+  -webkit-text-stroke: 4px;
+  margin-top: 32px;
+}
+.title-left-little {
+  font-family: 'Cy', sans-serif;
+  color: #A66321;
+  font-size: 64px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 2px 0 #A66321;
+  -webkit-text-stroke: 4px;
+  margin-top: 40px;
+}
+.title-right-little {
+font-family: 'Cy', sans-serif;
+color: #A66321;
+font-size: 64px;
+text-align: center;
+font-weight: bold;
+text-shadow: 2px 0 #A66321;
+-webkit-text-stroke: 4px;
+margin-top: 40px;
+}
+.subtitle{
+    font-family: 'Aujournuit', sans-serif;
+    color: #A66321;
+    font-size: 40px;
+    text-align: center;
+    margin: auto;
+    font-weight: bold;
+    text-shadow: 1px 0 #A66321;
+    margin-top: 65px;
+}
+
+.subtitle-left-left{
+    text-align: left;
+    margin-right: 20px;
+}
+
+.subtitle-left-right{
+    text-align: right;
+    margin-left: 20px;
+}
+
+br {
+    display: block; /* makes it have a width */
+}
+
+.subtitle > div {
+    margin-top: -27px;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+    align-content: stretch;
+  }
+  
+  .flex-items:nth-child(1) {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .flex-items:nth-child(2) {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .flex-items:nth-child(3) {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+
+  /* Style pour la liste des jeux */
+  .games-list {
+    padding: 40px;
+    margin-top: 30px;
+  }
+  
+  .game-item {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-family: 'Aujournuit', sans-serif;
+    color: #A66321;
+  }
+  
+  .game-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #A66321;
+    margin-right: 20px;
+  }
+  
+  .game-number-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #F4C3E4;
+    color: #A66321;
+    font-size: 28px;
+    font-weight: bolder;
+    text-shadow: 1px 0 #A66321;
+  }
+
+  .game-number-text-top-left {
+    margin-right: 11px;
+    margin-bottom: 16px;
+  }
+
+  .game-number-text-top-right {
+    margin-left: 20px;
+  }
+
+  .game-number-text-middle {
+    margin-right: 7px;
+    margin-left: 4px;
+    margin-bottom: 3px;
+  }
+  
+  .game-number-text-bottom {
+    margin-right: 7px;
+    margin-left: 6px;
+    margin-bottom: -18px;
+  }
+
+  .game-number-text-bottom-right {
+    margin-right: -4px;
+    margin-left: 11px;
+    margin-top: 10px;
+  }
+  
+  .game-name {
+    font-size: 70px;
+    font-weight: bold;
+    text-shadow: 2px 0 #A66321;
+    -webkit-text-stroke: 4px;
+  }
+
+  .game-name-little {
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: 2px 0 #A66321;
+    -webkit-text-stroke: 4px;
+  }
+  
+  /* Animation pour l'élément sélectionné */
+  .game-item:hover:not(.selected) {
+    transform: translateX(5px);
+  }
+  
+  .game-item.selected {
+    position: relative;
+    transform: translateX(15px);
+    transition: transform 0.3s ease;
+  }
+  
+  .game-item.selected .game-name {
+    color: #8B5318;
+    text-shadow: 3px 0 #A66321;
+  }
+  
+  .game-item.selected .game-number {
+    box-shadow: 0 0 15px rgba(166, 99, 33, 0.7);
+    animation: glow 2s infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px rgba(166, 99, 33, 0.7);
+    }
+    to {
+      box-shadow: 0 0 20px rgba(166, 99, 33, 1);
+    }
+  }
+  
+  .game-item.selected::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    background-color: #A66321;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  .recent-games-table {
+    margin-top: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  
+  .compact-table {
+    width: 99%;
+    border-collapse: collapse;
+    margin: 10px;
+    font-family: 'Aujournuit', sans-serif;
+    font-size: 40px;
+    color: #A66321;
+  }
+  
+  .compact-table th, 
+  .compact-table td {
+    padding: 6px 4px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .compact-table th {
+    font-weight: bold;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+   
+  .winner-cell {
+    color: var(--accent-color);
+    font-weight: bold;
+  }
+  
+  .trophy-icon {
+    font-size: 2.8rem;
+    margin-right: 4px;
+  }
+  
+  .compact-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .cardCustom {
+    background-color: #F0B444;
+    width: 95%;
+    height: 100%;
+    margin-top: 10px;
+    margin-left: 28px;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: translateY(-50%) scale(0.8);
+      opacity: 0.7;
+    }
+    50% {
+      transform: translateY(-50%) scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-50%) scale(0.8);
+      opacity: 0.7;
+    }
+  }
