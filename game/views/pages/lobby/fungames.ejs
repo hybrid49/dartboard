@@ -1,112 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-theme="<%= typeof theme !== 'undefined' ? theme : 'default' %>">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Dartboard - Choisissez votre jeu</title>
 
   <!-- CSS  -->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="../../css/index.css" type="text/css" rel="stylesheet"/>
+  <link href="../../css/themes/<%= typeof theme !== 'undefined' ? theme : 'default' %>.css" type="text/css" rel="stylesheet"/>
+  
+  <style>
+
+  </style>
 
 </head>
 <body>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="section">
-        <!--   Icon Section   -->
-        <div class="row">
-          <div class="col s12 m2">
-
-          </div>
-          <div class="col s12 m8">
-            <div class="icon-block">
-              <div class="center titleMenu">Choisissez le mode de jeu fun</div>
-            </div>
-          </div>
-          <div class="col s12 m2">
-            <div class="icon-block">
-              <div class="center titleMenuLeft">Ni</div>
-            </div>
-          </div>
-          <div class="col s12 m1">
-          </div>
-          <div class="col s12 m7 choiceGameSection">
-            <div class="row">
-              <div class="col m4">
-                <div class="box boxGame1 selected" data-name="goldHunting">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>Gold Hunting </h2>
-                  </div>
-
-                </div>
-              </div>
-              <div class="col m4">
-                <div class="box boxGame2" data-name="hyperjumpup">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>High Jump </h2>
-                  </div>
-
-                </div>
-              </div>
-              <div class="col m4">
-                <div class="box boxGame3" data-name="lejeudelato">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div class="content">
-                    <h2>Le jeu de l'ato </h2>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col s12 m3  ">
-            <div class="box boxLastGame">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <div class="content">
-                <h2>Regles</h2>
-                <div id="RulesBox">dededede</div>
-              </div>
-
-            </div>
-            <!--<div class="icon-block">-->
-            <!--  <div class="center titleChoiceGame">Dernieres parties</div>-->
-            <!--</div>-->
-          </div>
-          <div class="col s12 m1">
-          </div>
-
-        </div>
+  <div class="header flex-container">
+    <div class="header-left flex-items">
+      <div class="flex-container">
+        <div class="subtitle subtitle-left-left flex-items"><div>fais</div><div>ton</div><div>choix</div></div>
+        <div class="title-left flex-items">JEUX</div>
+        <div class="subtitle subtitle-left-right flex-items"><div>fais</div><div>ton</div><div>choix</div></div>
       </div>
+    </div>
+    <div class="header-right flex-items">
+      <div class="flex-container">
+        <div class="subtitle subtitle-left-left flex-items"><div>pas</div><div>de</div><div>triche</div></div>
+        <div class="title-left flex-items">RÈGLES</div>
+        <div class="subtitle subtitle-left-right flex-items"><div>pas</div><div>de</div><div>triche</div></div>
+      </div>
+    </div>
   </div>
+  
+  <div class="content flex-container">
+    <div class="content-left flex-items">
+      <img src="../../img/flechettes.png" class="flechettes-img">
+      <div class="games-list">
+        <div class="game-item selected boxGame1 box" data-name="goldHunting">
+          <div class="game-number"><div class="game-number-text game-number-text-top-left">1</div></div>
+          <div class="game-name-middle">Gold Hunting</div>
+        </div>
+        <div class="game-item boxGame2 box" data-name="hyperjumpup">
+          <div class="game-number"><div class="game-number-text game-number-text-bottom">2</div></div>
+          <div class="game-name-middle">High Jump</div>
+        </div>
+        <div class="game-item boxGame3 box" data-name="lejeudelato">
+          <div class="game-number"><div class="game-number-text game-number-text-middle">3</div></div>
+          <div class="game-name-middle">Le jeu de l'ato</div>
+        </div>
+        <div class="game-item boxGame4 box" data-name="clockgame">
+          <div class="game-number"><div class="game-number-text game-number-text-bottom-right">4</div></div>
+          <div class="game-name-middle">Tour d'Horloge</div>
+        </div>
+      
+      </div>
+    </div>
+    <div class="content-right flex-items">
+      <img src="../../img/regle.png" class="regle-img">
+      <p>Dans le Tour d'Horloge, les joueurs doivent toucher tous les numéros de la cible dans l'ordre croissant, en commençant par le 1 et en terminant par le 20. Plusieurs variantes sont disponibles: standard, double (seuls les doubles comptent), triple (seuls les triples comptent) et bull (après le 20, il faut toucher le centre).</p>
+    </div>
+  </div>
+  
   <!--  Scripts-->
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/materialize.min.js"></script>
   <script src="../../js/socket.io.js"></script>
-  <script src="../../js/lobby.js"></script>
 
   <script>
     var socket = io();
     let gameSelected = 1;
-    let nbTotalGame = 3;
+    let nbTotalGame = 4;
     let lastMsg = '';
-
-    let nameGame = $('.boxGame'+gameSelected).data('name');
-    $('#RulesBox').html(arrayGamesRules[nameGame]);
+    
+    // Noms des jeux pour l'affichage
+    const gameNames = ['Cricket', '01 Games', 'Fun Games'];
+    
+    // Descriptions des jeux
+    const gameDescriptions = [
+      "Le jeu Gold Hunting consiste à tirer des flèches pour atteindre des cibles en or tout en évitant les obstacles afin de maximiser le score.",
+      "Dans le mode de jeu Hyper Jump Up des fléchettes, chaque joueur doit viser des sections spécifiques du tableau dans un ordre précis, en augmentant progressivement les zones à viser à chaque tour, jusqu\'à atteindre la cible finale.",
+      "Dans le Jeu de l\'ATO, vous progressez à travers 12 tours avec des cibles spécifiques à chaque tour : 12, 13, 14, tous les doubles, 15, 16, 17, tous les triples, 18, 19, 20 et enfin le bull. Si aucune de vos 3 fléchettes ne touche la cible du tour, votre score est divisé par 2 !",
+      "Dans le Tour d\'Horloge, les joueurs doivent toucher tous les numéros de la cible dans l\'ordre croissant, en commençant par le 1 et en terminant par le 20. Plusieurs variantes sont disponibles: standard, double (seuls les doubles comptent), triple (seuls les triples comptent) et bull (après le 20, il faut toucher le centre).",
+    ];
+    
+    // Mettre à jour l'information du jeu sélectionné
+    function updateSelectedGameInfo() {
+      // Récupérer le nom du jeu sélectionné depuis l'élément HTML
+      const selectedGameName = $('.game-item.selected .game-name').text();
+      
+      // Mettre à jour la description dans le content-right
+      $('.content-right p').text(gameDescriptions[gameSelected-1]);
+    }
+    
+    // Initialiser l'information du jeu sélectionné
+    updateSelectedGameInfo();
+    
+    // Ajouter des effets visuels lors de la sélection
+    $('.box').click(function() {
+      if ($(this).hasClass('boxLastGame') || $(this).hasClass('boxStats')) {
+        // Si c'est le bloc de règles ou de statistiques, ne pas changer la sélection des jeux
+        // mais rediriger vers la page appropriée si nécessaire
+        if ($(this).hasClass('boxStats')) {
+          window.location.href = "/statistics";
+        }
+        return;
+      }
+      
+      $('.box').removeClass('selected');
+      $(this).addClass('selected');
+      
+      // Obtenir l'index du jeu sélectionné
+      gameSelected = $(this).hasClass('boxGame1') ? 1 : 
+                     $(this).hasClass('boxGame2') ? 2 : 
+                     $(this).hasClass('boxGame3') ? 3 : gameSelected;
+      
+      updateSelectedGameInfo();
+    });
 
     socket.on('arduino', function(msg) {
       arduinoEvent(msg);
@@ -123,10 +133,10 @@
           }
           $('.box').removeClass('selected');
           $('.boxGame'+gameSelected).addClass('selected');
-          nameGame = $('.boxGame'+gameSelected).data('name');
-          $('#RulesBox').html(arrayGamesRules[nameGame]);
+            // Mettre à jour l'affichage du jeu sélectionné
+            updateSelectedGameInfo();
         }else if(msg === 'btnValidate'){
-          nameGame = $('.boxGame'+gameSelected).data('name');
+          let nameGame = $('.boxGame'+gameSelected).data('name');
           window.location.replace("/selectionJoueur?game="+nameGame);
         }
         else if(msg === 'btnCancel'){
@@ -139,6 +149,24 @@
       }, 500);
 
     }
+    
+    // Ajouter un effet de pulse pour le titre
+    $(document).ready(function() {
+      $('.titleMenu').addClass('animated');
+      
+      // Gestion de la sélection des jeux
+      $('.game-item').click(function() {
+        $('.game-item').removeClass('selected');
+        $(this).addClass('selected');
+        
+        // Obtenir l'index du jeu sélectionné (1-indexé)
+        const gameIndex = $(this).index() + 1;
+        gameSelected = gameIndex;
+        
+        // Mise à jour de l'interface utilisateur si nécessaire
+        updateSelectedGameInfo();
+      });
+    });
   </script>
 </body>
 </html>

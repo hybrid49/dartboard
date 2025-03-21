@@ -3,13 +3,80 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Dartboard - Cricket</title>
 
   <!-- CSS  -->
   <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="../../css/cricket.css" rel="stylesheet">
+
+  <style>
+    /* Variables CSS dynamiques pour les couleurs des joueurs */
+    :root {
+      /* Couleur du joueur actif (par défaut: joueur 1) */
+      --main-bg-color: <%= playerData && playerData[0] ? playerData[0].color : '#f44336' %>;
+      --main-bg-color-darker: <%= playerData && playerData[0] ? playerData[0].colorDarker : '#c62828' %>;
+      --main-bg-color-darker-transparent: <%= playerData && playerData[0] ? playerData[0].colorTransparent : 'rgba(198, 40, 40, 0.4)' %>;
+      
+      /* Couleurs des joueurs (personnalisées ou par défaut) */
+      <% for(var i=0; i < nbPlayer; i++) { %>
+      --player<%= i+1 %>-color: <%= playerData && playerData[i] ? playerData[i].color : '#f44336' %>;
+      --player<%= i+1 %>-color-darker: <%= playerData && playerData[i] ? playerData[i].colorDarker : '#c62828' %>;
+      --player<%= i+1 %>-color-transparent: <%= playerData && playerData[i] ? playerData[i].colorTransparent : 'rgba(198, 40, 40, 0.4)' %>;
+      <% } %>
+      
+      /* Couleurs par défaut (fallback) */
+      --default-p1-color: #f44336;
+      --default-p1-color-darker: #c62828;
+      --default-p1-color-transparent: rgba(198, 40, 40, 0.4);
+      
+      --default-p2-color: #fdd835;
+      --default-p2-color-darker: #c7aa2b;
+      --default-p2-color-transparent: rgba(199, 170, 43, 0.4);
+      
+      --default-p3-color: #2fc536;
+      --default-p3-color-darker: #1d8122;
+      --default-p3-color-transparent: rgba(29, 129, 34, 0.4);
+      
+      --default-p4-color: #03a9f4;
+      --default-p4-color-darker: #016795;
+      --default-p4-color-transparent: rgba(1, 103, 149, 0.4);
+    }
+    
+    /* Styles pour les zones de score des joueurs */
+    <% for(var i=1; i <= nbPlayer; i++) { %>
+    .zoneScorePlayer<%= i %> {
+      border-color: var(--player<%= i %>-color);
+    }
+    
+    .zoneScorePlayer<%= i %>.selected {
+      background-color: var(--player<%= i %>-color) !important;
+    }
+    
+    .zoneScorePlayer<%= i %> .titlePlayer {
+      border-bottom-color: var(--player<%= i %>-color-darker);
+    }
+    
+    .zoneScorePlayer<%= i %>.selected .titlePlayer {
+      border-bottom-color: var(--player<%= i %>-color-darker);
+    }
+    
+    /* Colonnes pour le joueur <%= i %> */
+    .tableCricket .tdPlayer<%= i %>.selected {
+      border-right: 10px solid var(--player<%= i %>-color) !important;
+      border-left: 10px solid var(--player<%= i %>-color) !important;
+    }
+    
+    .tableCricket tr:nth-child(1) .tdPlayer<%= i %>.selected {
+      border-top: 10px solid var(--player<%= i %>-color) !important;
+    }
+    
+    .tableCricket tr:nth-last-child(1) .tdPlayer<%= i %>.selected {
+      border-bottom: 10px solid var(--player<%= i %>-color) !important;
+    }
+    <% } %>
+  </style>
 
 </head>
 <body>
@@ -39,7 +106,7 @@
                   <tr id="tr25">
                     <td class="tdGame tdPlayer1 selected"></td>
                     <% if(nbPlayer <= 2){%><td class="tdGame tableChiffreCenter">BULL</td><%}%>
-                   <% if(nbPlayer >= 2){%><td class="tdGame tdPlayer2"></td><%}%>
+                    <% if(nbPlayer >= 2){%><td class="tdGame tdPlayer2"></td><%}%>
                     <% if(nbPlayer > 2){%><td class="tdGame tableChiffreCenter">BULL</td><%}%>
                     <% if(nbPlayer >= 3){%><td class="tdGame tdPlayer3"></td><%}%>
                     <% if(nbPlayer >= 4){%><td class="tdGame tdPlayer4"></td><%}%>
@@ -125,7 +192,13 @@
       <% for(var i=1; i<=nbPlayer; i++) {%>
         <div class="col s12 m3">
           <div class="icon-block scorePlayer zoneScorePlayer<%- i %> <% if(i === 1){%>selected<%}%>" id="zoneScorePlayer<%- i %>">
-            <div class="center titlePlayer">Player <%- i %></div>
+            <div class="center titlePlayer">
+              <% if(typeof playerNames !== 'undefined' && playerNames[i-1]) { %>
+                <%- playerNames[i-1] %>
+              <% } else { %>
+                Player <%- i %>
+              <% } %>
+            </div>
             <div id="scoreTotal<%- i %>" class="center scoreP">
               0
             </div>
@@ -140,8 +213,17 @@
 <div id="changePlayer">
   CHANGE PLAYER
 </div>
-<div id="newGame">
-  Play again ?
+<div id="zonevictory">
+  <div class="victory-title">VICTORY!</div>
+  <div id="zonevictoryPlayer"></div>
+  <div class="score-summary">
+    <!-- Score summary will be filled dynamically -->
+  </div>
+  <div id="newGame">Play again?</div>
+  <div class="victory-buttons">
+    <div id="zonebtnno">NO <i class="fa fa-circle"></i></div>
+    <div id="zonebtyes">YES <i class="fa fa-circle"></i></div>
+  </div>
 </div>
 <div id="timeExceed">
   A QUELLE HEURE ?!
@@ -149,25 +231,20 @@
 <div id="returnMenu">
   Return menu ?
 </div>
-<div id="zonevictory">
-  Victory : <span id="zonevictoryPlayer"></span>
-</div>
-<div id="zonebtnno">
-  NO <i class="fa fa-circle" style="color: red;"></i>
-</div>
-<div id="zonebtyes">
-  YES <i class="fa fa-circle" style="color: blue;"></i>
-</div>
 <!--  Scripts-->
 <script src="../../js/jquery-2.1.1.min.js"></script>
 <script src="../../js/materialize.min.js"></script>
 <script src="../../js/socket.io.js"></script>
 <script src="../../js/dart_target_matrix.js"></script>
 <script>
-  let nombrePlayer = <%- nbPlayer %>;
-  let maxRound = <%- maxRound %>;
-  let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
+  let nombrePlayer = parseInt("<%- nbPlayer %>");
+  let maxRound = parseInt("<%- maxRound %>");
+  let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
+  
+  // Passer les données des joueurs à JavaScript
+  let playerData = JSON.parse('<%- JSON.stringify(playerData || []) %>');
 </script>
+<script src="../../js/game/statsManager.js"></script>
 <script src="../../js/game/mainDisplay.js"></script>
 <script src="../../js/game/main.js"></script>
 <script src="../../js/game/cricket.js"></script>

@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Dartboard - 01 games</title>
 
   <!-- CSS  -->
   <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
@@ -21,7 +21,13 @@
             <% for(var i=1; i<=nbPlayer; i++) {%>
               <div class="">
                 <div id="zoneScorePlayer<%- i %>" class=" titlePlayer icon-block row scorePlayer <% if(i === 1){%>selected<%}%>">
-                  <div class="col m7 center ">PLAYER <%- i %></div>
+                  <div class="col m7 center ">
+                    <% if(typeof playerNames !== 'undefined' && playerNames[i-1]) { %>
+                      <%- playerNames[i-1] %>
+                    <% } else { %>
+                      PLAYER <%- i %>
+                    <% } %>
+                  </div>
                   <div class="col m5 center" id="scoreTotal<%- i %>">
                     <div id="score">
                       0
@@ -131,13 +137,14 @@
   <script src="../../js/socket.io.js"></script>
   <script src="../../js/dart_target_matrix.js"></script>
   <script>
-    let nombrePlayer = <%- nbPlayer %>;
-    let maxRound = <%- maxRound %>;
-    let arrayTargets = <%- JSON.stringify(arrayTargets) %>;
-    let mode = <%- mode %>;
+    let nombrePlayer = parseInt("<%- nbPlayer %>");
+    let maxRound = parseInt("<%- maxRound %>");
+    let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
+    let mode = parseInt("<%- mode %>");
   </script>
-  <script src="../../js/game/main.js"></script>
+  <script src="../../js/game/statsManager.js"></script>
   <script src="../../js/game/mainDisplay.js"></script>
+  <script src="../../js/game/main.js"></script>
   <script src="../../js/game/501.js"></script>
 </body>
 </html>

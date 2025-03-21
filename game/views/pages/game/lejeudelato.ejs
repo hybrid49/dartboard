@@ -3,14 +3,12 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Le Jeu de l'ATO - Dartboard</title>
 
   <!-- CSS  -->
-  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="../../css/hyperjumpup.css" rel="stylesheet">
-
 </head>
 <body>
   <div class="no-pad-bot" id="index-banner">
@@ -78,14 +76,34 @@
 
           <div class="col s12 m2">
             <div class="icon-block sectionLeft">
-              <div class="center titleLeft">HYPER JUMP</div>
-              <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
+              <div class="center titleLeft">JEU DE L'ATO</div>
+              <div class="center titleLeft">TOUR <span id="nbRound">1</span> / 12</div>
             </div>
-            <div class="borderMultipe">
-              <div class="multiple">
-                <span class="textMultiple">x 1</span>
+            
+            <!-- Cible actuelle -->
+            <div class="icon-block sectionLeft" style="margin-top: 20px;">
+              <div class="center" style="margin-top: 10px;">
+                <span style="color: white; font-size: 18px;">VISEZ</span>
+              </div>
+              <div class="currentTarget">12</div>
+              <div class="target-type">SIMPLE</div>
+              
+              <!-- Indicateur de progression -->
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 0%">0%</div>
+              </div>
+              
+              <!-- Information sur le tour actuel -->
+              <div class="target-info">
+                Chaque fléchette qui touche le 12 marque des points
+              </div>
+              
+              <!-- Nombre de fléchettes lancées -->
+              <div class="darts-thrown">
+                Fléchettes lancées: <span id="dartsThrown">0</span>
               </div>
             </div>
+            
         </div>
       </div>
   </div>
@@ -114,6 +132,7 @@
   <div id="zonebtyes">
     YES <i class="fa fa-circle" style="color: blue;"></i>
   </div>
+  
   <!--  Scripts-->
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/materialize.min.js"></script>
@@ -121,7 +140,7 @@
   <script src="../../js/dart_target_matrix.js"></script>
   <script>
     let nombrePlayer = parseInt("<%- nbPlayer %>");
-    let maxRound = parseInt("<%- maxRound %>");
+    let maxRound = 12; // Le jeu de l'ATO a 12 tours fixes
     let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
 
     score = 0;
@@ -139,11 +158,10 @@
         }
       });
     }
-
   </script>
   <script src="../../js/game/statsManager.js"></script>
   <script src="../../js/game/mainDisplay.js"></script>
   <script src="../../js/game/main.js"></script>
-  <script src="../../js/game/highJumpUp.js"></script>
+  <script src="../../js/game/lejeudelato.js"></script>
 </body>
-</html>
+</html> 

@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+  <title>Tour d'Horloge - Jeu de Fléchettes</title>
 
   <!-- CSS  -->
-  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="../../css/hyperjumpup.css" rel="stylesheet">
+  <link href="../../css/clockgame.css" rel="stylesheet">
 
 </head>
 <body>
@@ -18,18 +17,20 @@
         <!--   Icon Section   -->
         <div class="row">
           <div class="col s12 m3">
-            <% for(var i=1; i<=nbPlayer; i++) {%>
-              <div class="">
-                <div id="zoneScorePlayer<%- i %>" class=" titlePlayer icon-block row scorePlayer <% if(i === 1){%>selected<%}%>">
-                  <div class="col m7 center ">PLAYER <%- i %></div>
-                  <div class="col m5 center" id="scoreTotal<%- i %>">
-                    <div id="score">
-                      0
+            <div class="section">
+              <div class="row">
+                <% for(var i=1; i<=nbPlayer; i++) {%>
+                  <div class="col s12 m<%= 12/nbPlayer %>">
+                    <div class="zoneScorePlayer<%= i %> icon-block scorePlayer <% if(i === 1){%>selected<%}%>">
+                      <div class="center titlePlayer"><%= playerNames[i-1] || 'Joueur ' + i %></div>
+                      <div id="scoreTotal<%= i %>" class="center scoreP">
+                        0/20
+                      </div>
                     </div>
                   </div>
-                </div>
+                <% } %>
               </div>
-            <% } %>
+            </div>
           </div>
 
           <div class="col s12 m7" style="margin-top: 0.5em;">
@@ -55,6 +56,8 @@
               <div id="zone12" class=""></div>
               <div id="zone5" class=""></div>
             </div>
+            
+            <!-- Affichage des derniers lancers -->
             <div class="col s12 m11" style="margin-top: 1em;">
               <div class="row" style="margin-bottom: 0em;">
                 <div class="col s12 m4">
@@ -78,12 +81,28 @@
 
           <div class="col s12 m2">
             <div class="icon-block sectionLeft">
-              <div class="center titleLeft">HYPER JUMP</div>
-              <div class="center titleLeft">ROUND <span id="nbRound">1</span> / <%- maxRound %></div>
-            </div>
-            <div class="borderMultipe">
-              <div class="multiple">
-                <span class="textMultiple">x 1</span>
+              <div class="center titleLeft">TOUR D'HORLOGE</div>
+              <div class="center" style="margin-top: 10px;">
+                <span style="color: white; font-size: 18px;">VISEZ LE</span>
+              </div>
+              <div class="currentNumber">1</div>
+              
+              <!-- Barre de progression -->
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 0%">0%</div>
+              </div>
+              
+              <!-- Affichage des numéros restants -->
+              <div class="remaining-numbers">
+                Numéros restants : <span>1</span> <span>2</span> <span>3</span> <span>4</span> <span>5</span>
+              </div>
+              
+              <!-- Sélecteur de variante -->
+              <div class="variation-selector">
+                <div class="variation-btn active" data-mode="standard">Standard</div>
+                <div class="variation-btn" data-mode="double">Double</div>
+                <div class="variation-btn" data-mode="triple">Triple</div>
+                <div class="variation-btn" data-mode="bull">Bull</div>
               </div>
             </div>
         </div>
@@ -114,6 +133,7 @@
   <div id="zonebtyes">
     YES <i class="fa fa-circle" style="color: blue;"></i>
   </div>
+  
   <!--  Scripts-->
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/materialize.min.js"></script>
@@ -121,8 +141,8 @@
   <script src="../../js/dart_target_matrix.js"></script>
   <script>
     let nombrePlayer = parseInt("<%- nbPlayer %>");
-    let maxRound = parseInt("<%- maxRound %>");
     let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
+    let maxRound = 20; // Par défaut, jusqu'à 20
 
     score = 0;
 
@@ -140,10 +160,17 @@
       });
     }
 
+    // Gestionnaire de clics pour les boutons de variante
+    $(document).ready(function() {
+      $(".variation-btn").click(function() {
+        const mode = $(this).data("mode");
+        setClockMode(mode);
+      });
+    });
   </script>
   <script src="../../js/game/statsManager.js"></script>
   <script src="../../js/game/mainDisplay.js"></script>
   <script src="../../js/game/main.js"></script>
-  <script src="../../js/game/highJumpUp.js"></script>
+  <script src="../../js/game/clockgame.js"></script>
 </body>
-</html>
+</html> 
