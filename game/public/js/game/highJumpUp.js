@@ -124,9 +124,27 @@ function displayScore(){
 
 function displayVictoryScreen(){
     let winner = determineWinner();
-
-    $('#zonevictory').show();
-    $('#zonevictoryPlayer').html('Player '+winner);
+     // Préparation des stats spécifiques au mode JumpUp
+     let customStats = {};
+     for (let i = 1; i <= nombrePlayer; i++) {
+         customStats[i] = {
+             highestMultiplier: arrayTouch[i]['highestMultiplier'] || 1,
+             totalMultiplied: arrayTouch[i]['totalMultiplied'] || 0,
+             jumps: arrayTouch[i]['jumps'] || 0
+         };
+     }
+     
+     // Sauvegarde des statistiques
+     saveGameStats(winner, "HyperJumpUp", customStats);
+     
+     // Affichage de l'écran de victoire
+     $("#changePlayer").fadeOut();
+     $("#newGame").fadeIn();
+     $("#returnMenu").fadeIn();
+     $("#zonevictory").fadeIn();
+     $("#zonevictoryPlayer").html($('.zoneScorePlayer' + winner + ' .titlePlayer').text() || 'Joueur ' + winner);
+     $("#zonebtnno").fadeIn();
+     $("#zonebtyes").fadeIn();
 }
 
 function determineWinner(){

@@ -53,56 +53,16 @@ router.get('/', async function(req, res) {
 
 
 router.get('/test', async function(req, res) {
-    let nbPlayer;
-    if (req.query.game === "cricket" || req.query.game === "goldHunting") {
-        nbPlayer = 4;
-    } else {
-        nbPlayer = 8;
-    }
-    try {
-        // Récupérer les dernières parties pour les afficher dans la boîte des règles
-        const games = await require('../bdd/bddGames').getGames();
-        
-        // Récupérer les 5 dernières parties
-        const recentGames = games.slice(0, Math.min(5, games.length));
-        
-        // Formater les données des parties récentes pour l'affichage
-        const formattedGames = recentGames.map(game => {
-            // Parsing des données JSON stockées sous forme de chaîne
-            let playerNames = [];
-            
-            try {
-                playerNames = JSON.parse(game.players || '[]');
-            } catch (e) {
-                console.error("Erreur de parsing JSON:", e);
-            }
-            
-            return {
-                id: game.id,
-                type: game.type,
-                formattedDate: new Date(game.date).toLocaleDateString('fr-FR', { 
-                    day: '2-digit', 
-                    month: '2-digit'
-                }),
-                winner: game.winner,
-                playerNames
-            };
-        });
-        const arrayPlayers = await bdd.getPlayers();
-        res.render('pages/test', { 
-            theme: defaultTheme,
-            recentGames: formattedGames,
-            nbPlayerMax: nbPlayer,
-            players: arrayPlayers,
-            game: req.query.game, 
-        });
-    } catch (error) {
-        console.error("Erreur lors de la récupération des parties récentes:", error);
-        res.render('pages/test', { 
-            theme: defaultTheme,
-            recentGames: []
-        });
-    }
+    const playerNames = await getPlayerNames(req);
+    res.render('pages/game/01', {
+        nbPlayer: req.query.nbPlayer, 
+        mode: 501, 
+        maxRound: 2, 
+        arrayTargets: arrayComplete,
+        playerNames: playerNames.names,
+        playerData: playerNames.data,
+        theme: defaultTheme
+    });
 });
 
 router.get('/settings', async function (req, res) {
@@ -403,7 +363,7 @@ router.get('/game/hyperjumpup', async function(req, res) {
     
     res.render('pages/game/hyperjumpup', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 20, 
+        maxRound: 12, 
         arrayTargets: arrayComplete,
         playerNames,
         playerData,
@@ -416,7 +376,7 @@ router.get('/game/goldHunting', async function(req, res) {
     
     res.render('pages/game/goldHunting', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 20, 
+        maxRound: 12, 
         arrayTargets: arrayComplete,
         playerNames,
         playerData,
@@ -429,7 +389,7 @@ router.get('/game/lejeudelato', async function(req, res) {
     
     res.render('pages/game/lejeudelato', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 20, 
+        maxRound: 12, 
         arrayTargets: arrayComplete,
         playerNames,
         playerData,

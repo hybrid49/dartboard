@@ -17,24 +17,20 @@
 </head>
 <body>
   <div class="header flex-container">
-    <div class="header-left flex-items">
+    <div class="header-left-ingame flex-items">
       <div class="flex-container">
-        <div class="subtitle subtitle-left-left flex-items"><div>fais</div><div>ton</div><div>choix</div></div>
-        <div class="title-left-little flex-items">Nombre de joueurs</div>
-        <div class="subtitle subtitle-left-right flex-items"><div>fais</div><div>ton</div><div>choix</div></div>
+        <div class="title-left-ingame flex-items">Allez gros naze</div>
       </div>
     </div>
-    <div class="header-right flex-items">
+    <div class="header-right-ingame flex-items">
       <div class="flex-container">
-        <div class="subtitle subtitle-left-left flex-items"><div>pas</div><div>de</div><div>triche</div></div>
-        <div class="title-right-little flex-items">Selection des joueurs</div>
-        <div class="subtitle subtitle-left-right flex-items"><div>pas</div><div>de</div><div>triche</div></div>
+        <div class="title-right-little flex-items"></div>
       </div>
     </div>
   </div>
   
   <div class="content flex-container">
-    <div class="content-left flex-items">
+    <div class="content-left-ingame flex-items">
       <div class="games-list">
         <% for(var i=1; i<=nbPlayerMax; i++) {%>
         <div class="game-item boxGame<%- i %> box" data-nbPlayer="<%- i %>">
@@ -45,7 +41,7 @@
       
       </div>
     </div>
-    <div class="content-right flex-items">
+    <div class="content-right-ingame flex-items">
       <% for(var i=1; i<=nbPlayerMax; i++) { %>
         <div class="player-selection player-<%- i %>" style="display: none;">
           <div class="cardCustom">

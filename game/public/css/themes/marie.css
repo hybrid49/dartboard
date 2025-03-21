@@ -23,6 +23,18 @@
     height: 200px;
 }
 
+.header-right-ingame {
+  background-color: #82802D;
+  width: 50%;
+  height: 200px;
+}
+
+.header-left-ingame {
+  background-color: #F0B444;
+  width: 50%;
+  height: 200px;
+}
+
 .content-left {
     background-color: #F4C3E4;
     width: 50%;
@@ -33,6 +45,17 @@
     background-color: #F0B444;
     width: 50%;
     height: 880px;
+}
+.content-left-ingame {
+  background-color: #82802D;
+  width: 50%;
+  height: 880px;
+}
+
+.content-right-ingame {
+  background-color: #F0B444;
+  width: 50%;
+  height: 880px;
 }
 .content-right p {
     font-family: 'Aujournuit', sans-serif;
@@ -52,15 +75,24 @@
     text-shadow: 2px 0 #A66321;
     -webkit-text-stroke: 4px;
 }
-.title-right {
+.title-left-ingame {
   font-family: 'Cy', sans-serif;
   color: #A66321;
-  font-size: 81px;
+  font-size: 100px;
   text-align: center;
   font-weight: bold;
   text-shadow: 2px 0 #A66321;
   -webkit-text-stroke: 4px;
-  margin-top: 32px;
+}
+.title-right {
+  font-family: 'Cy', sans-serif;
+  color: #A66321;
+  font-size: 64px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 2px 0 #A66321;
+  -webkit-text-stroke: 4px;
+  margin-top: 50px;
 }
 .title-left-little {
   font-family: 'Cy', sans-serif;
@@ -150,7 +182,7 @@ br {
   /* Style pour la liste des jeux */
   .games-list {
     padding: 40px;
-    margin-top: 30px;
+    padding-bottom: 0;
   }
   
   .game-item {
@@ -217,7 +249,7 @@ br {
   }
   
   .game-name {
-    font-size: 70px;
+    font-size: 95px;
     font-weight: bold;
     text-shadow: 2px 0 #A66321;
     -webkit-text-stroke: 4px;
@@ -225,6 +257,13 @@ br {
 
   .game-name-little {
     font-size: 40px;
+    font-weight: bold;
+    text-shadow: 2px 0 #A66321;
+    -webkit-text-stroke: 4px;
+  }
+  
+  .game-name-middle {
+    font-size: 70px;
     font-weight: bold;
     text-shadow: 2px 0 #A66321;
     -webkit-text-stroke: 4px;
@@ -323,7 +362,18 @@ br {
     margin-top: 10px;
     margin-left: 28px;
   }
-  
+
+  .flechettes-img {
+    width: 80%;
+    margin-top: 50px;
+    margin-left: 30px;
+  }
+
+  .regle-img {    
+    width: 50%;
+    position: absolute;
+    bottom: 0px;
+  }
   @keyframes pulse {
     0% {
       transform: translateY(-50%) scale(0.8);
