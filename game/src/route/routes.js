@@ -220,7 +220,7 @@ router.get('/game/cricket', async function(req, res) {
     
     res.render('pages/game/cricket', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 2, 
+        maxRound: 20, 
         arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
         mode: "cricket",
         playerNames: playerNames.names,
