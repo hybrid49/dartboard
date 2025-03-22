@@ -32,266 +32,46 @@
   <div class="content flex-container">
     <div class="content-left-ingame flex-items">
       <div class="games-list">
-        <% for(var i=1; i<=nbPlayerMax; i++) {%>
-        <div class="game-item boxGame<%- i %> box" data-nbPlayer="<%- i %>">
-          <div class="game-number"><div class="game-number-text game-number-text-middle"><%- i %></div></div>
-          <div class="game-name-little"><%- i %> joueurs</div>
-        </div>
-        <% } %>
       
       </div>
     </div>
     <div class="content-right-ingame flex-items">
-      <% for(var i=1; i<=nbPlayerMax; i++) { %>
-        <div class="player-selection player-<%- i %>" style="display: none;">
-          <div class="cardCustom">
-            <div class="card-content">
-              <span class="card-title">Joueur <%- i %></span>
-              <div class="input-field" style="margin: 10px 0;">
-                <select id="player-<%- i %>-select" class="browser-default" style="display: block !important;">
-                  <option value="default">Joueur <%- i %> (Anonyme)</option>
-                  <% if (typeof players !== 'undefined' && players.length > 0) { %>
-                    <% players.forEach(function(player) { %>
-                      <option value="<%- player.id %>"><%- player.name %></option>
-                    <% }); %>
-                  <% } %>
-                </select>
-              </div>
-            </div>
+      <div id="scoreCurrentPlayer" class="scoreCurrentPlayer">
+        <%- mode %>
+      </div>
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block lastDart center" id="throw1">
+            -
           </div>
         </div>
-      <% } %>    </div>
+        <div class="col s12 m4">
+          <div class="icon-block lastDart center" id="throw2">
+            -
+          </div>
+        </div>
+        <div class="col s12 m4">
+          <div class="icon-block lastDart center" id="throw3">
+            -
+          </div>
+        </div>
+      </div>
   </div>
-  
-  <!--  Scripts-->
-  <script src="../../js/jquery-2.1.1.min.js"></script>
-  <script src="../../js/materialize.min.js"></script>
-  <script src="../../js/socket.io.js"></script>
 
+    <!--  Scripts-->
+    <script src="../../js/jquery-2.1.1.min.js"></script>
+    <script src="../../js/materialize.min.js"></script>
+    <script src="../../js/socket.io.js"></script>
+    <script src="../../js/dart_target_matrix.js"></script>
   <script>
-    var socket = io();
-    let gameSelected = 1;
-    let nbTotalGame = parseInt("<%- nbPlayerMax %>");
-    let lastMsg = '';
-    let selectedPlayers = {};
-    let isPlayerSelectionMode = false;
-    
-    // Noms des jeux pour l'affichage
-    const gameNames = ['Cricket', '01 Games', 'Fun Games'];
-    
-    // Descriptions des jeux
-    const gameDescriptions = [
-      "Le jeu Gold Hunting consiste à tirer des flèches pour atteindre des cibles en or tout en évitant les obstacles afin de maximiser le score.",
-      "Dans le mode de jeu Hyper Jump Up des fléchettes, chaque joueur doit viser des sections spécifiques du tableau dans un ordre précis, en augmentant progressivement les zones à viser à chaque tour, jusqu\'à atteindre la cible finale.",
-      "Dans le Jeu de l\'ATO, vous progressez à travers 12 tours avec des cibles spécifiques à chaque tour : 12, 13, 14, tous les doubles, 15, 16, 17, tous les triples, 18, 19, 20 et enfin le bull. Si aucune de vos 3 fléchettes ne touche la cible du tour, votre score est divisé par 2 !",
-      "Dans le Tour d\'Horloge, les joueurs doivent toucher tous les numéros de la cible dans l\'ordre croissant, en commençant par le 1 et en terminant par le 20. Plusieurs variantes sont disponibles: standard, double (seuls les doubles comptent), triple (seuls les triples comptent) et bull (après le 20, il faut toucher le centre).",
-    ];
-    
-    // Mettre à jour l'information du jeu sélectionné
-    function updateSelectedGameInfo() {
-      // Récupérer le nom du jeu sélectionné depuis l'élément HTML
-      const selectedGameName = $('.game-item.selected .game-name').text();
-      
-      // Mettre à jour la description dans le content-right
-      $('.content-right p').text(gameDescriptions[gameSelected-1]);
-    }
-    
-    // Initialiser l'information du jeu sélectionné
-    updateSelectedGameInfo();
-    
-    // Ajouter des effets visuels lors de la sélection
-    $('.box').click(function() {
-      if ($(this).hasClass('boxLastGame') || $(this).hasClass('boxStats')) {
-        // Si c'est le bloc de règles ou de statistiques, ne pas changer la sélection des jeux
-        // mais rediriger vers la page appropriée si nécessaire
-        if ($(this).hasClass('boxStats')) {
-          window.location.href = "/statistics";
-        }
-        return;
-      }
-      
-      $('.box').removeClass('selected');
-      $(this).addClass('selected');
-      
-      // Obtenir l'index du jeu sélectionné
-      gameSelected = $(this).hasClass('boxGame1') ? 1 : 
-                     $(this).hasClass('boxGame2') ? 2 : 
-                     $(this).hasClass('boxGame3') ? 3 : gameSelected;
-      
-      updateSelectedGameInfo();
-    });
-
-    socket.on('arduino', function(msg) {
-      arduinoEvent(msg);
-    });
-    $('.boxGame1').addClass('selected');
-    function arduinoEvent(msg){
-      if(lastMsg === '') {
-        lastMsg = msg;
-        if(msg === 'btnNext'){
-          if(!isPlayerSelectionMode) {
-            // Mode sélection du nombre de joueurs
-            if(gameSelected < nbTotalGame){
-              gameSelected++;
-            }else{
-              gameSelected=1
-            }
-            $('.box').removeClass('selected');
-            $('.boxGame'+gameSelected).addClass('selected');
-          } else {
-            // Mode sélection des profils - faire défiler les sélections de joueurs
-            let visiblePlayers = [];
-            $('.player-selection').each(function() {
-              if ($(this).is(':visible')) {
-                // Extraire le numéro du joueur de la classe (par ex. "player-1" -> 1)
-                const playerClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('player-'));
-                if (playerClass) {
-                  const playerNumber = parseInt(playerClass.replace('player-', ''));
-                  visiblePlayers.push(playerNumber);
-                }
-              }
-            });
-            
-            // Trouver l'indice du joueur actif
-            let currentActivePlayer = 0;
-            $('.player-selection.active').each(function() {
-              const playerClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('player-'));
-              if (playerClass) {
-                currentActivePlayer = parseInt(playerClass.replace('player-', ''));
-              }
-            });
-            
-            let currentActiveIndex = visiblePlayers.indexOf(currentActivePlayer);
-            if (currentActiveIndex === -1) currentActiveIndex = 0;
-            
-            // Passer au joueur suivant ou revenir au premier
-            let nextIndex = (currentActiveIndex + 1) % visiblePlayers.length;
-            let nextPlayer = visiblePlayers[nextIndex];
-            
-            // Mise à jour de l'interface
-            $('.player-selection').removeClass('active');
-            $('.player-' + nextPlayer).addClass('active');
-          }
-        }else if(msg === 'btnValidate'){
-          if(!isPlayerSelectionMode) {
-            // Premier appui sur btnValidate - affiche la sélection des profils
-            let nbPLayer = $('.boxGame'+gameSelected).data('nbplayer');
-            showPlayerSelection(nbPLayer);
-            isPlayerSelectionMode = true;
-          } else {
-            // Second appui sur btnValidate - démarre la partie
-            startGame();
-          }
-        }else if(msg === 'btnCancel'){
-          if(isPlayerSelectionMode) {
-            // Retour à la sélection du nombre de joueurs
-            isPlayerSelectionMode = false;
-            $('.player-profiles').hide();
-            $('.player-number-selection').show();
-          } else {
-            // Retour au menu principal
-            window.location.replace("/");
-          }
-        }
-      }
-
-      setTimeout(function(){
-        lastMsg = '';
-      }, 500);
-    }
-
-     // Gestion de la sélection des joueurs
-     function showPlayerSelection(numPlayers) {
-      console.log(numPlayers);
-      // Cacher la sélection du nombre de joueurs
-      $('.player-number-selection').hide();
-      
-      // Afficher la section des profils de joueurs
-      $('.player-profiles').show();
-      
-      // Afficher seulement le nombre de sélections de joueurs nécessaires
-      for (let i = 1; i <= numPlayers; i++) {
-        $('.player-' + i).show();
-      }
-      
-      // Initialiser le tableau des joueurs sélectionnés
-      for (let i = 1; i <= numPlayers; i++) {
-        selectedPlayers[i] = 'default';
-      }
-      
-      // Mettre la première sélection en surbrillance
-      $('.player-1').addClass('active');
-      
-      // Réinitialiser les sélecteurs pour s'assurer qu'ils sont affichés correctement
-      setTimeout(function() {
-        $('select.browser-default').each(function() {
-          $(this).css('display', 'block');
-        });
-      }, 100);
-    }
-
-    function startGame() {
-      let game = "<%- game %>";
-      let nbPLayer = 0;
-      
-      // En mode sélection de profils, compter le nombre de joueurs affichés
-      $('.player-selection').each(function() {
-        if ($(this).is(':visible')) {
-          nbPLayer++;
-        }
-      });
-      
-      if (nbPLayer === 0) {
-        // Fallback si aucun joueur n'est affiché (peu probable)
-        nbPLayer = $('.boxGame'+gameSelected).data('nbplayer');
-      }
-      
-      let playerQuery = '';
-      
-      // Construire la chaîne de requête avec les ID des joueurs
-      for (let i = 1; i <= nbPLayer; i++) {
-        playerQuery += '&player' + i + '=' + (selectedPlayers[i] || 'default');
-      }
-      
-      window.location.replace("/game/" + game + "?nbPlayer=" + nbPLayer + playerQuery);
-    }
-    
-   // Ajouter les gestionnaires d'événements pour la sélection des joueurs au clic
-   $(document).ready(function() {
-      // Désactivation de l'initialisation Materialize pour les sélecteurs
-      // qui pourrait interférer avec notre affichage
-      // $('select').formSelect();
-      
-      // S'assurer que tous les sélecteurs sont visibles
-      $('select.browser-default').css('display', 'block');
-      
-      // Sélection du nombre de joueurs au clic
-      $('.box[data-nbPlayer]').on('click', function() {
-        // Mettre à jour la boîte sélectionnée
-        $('.box').removeClass('selected');
-        $(this).addClass('selected');
-        
-        // Mettre à jour l'index du jeu sélectionné
-        gameSelected = parseInt($(this).attr('class').split('boxGame')[1].split(' ')[0]);
-        
-        // Afficher la sélection des profils
-        let nbPlayer = $(this).data('nbplayer');
-        showPlayerSelection(nbPlayer);
-        isPlayerSelectionMode = true;
-      });
-      
-      // Navigation entre les joueurs au clic
-      $(document).on('click', '.player-selection', function() {
-        $('.player-selection').removeClass('active');
-        $(this).addClass('active');
-      });
-    });
-    
-    // Gestion des changements de sélection
-    $(document).on('change', 'select[id^="player-"]', function() {
-      const playerId = $(this).attr('id').split('-')[1];
-      selectedPlayers[playerId] = $(this).val();
-    });
+    let nombrePlayer = parseInt("<%- nbPlayer %>");
+    let maxRound = parseInt("<%- maxRound %>");
+    let arrayTargets = JSON.parse('<%- JSON.stringify(arrayTargets) %>');
+    let mode = parseInt("<%- mode %>");
   </script>
+  <script src="../../js/game/statsManager.js"></script>
+  <script src="../../js/game/mainDisplay.js"></script>
+  <script src="../../js/game/main.js"></script>
+  <script src="../../js/game/501.js"></script>
 </body>
 </html>

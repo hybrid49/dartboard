@@ -98,19 +98,11 @@ function arduinoEventGameOver(msg) {
             if(isNewGame)
                 window.location.reload();
             if(isReturnMenu)
-                window.location.replace('/');
+                
             break;
 
         case 'btnCancel':
-            if(isNewGame)
-                displayModalReturnMenu();
-            if(isReturnMenu) {
-                isReturnMenu = false;
-                $('#returnMenu').hide();
-                $('#zonebtnno').hide();
-                $('#zonebtyes').hide();
-                undoLastAction();
-                }
+            window.location.replace('/');
             break;
 
         default:

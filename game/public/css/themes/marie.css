@@ -374,6 +374,19 @@ br {
     position: absolute;
     bottom: 0px;
   }
+
+  .scoreCurrentPlayer{
+    font-family: 'Aujournuit', sans-serif;
+    color: #A66321;
+    font-size: 314px;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .icon-block{
+    font-family: 'Aujournuit', sans-serif;
+  }
+
   @keyframes pulse {
     0% {
       transform: translateY(-50%) scale(0.8);
