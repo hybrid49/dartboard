@@ -220,7 +220,7 @@ router.get('/game/cricket', async function(req, res) {
     
     res.render('pages/game/cricket', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 20, 
+        maxRound: 20,
         arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
         mode: "cricket",
         playerNames: playerNames.names,
@@ -246,7 +246,7 @@ router.get('/game/cricketshorty', async function(req, res) {
 router.get('/game/cricketcutthroat', async function(req, res) {
     const playerNames = await getPlayerNames(req);
     
-    res.render('pages/game/cricket', {
+    res.render('pages/game/cricketcutthroat', {
         nbPlayer: req.query.nbPlayer, 
         maxRound: 20, 
         arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
@@ -296,7 +296,7 @@ router.get('/game/cricketcutthroatrandom', async function(req, res) {
 
     const playerNames = await getPlayerNames(req);
     
-    res.render('pages/game/cricket', {
+    res.render('pages/game/cricketcutthroat', {
         nbPlayer: req.query.nbPlayer, 
         maxRound: 20, 
         arrayTargets: array, 
@@ -325,7 +325,7 @@ router.get('/game/501', async function(req, res) {
     res.render('pages/game/01', {
         nbPlayer: req.query.nbPlayer, 
         mode: 501, 
-        maxRound: 2, 
+        maxRound: 15,
         arrayTargets: arrayComplete,
         playerNames: playerNames.names,
         playerData: playerNames.data,
@@ -338,7 +338,7 @@ router.get('/game/301', async function(req, res) {
     res.render('pages/game/01', {
         nbPlayer: req.query.nbPlayer, 
         mode: 301, 
-        maxRound: 10, 
+        maxRound: 15,
         arrayTargets: arrayComplete,
         playerNames: playerNames.names,
         playerData: playerNames.data,
@@ -351,7 +351,7 @@ router.get('/game/701', async function(req, res) {
     res.render('pages/game/01', {
         nbPlayer: req.query.nbPlayer, 
         mode: 701, 
-        maxRound: 20, 
+        maxRound: 15,
         arrayTargets: arrayComplete,
         playerNames: playerNames.names,
         playerData: playerNames.data,
@@ -364,7 +364,7 @@ router.get('/game/hyperjumpup', async function(req, res) {
     
     res.render('pages/game/hyperjumpup', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 12, 
+        maxRound: 12,
         arrayTargets: arrayComplete,
         playerNames,
         playerData,

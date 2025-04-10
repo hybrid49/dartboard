@@ -349,7 +349,7 @@ label {
 /*CSS game*/
 
 
-#changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes{
+#changePlayer, #returnMenu, #newGame{
 	position: absolute;
 	top: 3em;
 	background-color: #9a9c98b3;
@@ -359,39 +359,6 @@ label {
 	border: 16px solid white;
 	display: none;
 	color: white;
-}
-#zonevictory{
-	top:1em;
-	left: 60px;
-	right: 60px;
-	animation-duration: 2s;
-	animation-name: clignoter;
-	animation-iteration-count: infinite;
-	transition: none;
-	background-color: var(--main-bg-color-darker-transparent);
-	border: 16px solid var(--main-bg-color);
-}
-#changePlayer{
-	left: 60px;
-	right: 60px;
-}
-#returnMenu{
-	left: 60px;
-	right: 60px;
-}
-#newGame{
-	left: 60px;
-	right: 60px;
-}
-#zonebtnno{
-	top:5em;
-	left: 200px;
-	right: 1100px;
-}
-#zonebtyes{
-	top:5em;
-	left: 1100px;
-	right: 200px;
 }
 
 /*ANIMATION DE SCORE*/

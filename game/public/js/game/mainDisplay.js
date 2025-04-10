@@ -174,3 +174,36 @@ function displayNewBestScoreAllTime(){
     // TODO : Faire apparaitre une vidéo de Macron, disant qu'il ferait mieux de traverser la rue
 }
 
+
+// Fonction pour créer des confettis
+function createConfetti() {
+    // Nettoyer les anciens confettis
+    $('.confetti').remove();
+
+    // Créer 100 confettis avec différentes couleurs et positions
+    const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
+        '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50',
+        '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
+
+    for (let i = 0; i < 100; i++) {
+        const confetti = $('<div class="confetti"></div>');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const left = Math.random() * 100;
+        const width = Math.random() * 10 + 5;
+        const height = Math.random() * 10 + 5;
+        const delay = Math.random() * 3;
+        const duration = Math.random() * 3 + 2;
+
+        confetti.css({
+            'background-color': color,
+            'left': left + 'vw',
+            'width': width + 'px',
+            'height': height + 'px',
+            'animation-delay': delay + 's',
+            'animation-duration': duration + 's'
+        });
+
+        $('body').append(confetti);
+    }
+}
+

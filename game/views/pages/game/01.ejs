@@ -10,6 +10,8 @@
   <link href="../../css/font-awesome.css" rel="stylesheet">
   <link href="../../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="../../css/501.css" rel="stylesheet">
+  <link href="../../css/core/victoryScreen.css" rel="stylesheet">
+
 
 </head>
 <body>
@@ -113,23 +115,20 @@
   <div id="changePlayer">
     CHANGE PLAYER
   </div>
-  <div id="newGame">
-    Play again ?
-  </div>
   <div id="timeExceed">
     A QUELLE HEURE ?!
   </div>
-  <div id="returnMenu">
-    Return menu ?
-  </div>
   <div id="zonevictory">
-    Victory : <span id="zonevictoryPlayer"></span>
-  </div>
-  <div id="zonebtnno">
-    NO <i class="fa fa-circle" style="color: red;"></i>
-  </div>
-  <div id="zonebtyes">
-    YES <i class="fa fa-circle" style="color: blue;"></i>
+    <div class="victory-title">VICTORY!</div>
+    <div id="zonevictoryPlayer"></div>
+    <div class="score-summary">
+      <!-- Score summary will be filled dynamically -->
+    </div>
+    <div id="newGame">Play again?</div>
+    <div class="victory-buttons">
+      <div id="zonebtnno">NO <i class="fa fa-circle"></i></div>
+      <div id="zonebtyes">YES <i class="fa fa-circle"></i></div>
+    </div>
   </div>
   <!--  Scripts-->
   <script src="../../js/jquery-2.1.1.min.js"></script>

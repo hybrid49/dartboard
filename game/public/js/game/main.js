@@ -93,25 +93,15 @@ function arduinoEventGameInProgress(msg) {
 }
 
 function arduinoEventGameOver(msg) {
+    console.log('gameover');
     switch(msg) {
         case 'btnValidate':
-            if(isNewGame)
                 window.location.reload();
-            if(isReturnMenu)
-                
             break;
 
         case 'btnCancel':
             window.location.replace('/');
             break;
-
-        default:
-            // Restart a game by throwing a dart after 5 seconds
-            let dart = getDart(msg);
-            if(deltaTimestamp >= '5000' && nbThrow === 3 && dart !== 'undefined' && dart !== null){
-                resetGlobal();
-                arduinoEventGameInProgress(msg);
-            }
     }
 }
 
@@ -173,8 +163,10 @@ function manageStat(dart, number, zone){
 }
 
 function manageEndTurn(){
-    if (checkVictory(''))
+    if (checkVictory('')){
+        isGameOver = true;
         displayVictoryScreen();
+    }
     else if(nbThrow === 3)
         displayModalChangePlayer();
 }
@@ -189,8 +181,11 @@ function changePlayer(){
     selector2.removeClass('TripleShot').removeClass('DoubleShot').html('-');
     selector3.removeClass('TripleShot').removeClass('DoubleShot').html('-');
 
-    if(checkVictory(true))
+    if(checkVictory(true)){
         displayVictoryScreen();
+        isGameOver = true;
+    }
+
     else if (selectedPlayer === nombrePlayer)
         newRound();
     else{
@@ -243,7 +238,7 @@ function undoLastChangePlayer(){
 
 function undoLastThrow(){
     arrayRound[round][selectedPlayer][nbThrow] = '';
-    arrayHistoryThrow[nbTotalAction] = [];
+    arrayHistoryThrow.splice(nbTotalAction, 1);
 
     nbThrow--;
     nbTotalAction--;
@@ -494,6 +489,68 @@ function addThrow(target, zone, isVictory = false) {
     if (checkVictory(isVictory)) {
         displayVictoryScreen();
     }
+}
+
+// Fonction pour mettre à jour le résumé des scores dans l'écran de victoire
+function updateScoreSummary(winner) {
+    let summaryHTML = '<div class="score-table">';
+
+    // En-tête du tableau
+    summaryHTML += '<div class="score-row header">';
+    summaryHTML += '<div class="score-cell">Player</div>';
+    summaryHTML += '<div class="score-cell">Points</div>';
+    summaryHTML += '<div class="score-cell">Precision</div>';
+    summaryHTML += '</div>';
+
+    // Lignes pour chaque joueur
+    for (let i = 1; i <= nombrePlayer; i++) {
+        const isWinner = (i === winner);
+
+        // Récupérer le nom du joueur à partir du DOM - utiliser différents sélecteurs possibles
+        let playerName = '';
+
+        // Tenter plusieurs sélecteurs pour trouver les noms
+        // 1. D'abord avec l'ID zoneScorePlayer
+        if ($('#zoneScorePlayer' + i + ' .titlePlayer').length) {
+            playerName = $('#zoneScorePlayer' + i + ' .titlePlayer').text().trim();
+        }
+        // 2. Ensuite avec la classe zoneScorePlayer
+        else if ($('.zoneScorePlayer' + i + ' .titlePlayer').length) {
+            playerName = $('.zoneScorePlayer' + i + ' .titlePlayer').text().trim();
+        }
+        // 3. Utiliser le tableau playerNames s'il est disponible
+        else if (typeof playerNames !== 'undefined' && playerNames[i-1]) {
+            playerName = playerNames[i-1];
+        }
+        // 4. Enfin, utiliser un nom de joueur par défaut
+        else {
+            playerName = 'Player ' + i;
+        }
+
+        // Filtrer les espaces supplémentaires ou les caractères superflus
+        playerName = playerName.replace(/\s+/g, ' ').trim();
+
+        console.log("Récupération du nom du joueur " + i + " (sélecteur ajusté):", playerName);
+
+        const playerPoints = arrayTouch[i]['point'] || 0;
+
+        // Calculer la précision
+        const hits = arrayTouch[i]['nbHit'] || 0;
+        const misses = arrayTouch[i]['nbMiss'] || 0;
+        const totalThrows = hits + misses;
+        const precision = totalThrows > 0 ? Math.round((hits / totalThrows) * 100) : 0;
+
+        summaryHTML += '<div class="score-row ' + (isWinner ? 'winner' : '') + '">';
+        summaryHTML += '<div class="score-cell">' + playerName + '</div>';
+        summaryHTML += '<div class="score-cell">' + playerPoints + '</div>';
+        summaryHTML += '<div class="score-cell">' + precision + '%</div>';
+        summaryHTML += '</div>';
+    }
+
+    summaryHTML += '</div>';
+
+    // Mettre à jour l'élément HTML
+    $('.score-summary').html(summaryHTML);
 }
 
 // Appeler l'initialisation des statistiques au démarrage du jeu

@@ -14,7 +14,7 @@
 }
 body{
 	height: 1080px;
-	font-family: myFirstFont, sans-serif;
+	font-family: oswald, sans-serif;
 	text-shadow: 1px 1px 5px black;
 	overflow: hidden;
 	background: linear-gradient(-45deg, #999999, #6b6b6b, #e7e7e7, #383838);
@@ -195,7 +195,7 @@ td{
 	top: 50em;
 	z-index: -1;
 }
-#changePlayer, #returnMenu, #zonevictory, #newGame, #zonebtnno, #zonebtyes, #timeExceed{
+#changePlayer, #returnMenu, #newGame, #timeExceed{
 	position: absolute;
 	top: 3em;
 	background-color: #9a9c98b3;
@@ -205,39 +205,6 @@ td{
 	border: 16px solid white;
 	display: none;
 	color: white;
-}
-#zonevictory{
-	top:1em;
-	left: 60px;
-	right: 60px;
-	animation-duration: 2s;
-	animation-name: clignoter;
-	animation-iteration-count: infinite;
-	transition: none;
-	background-color: var(--main-bg-color-darker-transparent);
-	border: 16px solid var(--main-bg-color);
-}
-#changePlayer{
-	left: 60px;
-	right: 60px;
-}
-#returnMenu{
-	left: 60px;
-	right: 60px;
-}
-#newGame{
-	left: 60px;
-	right: 60px;
-}
-#zonebtnno{
-	top:5em;
-	left: 200px;
-	right: 1100px;
-}
-#zonebtyes{
-	top:5em;
-	left: 1100px;
-	right: 200px;
 }
 .DoubleShot{
 	color : #9c27b0;
@@ -254,14 +221,4 @@ td{
 .tableChiffreCenter{
 	min-height: 93px;
 	background-color: #607d8b;
-}
-
-@keyframes clignoter {
-	0%   { opacity:1; }
-	40%   {opacity:0; }
-	100% { opacity:1; }
-}
-
-#scoreCurrentPlayer{
-	font-size: 28.7em;
 }

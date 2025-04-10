@@ -111,7 +111,7 @@ function determineHittedMultiplierZone(number){
 
 function checkVictory(button){
     if(button === true)
-        return (round > maxRound)
+        return (round === maxRound && selectedPlayer === nombrePlayer)
     else
         return  (round === maxRound && selectedPlayer === nombrePlayer && nbThrow === 3)
 }
@@ -133,7 +133,36 @@ function displayVictoryScreen(){
              jumps: arrayTouch[i]['jumps'] || 0
          };
      }
-     
+    // Récupérer le nom du joueur gagnant
+    let winnerName = '';
+
+    // Obtenir le nom depuis la zone d'affichage des scores
+    const winnerNameElement = $('.zoneScorePlayer' + winner + ' .titlePlayer');
+    if (winnerNameElement.length) {
+        winnerName = winnerNameElement.text().trim();
+    } else if (typeof playerNames !== 'undefined' && playerNames[winner-1]) {
+        winnerName = playerNames[winner-1];
+    } else {
+        winnerName = 'Player ' + winner;
+    }
+
+    // Créer des confettis pour la célébration
+    createConfetti();
+
+    // Mettre à jour le résumé des scores
+    updateScoreSummary(winner);
+
+    // Afficher l'écran de victoire avec animation en séquence
+    $('#zonevictory').fadeIn(500, function() {
+        // Animation du nom du gagnant
+        $('#zonevictoryPlayer').html(winnerName).hide().fadeIn(500, function() {
+            // Affichage du "Play again?"
+            $('#newGame').fadeIn(500, function() {
+                // Affichage des boutons YES/NO
+                $('#zonebtnno, #zonebtyes').fadeIn(500);
+            });
+        });
+    });
      // Sauvegarde des statistiques
      saveGameStats(winner, "HyperJumpUp", customStats);
      
