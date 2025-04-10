@@ -25,45 +25,42 @@
       </div>
 
       <div class="col s12 m8 central">
-        <div class="icon-block sectionCenter">
-          <table class="tableCricket">
-            <tbody>
-              <tr>
-                <% for(var i=1; i <= nbPlayer; i++) { %>
-                  <% if(i === 1){ %>
-                    <td class="tdGame tdPlayer<%-i %> selected"></td>
-                  <% }else{ %>
-                    <td class="tdGame tdPlayer<%-i %>"></td>
-<!--                    <tr id="trCatchUp"></tr>-->
-<!--                    <tr id="trNumber"></tr>-->
-<!--                    <tr id="trGotU"></tr>-->
-<!--                    <tr id="trBust"></tr>-->
-                <% } %>
-                <% } %>
-              </tr>
-            </tbody>
-          </table>
+        <div class="gauge-container-flex">
+          <!-- Première jauge -->
+          <div class="central-gauge-container">
+            <div class="central-gauge-track">
+              <div class="central-gauge-fill" id="centralGauge1" data-score="141">
+                <p>181</p>
+              </div>
+            </div>
+            <div class="central-gauge-value" id="centralGaugeValue1">181</div>
+          </div>
+          
+          <!-- Deuxième jauge -->
+          <div class="central-gauge-container">
+            <div class="central-gauge-track">
+              <div class="central-gauge-fill" id="centralGauge2" data-score="141"></div>
+            </div>
+            <div class="central-gauge-value" id="centralGaugeValue2">181</div>
+          </div>
+          <!-- Deuxième jauge -->
+          <div class="central-gauge-container">
+            <div class="central-gauge-track">
+              <div class="central-gauge-fill" id="centralGauge3" data-score="141"></div>
+            </div>
+            <div class="central-gauge-value" id="centralGaugeValue3">181</div>
+          </div>
+          <!-- Deuxième jauge -->
+          <div class="central-gauge-container">
+            <div class="central-gauge-track">
+              <div class="central-gauge-fill" id="centralGauge4" data-score="141"></div>
+            </div>
+            <div class="central-gauge-value" id="centralGaugeValue4">181</div>
+          </div>
         </div>
       </div>
 
       <div class="col s12 m2">
-
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="col s12 center">
-        <div class="player-names-container" style="margin-bottom: 20px;">
-          <% for(var i=1; i <= nbPlayer; i++) { %>
-            <div class="player-name <% if(i === 1){ %>active<% } %>" data-player="<%-i %>">
-              <% if(typeof playerNames !== 'undefined' && playerNames[i-1]) { %>
-                <%- playerNames[i-1] %>
-              <% } else { %>
-                Joueur <%- i %>
-              <% } %>
-            </div>
-          <% } %>
-        </div>
       </div>
     </div>
   </div>

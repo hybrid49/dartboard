@@ -74,6 +74,9 @@ td{
 .tableCricket tr:nth-child(7){
 	background-color: black;
 }
+.tableCricket tr:nth-child(9){
+	background-color: black;
+}	
 .tableCricket tr:nth-child(2){
 	background-color: #424242;
 }
@@ -83,6 +86,9 @@ td{
 .tableCricket tr:nth-child(6){
 	background-color: #424242;
 }
+.tableCricket tr:nth-child(8){
+	background-color: #424242;
+}	
 .tdGame{
 	border-right: 6px solid #a7a7a7;
 	border-left: 6px solid #a7a7a7;
@@ -252,4 +258,119 @@ td{
     font-weight: bold;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
+}
+
+/* Styles pour les jauges de progression */
+.progress-gauges-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.37);
+}
+
+/* Grande jauge centrale */
+.gauge-container-flex {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.central-gauge-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px;
+    height: 100%;
+}
+
+.central-gauge-track {
+    width: 280px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 8px solid white;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+.central-gauge-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #eff436, #ffeb3b, #f5d224, #ff7b2b);
+    transition: height 1s ease, top 1s ease, bottom 1s ease;
+}
+
+.central-gauge-value {
+    font-size: 60px;
+    margin-top: 20px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+.player-gauge-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    height: calc(100% / 4 - 10px);
+}
+
+.player-gauge-label {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: white;
+    text-align: center;
+}
+
+.player-gauge-track {
+    width: 40px;
+    height: 80%;
+    background-color: #424242;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid white;
+}
+
+.player-gauge-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    transition: height 0.5s ease;
+    height: 100%;
+}
+
+.player-gauge-value {
+    font-size: 20px;
+    margin-top: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Couleurs spécifiques aux joueurs */
+.player1-fill {
+    background-color: #f44336; /* Rouge - Joueur 1 */
+}
+
+.player2-fill {
+    background-color: #ffeb3b; /* Jaune - Joueur 2 */
+}
+
+.player3-fill {
+    background-color: #2fc536; /* Vert - Joueur 3 */
+}
+
+.player4-fill {
+    background-color: #03a9f4; /* Bleu - Joueur 4 */
 }

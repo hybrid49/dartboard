@@ -19,25 +19,19 @@ function saveTouch(dart, position){
 }
 
 function calculateNewScore(number){
-	// Si le joueur n'a pas plus de 3 touches, aucun calcul nécessaire
-    if (arrayTouch[selectedPlayer][number] <= 3) {
-        return;
-    }
+	let nbTouch;
 
-    // Calcul du nombre de touches excédentaires
-    const nbTouch = arrayTouch[selectedPlayer][number] - 3;
-    
-    // Vérifie si au moins un autre joueur n'a pas fermé ce nombre
-    const scoredAuthorized = Array.from({length: nombrePlayer}, (_, i) => i + 1)
-        .some(i => i !== selectedPlayer && arrayTouch[i][number] < 3);
-
-    // Attribution des points si autorisé
-    if (scoredAuthorized) {
-        arrayTouch[selectedPlayer]['point'] += number * nbTouch;
-    }
-
-    // Limite le nombre de touches à 3
-    arrayTouch[selectedPlayer][number] = 3;
+	if (arrayTouch[selectedPlayer][number] > 3) {
+		nbTouch = arrayTouch[selectedPlayer][number] - 3
+		for (let i = 1; i <= nombrePlayer; i++) {
+			if (i !== selectedPlayer) {
+				if (arrayTouch[i][number] < 3) {
+					arrayTouch[i]['point'] += number * nbTouch
+				}
+			}
+		}
+		arrayTouch[selectedPlayer][number] = 3
+	}
 }
 
 function checkVictory(button){
