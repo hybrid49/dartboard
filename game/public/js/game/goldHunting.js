@@ -17,54 +17,54 @@ function initGoldHunting(){
         arrayTouch[index]['steal'] = 0;
         arrayTouch[index]['stole'] = 0;
     });
-    
+
     // Initialiser les deux jauges centrales (commencent pleines)
     updateBothGauges(pointBeforeTreasure);
-    
+
     updateDisplay();
 }
 
 function updateDisplay() {
     // Mettre à jour le score cible actuel
     $('#currentTargetScore').text(arrayTouch[selectedPlayer]['point']);
-    
+
     // Mettre à jour les scores d'or pour tous les joueurs
     for(let i = 1; i <= nombrePlayer; i++) {
         $('#goldScore' + i).text(arrayTouch[i]['gold']);
         // Mettre à jour les scores dans les tableaux
         $('#scoreTotal' + i).text(arrayTouch[i]['point']);
     }
-    
+
     // Mettre à jour les jauges centrales avec le score du joueur actif
     updateBothGauges(arrayTouch[selectedPlayer]['point']);
-    
+
     // Mettre en évidence le joueur actuel
     $('.playerScoreCard').removeClass('selected');
     $('#zoneScorePlayer' + selectedPlayer).addClass('selected');
-    
+
     // Mettre en évidence le nom du joueur actif
     $('.player-name').removeClass('active');
     $('.player-name[data-player="' + selectedPlayer + '"]').addClass('active');
 }
 
 function displayScore(){
-	
+
 }
 
 //
 function displayHistoryRound(){
-	
+
 }
 //TODO: checkVictory
 function checkVictory(button){
-	
+
 }
 
 // Fonction pour mettre à jour les deux jauges centrales
 function updateBothGauges(currentScore) {
     // Mettre à jour la première jauge
     updateCentralGauge('1', currentScore);
-    
+
     // Mettre à jour la deuxième jauge
     updateCentralGauge('2', currentScore);
 }
@@ -73,26 +73,26 @@ function updateBothGauges(currentScore) {
 function updateCentralGauge(gaugeNumber, currentScore) {
     const maxScore = pointBeforeTreasure;
     const minScore = 0;
-    
+
     // Calculer le pourcentage de vidage pour la jauge (100% = vide, 0% = plein)
     let emptyPercentage = ((maxScore - currentScore) / maxScore) * 100;
-    
+
     // Limiter le pourcentage entre 0 et 100
     emptyPercentage = Math.max(0, Math.min(100, emptyPercentage));
-    
+
     // Mettre à jour la jauge pour qu'elle se vide par le haut
     let remainingPercentage = 100 - emptyPercentage;
-    
+
     // Mettre à jour la hauteur de la jauge et déplacer son point de départ
     $('#centralGauge' + gaugeNumber).css({
         'height': remainingPercentage + '%',
         'bottom': '0',
         'top': 'auto'
     });
-    
+
     // Mettre à jour la valeur affichée
     $('#centralGaugeValue' + gaugeNumber).text(currentScore);
-    
+
     // Mettre à jour l'attribut data-score
     $('#centralGauge' + gaugeNumber).attr('data-score', currentScore);
 }
@@ -113,7 +113,7 @@ function manageThrow(dart, number, zone){
         manageSteal();
         arrayTouch[selectedPlayer]['point'] -= throwPoint;
     }
-    
+
     updateDisplay();
 }
 
@@ -121,7 +121,7 @@ function foundTreasure(){
     arrayTouch[selectedPlayer]['point'] = pointBeforeTreasure;
     arrayTouch[selectedPlayer]['gold'] += 3;
     arrayTouch[selectedPlayer]['treasure']++;
-    
+
     // Afficher l'animation ou notification de trésor trouvé
     showNotification("TREASURE FOUND!");
 }
@@ -130,7 +130,7 @@ function showNotification(message) {
     // Créer un élément de notification temporaire
     let $notification = $('<div class="gameNotification">' + message + '</div>');
     $('body').append($notification);
-    
+
     // Afficher puis cacher après un délai
     $notification.fadeIn(300).delay(1500).fadeOut(300, function() {
         $(this).remove();
@@ -139,7 +139,7 @@ function showNotification(message) {
 
 function bust(throwPoint){
     arrayTouch[selectedPlayer]['point'] = throwPoint - arrayTouch[selectedPlayer]['point'];
-    
+
     // Afficher la notification de dépassement
     showNotification("BUST!");
 }
@@ -158,7 +158,7 @@ function stealGold(stoleCowboy){
         arrayTouch[selectedPlayer]['gold']++;
         arrayTouch[stoleCowboy]['gold']--;
         statSteal(stoleCowboy);
-        
+
         // Afficher la notification de vol d'or
         showNotification("GOLD STOLEN FROM PLAYER " + stoleCowboy + "!");
     }else {
@@ -178,7 +178,7 @@ function stolenCowboyLosePoints(stolenCowboy){
 
         arrayTouch[stolenCowboy]['point'] += lostPoint;
     }
-    
+
     // Mettre à jour l'affichage après les changements
     updateDisplay();
 }
@@ -198,17 +198,17 @@ function determineWinner(){
 
     arrayTouch.forEach((item, index) => {
         if(index === 0) return; // Ignorer l'index 0 qui n'est pas un joueur
-        
+
         if(item['gold'] > maxGold) {
             maxGold = item['gold'];
             winner = index;
-        }else if (item['gold'] === maxGold){
-            switch(isCurrentCowboyhasBetterStatThanCurrentWinner(item, arrayTouch[winner])) {
+        }else if (item['gold'] === maxGold);
+            switch(isCurrentCowboyBetterThanWinner(item, arrayTouch[winner])) {
                 case true:
                     winner = index;
                     break;
                 case null:
-                    if (isCurrentPlayerHasBetterStatThanCurrentWinner(item, arrayTouch[winner]))
+                    if (isCurrentCowboyBetterThanWinner(item, arrayTouch[winner]))
                         winner = index;
                     break;
             }
@@ -218,17 +218,20 @@ function determineWinner(){
     return winner;
 }
 
-function isCurrentCowboyhasBetterStatThanCurrentWinner(currentCowboy, currentWinner){
+function isCurrentCowboyBetterThanWinner(currentCowboy, winner){
     // Note: In this game, the points decrease, so the player with less points scored the most points
-    if (currentCowboy['point'] > currentWinner['point'])
+    if (currentCowboy.point > currentCowboy.point)
+    // if (currentCowboy['point'] > winner['point'])
         return true;
-    else if(currentCowboy['point'] === currentWinner['point']){
-        if (currentCowboy['treasure'] > currentWinner['treasure'])
+
+    if(currentCowboy['point'] === winner['point']){
+        if (currentCowboy['treasure'] > winner['treasure'])
             return true;
-        else if(currentCowboy['treasure'] === currentWinner['treasure']){
-            if (currentCowboy['steal'] > currentWinner['steal'])
+
+        if(currentCowboy['treasure'] === winner['treasure']){
+            if (currentCowboy['steal'] > winner['steal'])
                 return true;
-            else if(currentCowboy['steal'] === currentWinner['steal'])
+            else if(currentCowboy['steal'] === winner['steal'])
                 return null;
             else
                 return false;
@@ -248,14 +251,14 @@ function changePlayer() {
 $(document).ready(function() {
     // Ajouter le CSS pour la notification
     $('<style>.gameNotification { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; font-size: 30px; border-radius: 10px; z-index: 1000; display: none; }</style>').appendTo('head');
-    
+
     // Écouteur pour le clic sur "YES" pour rejouer
     $('#zonebtyes').on('click', function() {
         // Réinitialiser le jeu
         initGoldHunting();
         $('#zonevictory, #zonebtnno, #zonebtyes').hide();
     });
-    
+
     // Écouteur pour le clic sur "NO" pour quitter
     $('#zonebtnno').on('click', function() {
         $('#returnMenu').show();

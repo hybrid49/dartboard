@@ -43,13 +43,11 @@ function calculateNewScore(number){
 function checkVictory(button){
 	let isVictory = true;
 
-	if(!(round === maxRound && selectedPlayer === nombrePlayer &&
-		(nbThrow === 3 || button === true))){
+	if(!(round === maxRound && selectedPlayer === nombrePlayer && (nbThrow === 3 || button === true))){
 		arrayTargets.forEach((v) => {
 			if (arrayTouch[selectedPlayer][v] < 3)
 				isVictory = false;
 		});
-
 
 		for(let i = 1; i <= nombrePlayer; i++){
 			if (arrayTouch[selectedPlayer]["point"] > arrayTouch[i]["point"])
@@ -206,7 +204,7 @@ function determineWinner(){
 			minPoint = item['point'];
 			winner = index;
 		}else if (item['point'] === minPoint
-			  && isCurrentPlayerHasBetterStatThanCurrentWinner(item, arrayTouch[winner]))
+			  && isCurrentPlayerBetterThanCurrentWinner(item, arrayTouch[winner]))
 			winner = index;
 	});
 

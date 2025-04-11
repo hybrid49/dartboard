@@ -13,8 +13,9 @@ let arrayRound = [];
 let arrayHistoryThrow = [];
 let previousTimestamp = 0;
 let deltaTimestamp = 0;
-let easterEggsRatio = 0.44;
+let easterEggsRatio = 0.22;
 let easterEggTimeOutClear = false;
+let easterEggsRound = false;
 
 // Variable pour enregistrer le temps de début de partie
 window.gameStartTime = new Date().getTime();
@@ -64,8 +65,13 @@ function arduinoEvent(msg){
     if(msg !== '' && msg !== 'btnNext' && deltaTimestamp >= '800' ){
         previousTimestamp = timestamp;
 
-        if(nbTotalAction === 0 && msg === 'btnCancel')
-            window.location.replace("/");
+        if(msg === 'btnCancel'){
+            if(nbTotalAction === 0)
+                window.location.replace("/");
+
+            else if(nbTotalAction === 1)
+                window.location.reload()
+        }
 
         if(!isGameOver)
             arduinoEventGameInProgress(msg);
@@ -80,8 +86,10 @@ function arduinoEventGameInProgress(msg) {
     if(msg === 'btnValidate'){
         changePlayer();
         saveHistory('btn');
+
     }else if(msg === 'btnCancel'){
         undoLastAction();
+
     }else if (nbThrow < 3){
         if(!isAskChangePlayer){
             //We don't trigger the function when players hit the board when they remove darts
@@ -93,14 +101,14 @@ function arduinoEventGameInProgress(msg) {
 }
 
 function arduinoEventGameOver(msg) {
-    console.log('gameover');
     switch(msg) {
         case 'btnValidate':
                 window.location.reload();
             break;
 
         case 'btnCancel':
-            window.location.replace('/');
+            if(isNewGame)
+                displayModalReturnMenu();
             break;
     }
 }
@@ -110,11 +118,12 @@ function playThrow(msg){
     arrayRound[round][selectedPlayer][nbThrow] = dart;
     arrayTouch[selectedPlayer]['nbThrowRound'] = nbThrow;
 
-    console.log(dart);
+    console.log('playThrow - Zone : ' + dart);
 
     if(dart !== 'miss'){
         saveThrow(dart);
         displayRound();
+
     }else {
         // Exit for special management of certain games
         if (typeof exitPlayThrowMiss === "function")
@@ -149,16 +158,15 @@ function manageStat(dart, number, zone){
     if (arrayTargets.includes(number.toString())){
         arrayTouch[selectedPlayer]['nbHit'] ++;
 
-        if (dart === 'D25')
-            arrayTouch[selectedPlayer]['nbDoubleBull']++;
-        else if (dart === 'S25')
-            arrayTouch[selectedPlayer]['nbBull']++;
-        else if (zone === 'S')
-            arrayTouch[selectedPlayer]['nbSingle']++;
-        else if(zone === 'D')
-            arrayTouch[selectedPlayer]['nbDouble']++;
-        else if(zone === 'T')
-            arrayTouch[selectedPlayer]['nbTriple']++;
+        // Correspondance entre les zones et les stats
+        const statMapping = { 'D25': 'nbDoubleBull',
+                                   'S25': 'nbBull',
+                                   'S': 'nbSingle',
+                                   'D': 'nbDouble',
+                                   'T': 'nbTriple' };
+
+        if (statMapping[dart])
+            arrayTouch[selectedPlayer][statMapping[dart]]++;
     }
 }
 
@@ -174,12 +182,11 @@ function manageEndTurn(){
 function changePlayer(){
     nbThrow = 0;
     $('#changePlayer').hide();
-    let selector1 = $('#throw1');
-    let selector2 = $('#throw2');
-    let selector3 = $('#throw3');
-    selector1.removeClass('TripleShot').removeClass('DoubleShot').html('-');
-    selector2.removeClass('TripleShot').removeClass('DoubleShot').html('-');
-    selector3.removeClass('TripleShot').removeClass('DoubleShot').html('-');
+    const selectors = ['#throw1', '#throw2', '#throw3'];
+
+    selectors.forEach(selector => {
+        $(selector).removeClass('TripleShot').removeClass('DoubleShot').html('-');
+    });
 
     if(checkVictory(true)){
         displayVictoryScreen();
@@ -193,7 +200,7 @@ function changePlayer(){
         displayChangedPlayer();
     }
 
-    // Exit for special management of certain games
+    // Exit pour certains jeux
     if (typeof exitEndChangePlayer === "function")
         exitEndChangePlayer();
 
@@ -203,6 +210,7 @@ function changePlayer(){
 
 function saveHistory(action){
     nbTotalAction++;
+
     if(action ==='dart')
         arrayHistoryThrow[nbTotalAction] = $.extend(true, [], arrayTouch);
     else
@@ -213,15 +221,13 @@ function undoLastAction(){
     $('#changePlayer').hide();
     isAskChangePlayer = false;
 
-    if(nbTotalAction > 0){
-        if(arrayHistoryThrow[nbTotalAction] === 'changePlayer')
-            undoLastChangePlayer();
-        else
-            undoLastThrow();
+    if(arrayHistoryThrow[nbTotalAction] === 'changePlayer')
+        undoLastChangePlayer();
+    else
+        undoLastThrow();
 
-        displayScore();
-        displayRound();
-    }
+    displayScore();
+    displayRound();
 }
 
 function undoLastChangePlayer(){
@@ -235,10 +241,12 @@ function undoLastChangePlayer(){
 
     displayChangedPlayer();
 }
-
 function undoLastThrow(){
     arrayRound[round][selectedPlayer][nbThrow] = '';
-    arrayHistoryThrow.splice(nbTotalAction, 1);
+    // arrayHistoryThrow[nbTotalAction] = [];
+    // arrayHistoryThrow.splice(nbTotalAction, 1);
+
+    delete arrayHistoryThrow[nbTotalAction];
 
     nbThrow--;
     nbTotalAction--;
@@ -252,6 +260,7 @@ function undoLastThrow(){
     }
 }
 
+
 function newRound(){
     if(round !== maxRound){
         round ++;
@@ -262,7 +271,7 @@ function newRound(){
     }
 }
 
-function isCurrentPlayerHasBetterStatThanCurrentWinner(player, currentWinner){
+function isCurrentPlayerBetterThanCurrentWinner(player, currentWinner){
     const keys = ['nbHit', 'nbDoubleBull', 'nbBull', 'nbTriple', 'nbDouble', 'nbSingle'];
 
     for (const key of keys) {
@@ -357,6 +366,12 @@ function easterEggsIsRoundSameThrows(target){
     &&  arrayRound[round][selectedPlayer][2].includes(target)
     &&  arrayRound[round][selectedPlayer][3].includes(target))
         return true;
+}
+
+function easterEggsIsRoundSameThrowsValue(target){
+    let zone = target.substring(0,1);
+    let numberChar = target.replace(zone,'');
+    let number = parseInt(numberChar);
 }
 
 // Initialisation des statistiques de jeu

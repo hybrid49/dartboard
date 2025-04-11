@@ -18,7 +18,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Middleware pour assurer que toutes les vues ont accès à une variable de thème par défaut
 app.use((req, res, next) => {
-	// Nous n'utilisons pas de session, mais nous pouvons définir une variable locale 
+	// Nous n'utilisons pas de session, mais nous pouvons définir une variable locale
 	// qui sera disponible pour toutes les vues
 	res.locals.theme = 'light';
 	next();
@@ -73,13 +73,13 @@ io.on('connection', (socket) => {
 		bdd.deletePlayer(data);
 		console.log('delete player');
 	});
-	
+
 	// Écouter l'événement pour mettre à jour la couleur du joueur
 	socket.on('updatePlayerColor', (data) => {
 		if (data && data.name && data.color) {
 			// Mettre à jour la couleur de base et les variantes
 			bdd.updatePlayerColor(
-				data.name, 
+				data.name,
 				{
 					color: data.color,
 					colorDarker: data.colorDarker,
@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
 			console.log(`Mise à jour des couleurs pour ${data.name}: ${data.color}, ${data.colorDarker}, ${data.colorTransparent}`);
 		}
 	});
-	
+
 	// Écouter l'événement pour sauvegarder les statistiques de la partie
 	socket.on('saveGameStats', async (gameData) => {
 		try {
@@ -109,29 +109,29 @@ io.on('connection', (socket) => {
 					gameInfo: gameData.gameInfo
 				})
 			};
-			
+
 			// Sauvegarde dans la base de données
 			const success = await bddGames.addGame(gameDataForDb);
-			
+
 			// Mise à jour des statistiques des joueurs si nécessaire
 			// TODO: Implémenter cette fonction plus tard si besoin
-			
+
 			console.log('Game stats saved:', success ? 'Success' : 'Failed');
 		} catch (error) {
 			console.error('Error saving game stats:', error);
 		}
 	});
-	
+
 	// Écouter l'événement pour mettre à jour les statistiques d'un joueur
 	socket.on('updatePlayerStats', async (data) => {
 		try {
 			// Vérification des données reçues
 			if (data && data.name && data.stats) {
 				console.log('Mise à jour des statistiques pour:', data.name, 'Mode:', data.gameMode || 'Inconnu');
-				
+
 				// Appel de la fonction pour mettre à jour les statistiques dans la BDD
 				const success = await bdd.updatePlayerStats(data.name, data.stats);
-				
+
 				if (success) {
 					console.log('Statistiques du joueur mises à jour avec succès');
 				} else {
