@@ -110,10 +110,11 @@ function displayChangedPlayer(){
 }
 
 function displayEasterEggsTimeExceeded(msg){
+
     if (easterEggTimeOutClear
     ||  msg === 'btnCancel'
     ||  nbThrow === 3){
-        console.log('clear');
+        console.log('clearTimeOut');
         clearTimeout(timeOutID);}
     else{
         let timestamp = Math.floor(Date.now());
@@ -121,6 +122,8 @@ function displayEasterEggsTimeExceeded(msg){
 
         timeOutID = setTimeout(function (){
             if (deltaTimestamp > 50000) {
+                if(isEasterEggsDisplay)
+                    return;
                 $('#timeExceed').show().delay(3000).fadeOut("fast");
                 easterEggTimeOutClear = true;
             }
@@ -130,47 +133,55 @@ function displayEasterEggsTimeExceeded(msg){
 }
 
 function displayEasterEggsPlayThrow(){
-    // fews easterEgg doesn't happen all the time
+    easterEggsRound = false;
+
     if (nbThrow === 3){
+        displayLoser();
+        displayBoss();
+        displaySlotMachine();
+
         if (isEasterEggsDisplay()){
-            displayLoser();
-            displayBoss();
-            displaySlotMachine();
-            displayUniverseAnswer();
+            //TODO
         }
-        displayNewBestScoreAllTime();
     }
 }
 
 function displayLoser(){
-    // // Valeur du round = miss / miss / miss
-    // if (easterEggsIsRoundSameThrows('miss'))
-    //     $('#newGame').show().delay(3000).fadeOut("fast");
+    if (easterEggsRound === true) return;
+
+    // Valeur du round = miss / miss / miss
+    if (easterEggsIsRoundSameThrows('miss')){
+        easterEggsRound = true;
+        $('#easterEggsLoser').show().delay(3000).fadeOut("fast");
+    }
 }
 
 function displaySlotMachine(){
-    // // Valeur du round = S7 / S7 / S7
-    // if (easterEggsIsRoundSameThrows('S7'))
-    //     $('#newGame').show().delay(3000).fadeOut("fast");
+    if (easterEggsRound === true) return;
+
+    // Valeur du round = S7 / S7 / S7
+    if (easterEggsIsRoundSameThrows('S7')){
+        easterEggsRound = true;
+        $('#easterEggsSlotMachine').show().delay(3000).fadeOut("fast");
+    }
 }
 
 function displayBoss(){
-    // // Valeur du round = DBull / DBull / DBull
-    // if (easterEggsIsRoundSameThrows('DBull'))
-    //     $('#newGame').show().delay(3000).fadeOut("fast");
-    //
-    // // Valeur du round = bull / bull / bull
-    // else if (easterEggsIsRoundSameThrows('bull'))
-    //     $('#newGame').show().delay(3000).fadeOut("fast");
-}
+    if (easterEggsRound === true) return;
 
-function displayUniverseAnswer(){
-    // // Valeur du round = 42 avec 3 flechettes touchées
-    // if (arrayRound[round][selectedPlayer]['point'] === 42)
-    //     $('#newGame').show().delay(3000).fadeOut("fast");
-}
+    easterEggsRound = true;
 
-function displayNewBestScoreAllTime(){
-    // TODO : Faire apparaitre une vidéo de Macron, disant qu'il ferait mieux de traverser la rue
-}
+    // Valeur du round = DBull / DBull / DBull
+    if (easterEggsIsRoundSameThrows('D25'))
+        $('#easterEggsBoss').show().delay(3000).fadeOut("fast");
 
+    // Valeur du round = bull / bull / bull
+    else if (easterEggsIsRoundSameThrows('S25'))
+        $('#easterEggsLittleBoss').show().delay(3000).fadeOut("fast");
+
+    // Valeur du round = que des bull
+    else if (easterEggsIsRoundSameThrowsValue('S25'))
+        $('#easterEggsBull').show().delay(3000).fadeOut("fast");
+    else
+        easterEggsRound = false;
+}

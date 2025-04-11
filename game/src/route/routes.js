@@ -53,9 +53,8 @@ router.get('/', async function(req, res) {
 
 
 router.get('/test', async function(req, res) {
-    
     const playerNames = await getPlayerNames(req);
-    res.render('pages/test', {
+    res.render('pages/game/01', {
         nbPlayer: req.query.nbPlayer, 
         mode: 501, 
         maxRound: 2, 
@@ -220,7 +219,7 @@ router.get('/game/cricket', async function(req, res) {
     
     res.render('pages/game/cricket', {
         nbPlayer: req.query.nbPlayer, 
-        maxRound: 20, 
+        maxRound: 2, 
         arrayTargets: ["20", "19", "18", "17", "16", "15", "25"], 
         mode: "cricket",
         playerNames: playerNames.names,

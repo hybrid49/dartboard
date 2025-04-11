@@ -13,7 +13,6 @@ function manageThrow(dart, number, zone){
 	total = arrayTouch[selectedPlayer]['point'] - (nb*number);
 
 	if(total < 0){
-		isAskChangePlayer = true;
 		displayModalChangePlayer()
 	}else{
 		arrayTouch[selectedPlayer]['point'] -= nb*number;
@@ -23,7 +22,6 @@ function manageThrow(dart, number, zone){
 
 function displayScore(){
 	displayHistoryRound();
-	console.log(arrayTouch);
 	arrayTouch.forEach((hits, numPlayer) => {
 		$('#scoreTotal'+numPlayer).html(hits['point']);
 	});

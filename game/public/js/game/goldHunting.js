@@ -130,12 +130,12 @@ function determineWinner(){
             maxGold = item['gold'];
             winner = index;
         }else if (item['gold'] === maxGold);
-            switch(isCurrentCowboyhasBetterStatThanCurrentWinner(item, arrayTouch[winner])) {
+            switch(isCurrentCowboyBetterThanWinner(item, arrayTouch[winner])) {
                 case true:
                     winner = index;
                     break;
                 case null:
-                    if (isCurrentPlayerHasBetterStatThanCurrentWinner(item, arrayTouch[winner]))
+                    if (isCurrentCowboyBetterThanWinner(item, arrayTouch[winner]))
                         winner = index;
                     break;
             }
@@ -144,17 +144,20 @@ function determineWinner(){
     return winner;
 }
 
-function isCurrentCowboyhasBetterStatThanCurrentWinner(currentCowboy, currentWinner){
+function isCurrentCowboyBetterThanWinner(currentCowboy, winner){
     // Note: In this game, the points decrease, so the player with less points scored the most points
-    if (currentCowboy['point'] > currentWinner['point'])
+    if (currentCowboy.point > currentCowboy.point)
+    // if (currentCowboy['point'] > winner['point'])
         return true;
-    else if(currentCowboy['point'] === currentWinner['point']){
-        if (currentCowboy['treasure'] > currentWinner['treasure'])
+
+    if(currentCowboy['point'] === winner['point']){
+        if (currentCowboy['treasure'] > winner['treasure'])
             return true;
-        else if(currentCowboy['treasure'] === currentWinner['treasure']){
-            if (currentCowboy['steal'] > currentWinner['steal'])
+
+        if(currentCowboy['treasure'] === winner['treasure']){
+            if (currentCowboy['steal'] > winner['steal'])
                 return true;
-            else if(currentCowboy['steal'] === currentWinner['steal'])
+            else if(currentCowboy['steal'] === winner['steal'])
                 return null;
             else
                 return  false;

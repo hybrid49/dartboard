@@ -37,7 +37,7 @@ function determineWinner(){
             maxPoint = item['point'];
             winner = index;
         }else if (item['point'] === maxPoint
-            && isCurrentPlayerHasBetterStatThanCurrentWinner(item, arrayTouch[winner]))
+            &&  isCurrentPlayerBetterThanCurrentWinner(item, arrayTouch[winner]))
             winner = index;
     });
 

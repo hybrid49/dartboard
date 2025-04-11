@@ -1,4 +1,4 @@
 id;name;nbgames;nbhit;nbthrow;nbtriple;nbdouble;nbbull;color;colorDarker;colorTransparent
-0;Hybrid;0;0;0;0;0;0;#e53935;#a02725;rgba(160, 39, 37, 0.4)
-1;Eik;0;0;0;0;0;0;#e4f500;#9fab00;rgba(159, 171, 0, 0.4)
+0;Hybrid;3;10;10;6;0;0;#e53935;#a02725;rgba(160, 39, 37, 0.4)
+1;Eik;3;12;12;6;0;0;#e4f500;#9fab00;rgba(159, 171, 0, 0.4)
 2;Rabi;0;0;0;0;0;0;#00db0f;#00990a;rgba(0, 153, 10, 0.4)
