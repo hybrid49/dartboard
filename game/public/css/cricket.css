@@ -96,6 +96,11 @@ td{
 	border-right: 6px solid #a7a7a7;
 	border-left: 6px solid #a7a7a7;
 	color: white;
+	font-family: 'Aujournuit', sans-serif;
+	font-size: 38px;
+}
+#bodyHistoryRound{
+	font-family: 'Aujournuit', sans-serif;
 }
 .tableCricket tr:nth-child(1) td{
 	border-top: 6px solid #a7a7a7;

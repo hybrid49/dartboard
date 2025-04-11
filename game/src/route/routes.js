@@ -89,7 +89,7 @@ router.get('/lobby/fungames', function(req, res) {
 
 router.get('/selectionJoueur', async function(req, res) {
     let nbPlayer;
-    if (req.query.game === "cricket" || req.query.game === "goldHunting") {
+    if (req.query.game === "cricket" || req.query.game === "cricketcutthroat"|| req.query.game === "cricketrandom" || req.query.game === "cricketcutthroatrandom"|| req.query.game === "cricketshorty" || req.query.game === "goldHunting") {
         nbPlayer = 4;
     } else {
         nbPlayer = 8;

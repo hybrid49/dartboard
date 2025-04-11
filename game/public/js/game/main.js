@@ -332,7 +332,7 @@ function getHtmlThrowLastRound(dart){
     return !isTargetTouched(dart) ? '-'
          : dart.indexOf("S") >= 0 ? '/'
          : dart.indexOf("D") >= 0 ? 'X'
-         : dart.indexOf("T") >= 0 ? 'O'
+         : dart.indexOf("T") >= 0 ? 'Ø'
          :                                '-';
 }
 
