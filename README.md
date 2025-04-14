@@ -110,9 +110,9 @@ Description=Serveur Arduino
 After=redis-custom.service
 
 [Service]
-ExecStart=/usr/bin/node /chemin/vers/ton/projet/server.js
+ExecStart=node /chemin/vers/ton/projet/server.js
 Restart=always
-User=<ton-utilisateur>
+User=root
 WorkingDirectory=/chemin/vers/ton/projet
 
 [Install]
@@ -136,9 +136,9 @@ Description=Application Web
 After=server-arduino.service
 
 [Service]
-ExecStart=/usr/bin/node /chemin/vers/ton/projet/app.js
+ExecStart=node /chemin/vers/ton/projet/app.js
 Restart=always
-User=<ton-utilisateur>
+User=root
 WorkingDirectory=/chemin/vers/ton/projet
 
 [Install]
